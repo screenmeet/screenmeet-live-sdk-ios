@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="ScreenMeet" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="sZF-e8-cuL"/>
+                        <viewControllerLayoutGuide type="bottom" id="YXZ-5D-PXg"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NlE-ee-w2N" userLabel="RemoteVideo" customClass="RTCEAGLVideoView">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="596"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MaJ-MZ-ffP" userLabel="LocalVideo" customClass="RTCEAGLVideoView">
+                                <rect key="frame" x="274" y="54" width="120" height="160"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="160" id="mFa-LG-itF"/>
+                                    <constraint firstAttribute="width" constant="120" id="xMg-2f-uUJ"/>
+                                </constraints>
+                            </view>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="K8Z-lP-Egt">
+                                <rect key="frame" x="0.0" y="596" width="414" height="300"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="300" id="Uau-zf-1Jz"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xw4-cP-NYB">
+                                <rect key="frame" x="98" y="749" width="218" height="53"/>
+                                <color key="backgroundColor" red="0.40784313729999999" green="0.61176470589999998" blue="0.80784313730000001" alpha="0.84705882349999995" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="53" id="Dvg-Dc-GQl"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Connect"/>
+                                <connections>
+                                    <action selector="connect" destination="BYZ-38-t0r" eventType="touchUpInside" id="oIY-Or-YOB"/>
+                                </connections>
+                            </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EZa-7c-BbD">
+                                <rect key="frame" x="57" y="734" width="300" height="68"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6bu-Py-6lA">
+                                        <rect key="frame" x="17" y="9" width="50" height="50"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <inset key="imageEdgeInsets" minX="12" minY="12" maxX="12" maxY="12"/>
+                                        <state key="normal" image="icon-audio-on"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="25"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.clipToBounds" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="audioButtonClicked" destination="BYZ-38-t0r" eventType="touchUpInside" id="zgm-AC-hG7"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zrg-Jw-Djx">
+                                        <rect key="frame" x="88" y="9" width="50" height="50"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <inset key="imageEdgeInsets" minX="12" minY="12" maxX="12" maxY="12"/>
+                                        <state key="normal" image="icon-video-on"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="25"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.clipToBounds" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="videoButtonClicked" destination="BYZ-38-t0r" eventType="touchUpInside" id="BgM-to-XbK"/>
+                                        </connections>
+                                    </button>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="web-4Y-HxC" userLabel="Separator">
+                                        <rect key="frame" x="119.5" y="0.0" width="1" height="68"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </view>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mRQ-Nb-YSW">
+                                        <rect key="frame" x="158" y="9" width="50" height="50"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <inset key="imageEdgeInsets" minX="12" minY="12" maxX="12" maxY="12"/>
+                                        <state key="normal" image="iphone.badge.play" catalog="system"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="25"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.clipToBounds" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="screenButtonClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="a5g-Y4-Ft2"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4DY-40-TBV">
+                                        <rect key="frame" x="228" y="8" width="50" height="50"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" systemColor="systemRedColor"/>
+                                        <inset key="imageEdgeInsets" minX="16" minY="16" maxX="16" maxY="16"/>
+                                        <state key="normal" image="icon-phone"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="25"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="boolean" keyPath="layer.clipToBounds" value="YES"/>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="disconnect" destination="BYZ-38-t0r" eventType="touchUpInside" id="Aga-Tp-kWr"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.43601452464788731" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="300" id="PbQ-Q5-mgA"/>
+                                    <constraint firstAttribute="height" constant="68" id="c8e-yY-W3y"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="12"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="layer.clipToBounds" value="YES"/>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="K8Z-lP-Egt" firstAttribute="top" secondItem="NlE-ee-w2N" secondAttribute="bottom" id="0d8-9s-alR"/>
+                            <constraint firstItem="YXZ-5D-PXg" firstAttribute="top" secondItem="EZa-7c-BbD" secondAttribute="bottom" constant="60" id="5JO-cg-n9F"/>
+                            <constraint firstItem="MaJ-MZ-ffP" firstAttribute="top" secondItem="sZF-e8-cuL" secondAttribute="bottom" constant="10" id="7aD-Tp-SVQ"/>
+                            <constraint firstItem="NlE-ee-w2N" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="94F-yC-YKs"/>
+                            <constraint firstItem="K8Z-lP-Egt" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="EOx-QA-lXs"/>
+                            <constraint firstItem="YXZ-5D-PXg" firstAttribute="top" secondItem="Xw4-cP-NYB" secondAttribute="bottom" constant="60" id="K76-S3-nN1"/>
+                            <constraint firstAttribute="trailing" secondItem="NlE-ee-w2N" secondAttribute="trailing" id="UyF-Rk-zAR"/>
+                            <constraint firstAttribute="bottom" secondItem="K8Z-lP-Egt" secondAttribute="bottom" id="WBu-ud-Njo"/>
+                            <constraint firstItem="K8Z-lP-Egt" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" id="dmJ-1x-Vhs"/>
+                            <constraint firstItem="Xw4-cP-NYB" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="98" id="eAz-90-evE"/>
+                            <constraint firstItem="NlE-ee-w2N" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="gXW-jG-cYs"/>
+                            <constraint firstItem="EZa-7c-BbD" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="inJ-h3-Har"/>
+                            <constraint firstAttribute="trailing" secondItem="MaJ-MZ-ffP" secondAttribute="trailing" constant="20" id="oIZ-Ge-tNH"/>
+                            <constraint firstAttribute="trailing" secondItem="Xw4-cP-NYB" secondAttribute="trailing" constant="98" id="uOM-aa-6Xz"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="audioButton" destination="6bu-Py-6lA" id="O5O-H3-TPE"/>
+                        <outlet property="connectButton" destination="Xw4-cP-NYB" id="Rke-v9-GAI"/>
+                        <outlet property="controlsView" destination="EZa-7c-BbD" id="bF0-rh-wNv"/>
+                        <outlet property="gifImageView" destination="K8Z-lP-Egt" id="DVx-nx-Kvs"/>
+                        <outlet property="localVideoView" destination="MaJ-MZ-ffP" id="yZY-SN-iPC"/>
+                        <outlet property="remoteVideoView" destination="NlE-ee-w2N" id="gaF-4d-a1b"/>
+                        <outlet property="screenButton" destination="mRQ-Nb-YSW" id="eDo-2X-q6n"/>
+                        <outlet property="videoButton" destination="Zrg-Jw-Djx" id="peq-F8-H2q"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="137.68115942028987" y="80.357142857142847"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="icon-audio-on" width="80" height="80"/>
+        <image name="icon-phone" width="40" height="40"/>
+        <image name="icon-video-on" width="80" height="80"/>
+        <image name="iphone.badge.play" catalog="system" width="106" height="128"/>
+        <systemColor name="systemRedColor">
+            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>
