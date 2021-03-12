@@ -229,7 +229,6 @@ class MSSendTransport: MSTransport {
             }
         }
 
-       
         sendHandler.send(track, encodings, codecOptions) { [self] sendData, error in
             if let error = error {
                 completion(nil, error)

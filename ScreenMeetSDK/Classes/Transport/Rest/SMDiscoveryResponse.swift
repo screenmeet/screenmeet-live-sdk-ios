@@ -12,7 +12,7 @@ struct SMDiscoveryResponse: SMResponse {
     var session: Session!
 }
 
-public struct Session: Decodable {
+struct Session: Decodable {
     var id: String
     var label: String
     var servers: SMDiscoveryServers

@@ -53,6 +53,11 @@ let isVideoActive = ScreenMeet.isVideoActive() // true: unmuted, false: muted
 ScreenMeet.toggleLocalVideo() // toggle mute/unmute
 ```
 
+Call participants
+```swift
+let partisipantsList =  ScreenMeet.getParticipants() // Returns list of call participants [SMParticipant]
+```
+
 Change Video Source
 
 - Camera: `.backCamera`, `.frontCamera`
@@ -107,7 +112,7 @@ Set your event handler
 ```swift
 ScreenMeet.delegate = yourSMDelegate
 ```
-where `yourSMDelegate` is your implementation of `SMDelegate` protocol
+where `yourSMDelegate` is your implementation of `ScreenMeetDelegate` protocol
 
 ## Local track events
 
@@ -122,14 +127,8 @@ func onLocalVideoCreated(_ videoTrack: RTCVideoTrack)
 /// on Local Video stream stoped
 func onLocalVideoStopped()
 
-/// on Local Video stream resumed
-func onLocalVideoResumed()
-
 /// on Local Audio stream stoped
 func onLocalAudioStopped()
-
-/// on Local Audio stream resumed
-func onLocalAudioResumed()
 
 ```
 
@@ -164,6 +163,14 @@ func onActiveSpeakerChanged(_ participant: SMParticipant, _ remoteVideoTrack: RT
 
 ```
 
+## Connection state changing
+
+```swift
+/// On connection state change
+/// - Parameter new session state: `SMState`
+func onConnectionStateChanged(_ newState: SMConnectionState)
+
+```
 # Configuration 
 ScreenMeet Live requires initial config to join session
 ```swift

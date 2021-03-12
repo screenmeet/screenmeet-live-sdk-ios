@@ -26,7 +26,7 @@ class SMWebSocketClient: NSObject {
     
     private var reconnectHandler: ReconnectHandler?
     private var channelMessageHandler: ChannelMessageHandler?
-    private weak var delegate: SMDelegate? = nil
+    private weak var delegate: ScreenMeetDelegate? = nil
     
     func connect(_ url: String,
                _ nameSpace: String,
@@ -158,7 +158,7 @@ class SMWebSocketClient: NSObject {
         return state
     }
     
-    func setDelegate(_ delegate: SMDelegate?) {
+    func setDelegate(_ delegate: ScreenMeetDelegate?) {
         self.delegate = delegate
     }
     

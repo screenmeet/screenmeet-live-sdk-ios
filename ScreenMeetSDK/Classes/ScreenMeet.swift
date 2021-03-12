@@ -16,10 +16,11 @@ public class ScreenMeet: NSObject {
     
     private static let session = SMSession()
 
+    /// ScreenMeet Configuration
     public static let config = ScreenMeetConfig()
 
     /// Session delegate. Should be set before calling connect()
-    public static weak var delegate: SMDelegate? {
+    public static weak var delegate: ScreenMeetDelegate? {
         didSet {
             session.delegate = delegate
         }
@@ -35,8 +36,14 @@ public class ScreenMeet: NSObject {
         session.connect(code, videoSourceDevice, completion)
     }
     
+    /// Video Source types
     public enum VideoSourceType {
-        case backCamera, frontCamera, screen
+        /// Back camera as video source device
+        case backCamera
+        /// Front camera as video source device
+        case frontCamera
+        /// Screen capturing as video source device
+        case screen
     }
 
     /// Starts ScreenMeet session. No code specified, user will be asked to enter code value
@@ -87,14 +94,14 @@ public class ScreenMeet: NSObject {
     /// Change source of video stream
     /// - Parameter to: New video source that session should use. See `ScreenMeet.VideoSourceType`
     /// - Parameter completionHandler: Handle error during source switch
-    public static func changeVideoSource(_ to: VideoSourceType, _ completionHandler: CapturereCompletion? = nil) {
+    public static func changeVideoSource(_ to: VideoSourceType, _ completionHandler: SMCaptureCompletion? = nil) {
         session.changeVideoSource(to, completionHandler)
     }
     
     /// Change source of video stream
     /// - Parameter to: New video source device to capture frames (see `AVCaptureDevice`)
     /// - Parameter completionHandler: Handle error during source switch
-    public static func changeVideoSourceDevice(_ to: AVCaptureDevice!, _ completionHandler: CapturereCompletion? = nil) {
+    public static func changeVideoSourceDevice(_ to: AVCaptureDevice!, _ completionHandler: SMCaptureCompletion? = nil) {
         session.changeVideoSourceDevice(to, completionHandler)
     }
     
@@ -114,10 +121,6 @@ public class ScreenMeet: NSObject {
         return session.getConnectionState()
     }
     
-    /// Returns ice connection state. This is the state of the ICE process for the current session `SMIceConnectionState`
-    public static func getIceConnectionState() -> SMIceConnectionState {
-        return session.getIceConnectionState()
-    }
 }
 
 
@@ -138,11 +141,11 @@ public class ScreenMeetConfig {
         didSet {
             switch loggingLevel {
             case .info:
-                Logger.log.level = .info
+                SMLogger.log.level = .info
             case .debug:
-                Logger.log.level = .debug
+                SMLogger.log.level = .debug
             case .error:
-                Logger.log.level = .error
+                SMLogger.log.level = .error
             }
         }
     }
@@ -230,13 +233,20 @@ public class ScreenMeetConfig {
     }
 }
 
+/// Represents current connection state
 public enum SMConnectionState: Int {
+    
+    /// Client is in initial connecting state
     case connecting = 0
+    
+    /// Client successfully connected (Connection is active)
     case connected = 1
+
+    /// Client is disconnected or state before initial connection
     case disconnected = 2
 }
 
-public enum SMIceConnectionState: String {
+enum SMIceConnectionState: String {
     case new = "new"
     case disconnected = "disconnected"
     case failed = "failed"

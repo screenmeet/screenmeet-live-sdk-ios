@@ -426,7 +426,7 @@ class MSSendHandler: MSHandler {
                                 NSLog("[MS] pc.setRemoteDescription issue: " + error.message)
                             }
                             else {
-                                //Ok
+                                NSLog("Closed media section")
                             }
                         }
                     }

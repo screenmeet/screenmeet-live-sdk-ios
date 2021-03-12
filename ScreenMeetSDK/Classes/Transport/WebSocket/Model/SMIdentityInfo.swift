@@ -9,23 +9,35 @@ import Foundation
 import SocketIO
 import UIKit
 
-public enum SMIdentityInfoType: String, Codable {
+enum SMIdentityInfoType: String, Codable {
     case SERVER = "SERVER"
     case AGENT = "AGENT"
     case GUEST = "GUEST"
     case HOST = "HOST"
 }
 
+/// Participant role
 public enum SMIdentityInfoRole: Int, Codable {
+    /// Server
     case SERVER = 2000
+    
+    /// Host
     case HOST = 1000
+    
+    /// Supervisor
     case SUPERVISOR = 500
+    
+    /// Agent
     case AGENT = 300
+    
+    /// Guest
     case GUEST = 100
+    
+    /// None (unknown)
     case NONE = 0
 }
 
-public class SMIdentityInfoAuthCredential: Codable, SocketData {
+class SMIdentityInfoAuthCredential: Codable, SocketData {
     var reconnectToken: String?
     var authToken: String?
     
@@ -44,7 +56,7 @@ public class SMIdentityInfoAuthCredential: Codable, SocketData {
     }
 }
 
-public struct SMIdentityInfoUser: Codable, SocketData {
+struct SMIdentityInfoUser: Codable, SocketData {
     //var id: Int
     public var name: String
     //var email: String
@@ -55,15 +67,15 @@ public struct SMIdentityInfoUser: Codable, SocketData {
     }
 }
 
-public enum ServerType: String, Codable {
+enum SMServerType: String, Codable {
     case RECORDER = "RECORDER"
     case REPLICA = "REPLICA"
     case MASTER = "MASTER"
 }
 
-public struct SMIdentityInfoServerInfo: Codable, SocketData {
+struct SMIdentityInfoServerInfo: Codable, SocketData {
     var id: String
-    var serverType: ServerType
+    var serverType: SMServerType
     var instanceId: String
     var provider: String
     
@@ -77,19 +89,19 @@ public struct SMIdentityInfoServerInfo: Codable, SocketData {
     }
 }
 
-public enum SMIdentityInfoClientAppType: String, Codable {
+enum SMIdentityInfoClientAppType: String, Codable {
     case browser = "browser"
     case native = "native"
 }
 
-public struct SMIdentityInfoConnectionInfo: Codable {
+struct SMIdentityInfoConnectionInfo: Codable {
     var id: String
     var ip: String
     var secure: Bool
     var connectedAt: Int64
 }
 
-public struct SMIdentityInfoClientApp: Codable, SocketData {
+struct SMIdentityInfoClientApp: Codable, SocketData {
     private enum CodingKeys : String, CodingKey {
         case clientType = "type", version, userAgent = "useragent", name;
     }
@@ -125,7 +137,7 @@ public struct SMIdentityInfoClientApp: Codable, SocketData {
 }
 
 /// Represents participant details
-public class SMIdentityInfo: Codable, SocketData {
+class SMIdentityInfo: Codable, SocketData {
     
     private enum CodingKeys : String, CodingKey {
         case id, deviceId = "device_id", deviceKey = "device_key", entityId, connectionInfo = "connection_info", identityType = "type", authenticated, role, credential, user, server, clientApp = "client_app"
@@ -139,7 +151,7 @@ public class SMIdentityInfo: Codable, SocketData {
     public var identityType: SMIdentityInfoType?
     public var authenticated: Bool?
     public var role: SMIdentityInfoRole?
-    public var credential: SMIdentityInfoAuthCredential?
+           var credential: SMIdentityInfoAuthCredential?
     public var user: SMIdentityInfoUser?
     public var server: SMIdentityInfoServerInfo?
     public var clientApp: SMIdentityInfoClientApp?

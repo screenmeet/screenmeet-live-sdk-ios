@@ -10,8 +10,8 @@ import WebRTC
 import ReplayKit
 
 protocol SMVideoCapturer: RTCVideoCapturer {
-    func startCapture(_ completionHandler: CapturereCompletion?)
-    func stopCapture(_ completionHandler: CapturereCompletion?)
+    func startCapture(_ completionHandler: SMCaptureCompletion?)
+    func stopCapture(_ completionHandler: SMCaptureCompletion?)
     func getCaptureSession() -> AVCaptureSession
 }
 

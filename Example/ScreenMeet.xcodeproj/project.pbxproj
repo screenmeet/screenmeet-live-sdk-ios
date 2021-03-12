@@ -7,16 +7,28 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0463B25425E3BD3600734DAD /* stars.gif in Resources */ = {isa = PBXBuildFile; fileRef = 0463B25325E3BD3600734DAD /* stars.gif */; };
 		0463B25625E3BD4800734DAD /* UIImage+Gif.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0463B25525E3BD4800734DAD /* UIImage+Gif.swift */; };
-		0463B25825E3C2D800734DAD /* ladywalking.gif in Resources */ = {isa = PBXBuildFile; fileRef = 0463B25725E3C2D800734DAD /* ladywalking.gif */; };
 		04CC0AE025AC6A6500B8C4E2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CC0ADF25AC6A6500B8C4E2 /* AppDelegate.swift */; };
 		04CC0AE225AC6A6500B8C4E2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CC0AE125AC6A6500B8C4E2 /* SceneDelegate.swift */; };
-		04CC0AE425AC6A6500B8C4E2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CC0AE325AC6A6500B8C4E2 /* ViewController.swift */; };
 		04CC0AE725AC6A6500B8C4E2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 04CC0AE525AC6A6500B8C4E2 /* Main.storyboard */; };
 		04CC0AE925AC6A6900B8C4E2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04CC0AE825AC6A6900B8C4E2 /* Assets.xcassets */; };
 		04CC0AEC25AC6A6900B8C4E2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 04CC0AEA25AC6A6900B8C4E2 /* LaunchScreen.storyboard */; };
 		A3AEC24E0588CAEFB800D9FF /* Pods_ScreenMeet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F57D6F3DE8F95A515928F9F0 /* Pods_ScreenMeet.framework */; };
+		A946497325F7CE9500FDB22C /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A946497225F7CE9500FDB22C /* MainViewController.swift */; };
+		A946497A25F8C64100FDB22C /* SMUserInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = A946497925F8C64100FDB22C /* SMUserInterface.swift */; };
+		A946497C25F8E06D00FDB22C /* SMOptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A946497B25F8E06D00FDB22C /* SMOptionViewController.swift */; };
+		A946497E25F8EFD700FDB22C /* SMParticipantsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A946497D25F8EFD700FDB22C /* SMParticipantsTableViewCell.swift */; };
+		A946498025F919AC00FDB22C /* SMSmallVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A946497F25F919AC00FDB22C /* SMSmallVideoView.swift */; };
+		A946498725FA3ACB00FDB22C /* SMMainVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A946498625FA3ACB00FDB22C /* SMMainVideoView.swift */; };
+		A946498A25FA529100FDB22C /* SMRemoteVideosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A946498925FA529100FDB22C /* SMRemoteVideosView.swift */; };
+		A946498C25FA547F00FDB22C /* SMRemoteVideoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A946498B25FA547F00FDB22C /* SMRemoteVideoTableViewCell.swift */; };
+		A946498E25FA5EC400FDB22C /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A946498D25FA5EC400FDB22C /* WebViewController.swift */; };
+		A95BFBEE25F7C4E900432305 /* SMMainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95BFBED25F7C4E900432305 /* SMMainViewController.swift */; };
+		A95BFBF125F7C53F00432305 /* SMControlButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95BFBF025F7C53F00432305 /* SMControlButton.swift */; };
+		A95BFBF325F7C55000432305 /* SMControlBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95BFBF225F7C55000432305 /* SMControlBar.swift */; };
+		A95BFBF625F7C5A300432305 /* sm_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = A95BFBF525F7C5A300432305 /* sm_logo.png */; };
+		A95BFC0925F7C96A00432305 /* ladywalking.gif in Resources */ = {isa = PBXBuildFile; fileRef = A95BFC0725F7C96A00432305 /* ladywalking.gif */; };
+		A95BFC0A25F7C96A00432305 /* stars.gif in Resources */ = {isa = PBXBuildFile; fileRef = A95BFC0825F7C96A00432305 /* stars.gif */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -34,19 +46,31 @@
 
 /* Begin PBXFileReference section */
 		04553E5925AF9B1D00159844 /* ScreenMeet-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ScreenMeet-Bridging-Header.h"; sourceTree = "<group>"; };
-		0463B25325E3BD3600734DAD /* stars.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = stars.gif; path = ScreenMeet/stars.gif; sourceTree = SOURCE_ROOT; };
 		0463B25525E3BD4800734DAD /* UIImage+Gif.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Gif.swift"; sourceTree = "<group>"; };
-		0463B25725E3C2D800734DAD /* ladywalking.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = ladywalking.gif; path = ScreenMeet/ladywalking.gif; sourceTree = SOURCE_ROOT; };
 		04CC0ADC25AC6A6500B8C4E2 /* ScreenMeet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScreenMeet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		04CC0ADF25AC6A6500B8C4E2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		04CC0AE125AC6A6500B8C4E2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		04CC0AE325AC6A6500B8C4E2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		04CC0AE625AC6A6500B8C4E2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		04CC0AE825AC6A6900B8C4E2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		04CC0AEB25AC6A6900B8C4E2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		04CC0AED25AC6A6900B8C4E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		148E30CA7C218518B7C57077 /* Pods-ScreenMeet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScreenMeet.release.xcconfig"; path = "Target Support Files/Pods-ScreenMeet/Pods-ScreenMeet.release.xcconfig"; sourceTree = "<group>"; };
 		608E0CA996BC6302C9735526 /* Pods-ScreenMeet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScreenMeet.debug.xcconfig"; path = "Target Support Files/Pods-ScreenMeet/Pods-ScreenMeet.debug.xcconfig"; sourceTree = "<group>"; };
+		A946497225F7CE9500FDB22C /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		A946497925F8C64100FDB22C /* SMUserInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMUserInterface.swift; sourceTree = "<group>"; };
+		A946497B25F8E06D00FDB22C /* SMOptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMOptionViewController.swift; sourceTree = "<group>"; };
+		A946497D25F8EFD700FDB22C /* SMParticipantsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMParticipantsTableViewCell.swift; sourceTree = "<group>"; };
+		A946497F25F919AC00FDB22C /* SMSmallVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMSmallVideoView.swift; sourceTree = "<group>"; };
+		A946498625FA3ACB00FDB22C /* SMMainVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMMainVideoView.swift; sourceTree = "<group>"; };
+		A946498925FA529100FDB22C /* SMRemoteVideosView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMRemoteVideosView.swift; sourceTree = "<group>"; };
+		A946498B25FA547F00FDB22C /* SMRemoteVideoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMRemoteVideoTableViewCell.swift; sourceTree = "<group>"; };
+		A946498D25FA5EC400FDB22C /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
+		A95BFBED25F7C4E900432305 /* SMMainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMMainViewController.swift; sourceTree = "<group>"; };
+		A95BFBF025F7C53F00432305 /* SMControlButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMControlButton.swift; sourceTree = "<group>"; };
+		A95BFBF225F7C55000432305 /* SMControlBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMControlBar.swift; sourceTree = "<group>"; };
+		A95BFBF525F7C5A300432305 /* sm_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sm_logo.png; sourceTree = "<group>"; };
+		A95BFC0725F7C96A00432305 /* ladywalking.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = ladywalking.gif; sourceTree = "<group>"; };
+		A95BFC0825F7C96A00432305 /* stars.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = stars.gif; sourceTree = "<group>"; };
 		F57D6F3DE8F95A515928F9F0 /* Pods_ScreenMeet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ScreenMeet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -65,8 +89,8 @@
 		0463B25225E3BD2600734DAD /* Gif */ = {
 			isa = PBXGroup;
 			children = (
-				0463B25325E3BD3600734DAD /* stars.gif */,
-				0463B25725E3C2D800734DAD /* ladywalking.gif */,
+				A95BFC0725F7C96A00432305 /* ladywalking.gif */,
+				A95BFC0825F7C96A00432305 /* stars.gif */,
 				0463B25525E3BD4800734DAD /* UIImage+Gif.swift */,
 			);
 			path = Gif;
@@ -93,10 +117,12 @@
 		04CC0ADE25AC6A6500B8C4E2 /* ScreenMeet */ = {
 			isa = PBXGroup;
 			children = (
+				A95BFBEC25F7C4CC00432305 /* ScreenMeetUI */,
 				0463B25225E3BD2600734DAD /* Gif */,
 				04CC0ADF25AC6A6500B8C4E2 /* AppDelegate.swift */,
 				04CC0AE125AC6A6500B8C4E2 /* SceneDelegate.swift */,
-				04CC0AE325AC6A6500B8C4E2 /* ViewController.swift */,
+				A946497225F7CE9500FDB22C /* MainViewController.swift */,
+				A946498D25FA5EC400FDB22C /* WebViewController.swift */,
 				04CC0AE525AC6A6500B8C4E2 /* Main.storyboard */,
 				04CC0AE825AC6A6900B8C4E2 /* Assets.xcassets */,
 				04CC0AEA25AC6A6900B8C4E2 /* LaunchScreen.storyboard */,
@@ -112,6 +138,48 @@
 				F57D6F3DE8F95A515928F9F0 /* Pods_ScreenMeet.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A946498825FA4AFD00FDB22C /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				A946497925F8C64100FDB22C /* SMUserInterface.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		A95BFBEC25F7C4CC00432305 /* ScreenMeetUI */ = {
+			isa = PBXGroup;
+			children = (
+				A95BFBF425F7C56F00432305 /* Assets */,
+				A95BFBEF25F7C52900432305 /* Components */,
+				A946498825FA4AFD00FDB22C /* Managers */,
+				A95BFBED25F7C4E900432305 /* SMMainViewController.swift */,
+				A946497B25F8E06D00FDB22C /* SMOptionViewController.swift */,
+			);
+			path = ScreenMeetUI;
+			sourceTree = "<group>";
+		};
+		A95BFBEF25F7C52900432305 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				A95BFBF225F7C55000432305 /* SMControlBar.swift */,
+				A95BFBF025F7C53F00432305 /* SMControlButton.swift */,
+				A946497D25F8EFD700FDB22C /* SMParticipantsTableViewCell.swift */,
+				A946498B25FA547F00FDB22C /* SMRemoteVideoTableViewCell.swift */,
+				A946497F25F919AC00FDB22C /* SMSmallVideoView.swift */,
+				A946498625FA3ACB00FDB22C /* SMMainVideoView.swift */,
+				A946498925FA529100FDB22C /* SMRemoteVideosView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		A95BFBF425F7C56F00432305 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				A95BFBF525F7C5A300432305 /* sm_logo.png */,
+			);
+			path = Assets;
 			sourceTree = "<group>";
 		};
 		E27F251FE7E1E1B7230C7D30 /* Pods */ = {
@@ -186,9 +254,10 @@
 			files = (
 				04CC0AEC25AC6A6900B8C4E2 /* LaunchScreen.storyboard in Resources */,
 				04CC0AE925AC6A6900B8C4E2 /* Assets.xcassets in Resources */,
-				0463B25425E3BD3600734DAD /* stars.gif in Resources */,
+				A95BFBF625F7C5A300432305 /* sm_logo.png in Resources */,
 				04CC0AE725AC6A6500B8C4E2 /* Main.storyboard in Resources */,
-				0463B25825E3C2D800734DAD /* ladywalking.gif in Resources */,
+				A95BFC0A25F7C96A00432305 /* stars.gif in Resources */,
+				A95BFC0925F7C96A00432305 /* ladywalking.gif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -241,10 +310,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				04CC0AE425AC6A6500B8C4E2 /* ViewController.swift in Sources */,
+				A95BFBEE25F7C4E900432305 /* SMMainViewController.swift in Sources */,
+				A946498725FA3ACB00FDB22C /* SMMainVideoView.swift in Sources */,
+				A95BFBF125F7C53F00432305 /* SMControlButton.swift in Sources */,
+				A946497A25F8C64100FDB22C /* SMUserInterface.swift in Sources */,
+				A946498025F919AC00FDB22C /* SMSmallVideoView.swift in Sources */,
 				04CC0AE025AC6A6500B8C4E2 /* AppDelegate.swift in Sources */,
+				A946497C25F8E06D00FDB22C /* SMOptionViewController.swift in Sources */,
 				0463B25625E3BD4800734DAD /* UIImage+Gif.swift in Sources */,
+				A95BFBF325F7C55000432305 /* SMControlBar.swift in Sources */,
+				A946498A25FA529100FDB22C /* SMRemoteVideosView.swift in Sources */,
+				A946497E25F8EFD700FDB22C /* SMParticipantsTableViewCell.swift in Sources */,
+				A946498C25FA547F00FDB22C /* SMRemoteVideoTableViewCell.swift in Sources */,
 				04CC0AE225AC6A6500B8C4E2 /* SceneDelegate.swift in Sources */,
+				A946497325F7CE9500FDB22C /* MainViewController.swift in Sources */,
+				A946498E25FA5EC400FDB22C /* WebViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

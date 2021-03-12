@@ -8,11 +8,14 @@
 import UIKit
 import WebRTC
 
+/// ScreenMeet initial connection callback
 public typealias SMConnectCompletion = (_ error: SMError?) -> Void
+
+/// ScreenMeet disconnection callback
 public typealias SMDisconnectCompletion = (_ error: SMError?) -> Void
 
 /// Protocol to handle session events
-public protocol SMDelegate: class {
+public protocol ScreenMeetDelegate: class {
     
     /// on Audio stream created
     func onLocalAudioCreated()
@@ -23,15 +26,9 @@ public protocol SMDelegate: class {
     
     /// on Local Video stream stoped
     func onLocalVideoStopped()
-
-    /// on Local Video stream resumed
-    func onLocalVideoResumed()
-
+    
     /// on Local Audio stream stoped
     func onLocalAudioStopped()
-    
-    /// on Local Audio stream resumed
-    func onLocalAudioResumed()
     
     // Participants
     
@@ -59,16 +56,13 @@ public protocol SMDelegate: class {
     /// - Parameter participant: Participant details. See `SMParticipant`
     func onActiveSpeakerChanged(_ participant: SMParticipant)
     
-    // Session state
-    
-    /// Session state change
+    /// On connection state change
     /// - Parameter new session state: `SMState`
-    func onIceConnectionStateChanged(_ transportDirection: String, _ newState: SMIceConnectionState)
     func onConnectionStateChanged(_ newState: SMConnectionState)
 }
 
 class SMSession: NSObject {
-    weak var delegate: SMDelegate?
+    weak var delegate: ScreenMeetDelegate?
     
     private var connectCompletion: SMConnectCompletion? = nil
     private var session: Session!
@@ -118,12 +112,10 @@ class SMSession: NSObject {
             }
             else {
                 DispatchQueue.main.async {
-                    if state {
-                        self?.delegate?.onLocalVideoResumed()
-                    }
-                    else {
+                    if !state {
                         self?.delegate?.onLocalVideoStopped()
                     }
+                    // state resumed will be delivered via onLocalVideoCreated later
                 }
             }
         }
@@ -131,7 +123,6 @@ class SMSession: NSObject {
     
     func toggleLocalAudio() {
         let channel = SMChannelsManager.shared.channel(for: .mediasoup) as! SMMediasoupChannel
-        
         var state = channel.getAudioEnabled()
         state = !state
         channel.setAudioState(state)
@@ -143,12 +134,10 @@ class SMSession: NSObject {
             }
             else {
                 DispatchQueue.main.async {
-                    if state {
-                        self?.delegate?.onLocalAudioResumed()
-                    }
-                    else {
+                    if !state {
                         self?.delegate?.onLocalAudioStopped()
                     }
+                    // state resumed will be delivered via onLocalAudioCreated later
                 }
                 
             }
@@ -207,7 +196,7 @@ class SMSession: NSObject {
 
 extension SMSession {
     
-    func changeVideoSource(_ to: ScreenMeet.VideoSourceType, _ completionHandler: CapturereCompletion? = nil) {
+    func changeVideoSource(_ to: ScreenMeet.VideoSourceType, _ completionHandler: SMCaptureCompletion? = nil) {
         var newDevice: AVCaptureDevice! = nil
         switch to {
         case .backCamera:
@@ -220,7 +209,7 @@ extension SMSession {
         self.changeVideoSourceDevice(newDevice, completionHandler)
     }
     
-    func changeVideoSourceDevice(_ to: AVCaptureDevice!, _ completionHandler: CapturereCompletion? = nil) {
+    func changeVideoSourceDevice(_ to: AVCaptureDevice!, _ completionHandler: SMCaptureCompletion? = nil) {
         if let msChannel = SMChannelsManager.shared.channel(for: .mediasoup) as? SMMediasoupChannel {
             msChannel.changeCapturer(to, completionHandler: completionHandler)
         } else {

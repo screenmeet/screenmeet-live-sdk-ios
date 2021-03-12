@@ -18,11 +18,11 @@ class ScreenVideoCapturer: RTCVideoCapturer, SMVideoCapturer, AVCaptureVideoData
         super.init(delegate: delegate)
     }
     
-    func startCapture(_ completionHandler: CapturereCompletion? = nil) {
+    func startCapture(_ completionHandler: SMCaptureCompletion? = nil) {
         self.startCaptureScreen(completionHandler)
     }
 
-    public func startCaptureScreen(_ completionHandler: CapturereCompletion? = nil) {
+    public func startCaptureScreen(_ completionHandler: SMCaptureCompletion? = nil) {
         RTCDispatcher.dispatchAsync(on: .typeCaptureSession, block: {
             self.reconfigureCaptureSessionInput()
             self.captureSession.startRunning()
@@ -37,7 +37,6 @@ class ScreenVideoCapturer: RTCVideoCapturer, SMVideoCapturer, AVCaptureVideoData
                 let timeStampNs: Int64 = Int64(Date().timeIntervalSince1970 * 1000000000)
                 let videoFrame = RTCVideoFrame(buffer: rtcPixelBuffer, rotation: rotation, timeStampNs: timeStampNs)
                 self.delegate?.capturer(self, didCapture: videoFrame)
-                //self.videoScreenSource.capturer(videoScreenCapturer, didCapture: videoFrame)
             }, completionHandler: { (error) in
                 if error != nil {
                     completionHandler?(SMError(code: .capturerInternalError, message: error!.localizedDescription))
@@ -99,13 +98,11 @@ class ScreenVideoCapturer: RTCVideoCapturer, SMVideoCapturer, AVCaptureVideoData
     }
     
     public func sendScreenshot(_ sampleBuffer: CMSampleBuffer, _ orientation: RTCVideoRotation) {
-
-            if (self.delegate != nil) {
-                  if (CMSampleBufferGetNumSamples(sampleBuffer) != 1 || !CMSampleBufferIsValid(sampleBuffer) ||
-                    !CMSampleBufferDataIsReady(sampleBuffer)) {
-                  
-                  } else {
-                
+        if (self.delegate != nil) {
+              if (CMSampleBufferGetNumSamples(sampleBuffer) != 1 || !CMSampleBufferIsValid(sampleBuffer) ||
+                !CMSampleBufferDataIsReady(sampleBuffer)) {
+              }
+              else {
                 let _rotation = orientation
                 if let _pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
                     let _rtcPixelBuffer = RTCCVPixelBuffer(pixelBuffer: _pixelBuffer)
@@ -113,11 +110,11 @@ class ScreenVideoCapturer: RTCVideoCapturer, SMVideoCapturer, AVCaptureVideoData
                     let _videoFrame = RTCVideoFrame(buffer:_rtcPixelBuffer, rotation:_rotation, timeStampNs:timeStampNs)
                     self.delegate?.capturer(self, didCapture:_videoFrame)
                 }
-                }
-            }
+              }
+        }
     }
     
-    public func stopCapture(_ completionHandler: CapturereCompletion? = nil) {
+    public func stopCapture(_ completionHandler: SMCaptureCompletion? = nil) {
         RPScreenRecorder.shared().stopCapture(handler: {error in
             if let stopCaptureError = error {
                 completionHandler?(SMError(code: .capturerInternalError, message: stopCaptureError.localizedDescription))

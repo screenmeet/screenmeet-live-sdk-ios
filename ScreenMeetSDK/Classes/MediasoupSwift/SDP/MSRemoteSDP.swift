@@ -246,6 +246,7 @@ class MSRemoteSDP: NSObject {
             // Update the SDP object.
             var mediaObjects = sdpObject["media"] as! MSJsonArray
             mediaObjects[idx!] = newMediaSection.getObject()
+            sdpObject["media"] = mediaObjects
 
             // Regenerate BUNDLE mids.
             regenerateBundleMids();
@@ -261,6 +262,7 @@ class MSRemoteSDP: NSObject {
             // Update the SDP object.
             var mediaObjects = sdpObject["media"] as! MSJsonArray
             mediaObjects[mediaSections.count - 1] = newMediaSection.getObject()
+            sdpObject["media"] = mediaObjects
         }
     }
     

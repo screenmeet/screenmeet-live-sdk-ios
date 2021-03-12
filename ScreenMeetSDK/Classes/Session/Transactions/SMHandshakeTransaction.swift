@@ -12,7 +12,7 @@ typealias ReconnectHandler = () -> Void
 typealias ChannelMessageHandler = (SMChannelMessage) -> Void
 
 class SMHandshakeTransaction: SMTransaction {
-    private var delegate: SMDelegate?
+    private var delegate: ScreenMeetDelegate?
     private var completion: HandshakeCompletion!
     private var reconnectHandler: ReconnectHandler!
     private var channelMessageHandler: ChannelMessageHandler!
@@ -25,7 +25,7 @@ class SMHandshakeTransaction: SMTransaction {
         return self
     }
     
-    func withDelegate(_ delegate: SMDelegate?) -> SMHandshakeTransaction {
+    func withDelegate(_ delegate: ScreenMeetDelegate?) -> SMHandshakeTransaction {
         self.delegate = delegate
         return self
     }

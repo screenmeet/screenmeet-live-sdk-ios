@@ -65,6 +65,7 @@ class MSProducer: NSObject {
         _ appData: MSJson?) {
         
         self.id = id
+        self.privateDelegate = privateDelegate
         self.delegate = delegate
         self.localId = localId
         self.rtpSender = rtpSender

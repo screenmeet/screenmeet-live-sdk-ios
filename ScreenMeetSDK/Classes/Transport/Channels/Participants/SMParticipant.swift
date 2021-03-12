@@ -14,8 +14,22 @@ public struct SMParticipant {
     /// UID of participant
     public var id: String
 
-    /// Participant details
-    public var identity: SMIdentityInfo
+   var identity: SMIdentityInfo
+    
+    /// Participant name
+    public var name: String {
+        identity.user?.name ?? "noname"
+    }
+
+    /// Participant role HOST | GUEST
+    public var role: SMIdentityInfoRole {
+        identity.role ?? .NONE
+    }
+
+    /// Participant last connection time
+    public var connectedAt: Int64 {
+        identity.connectionInfo.connectedAt
+    }
 
     /// Participant sate. Mute/Unmute, Camera or screen shared etc. See `SMCallerState`
     public var callerState: SMCallerState

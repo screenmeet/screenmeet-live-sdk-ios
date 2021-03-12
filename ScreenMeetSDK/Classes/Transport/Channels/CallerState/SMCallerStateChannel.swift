@@ -10,11 +10,21 @@ import SocketIO
 
 /// Represents participant state
 public struct SMCallerState: SocketData {
+    
+    /// Is Audio enabled
     public var audioEnabled: Bool = false
-    public var outputEnabled: Bool = false
+    
+    var outputEnabled: Bool = false
+    
+    /// Is Video enabled
     public var videoEnabled: Bool = false
+    
+    /// Is Screen enabled
     public var screenEnabled: Bool = false
-    public var sourceType: String = "cam"
+
+    var sourceType: String = "cam"
+    
+    /// Is talking
     public var talking: Bool = false
     
     init() {

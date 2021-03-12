@@ -8,7 +8,8 @@
 import UIKit
 import WebRTC
 
-public typealias CapturereCompletion = (SMError?) -> Void
+/// Start/Stop Capturer callback
+public typealias SMCaptureCompletion = (SMError?) -> Void
 
 class SMTracksManager: NSObject {
     private var mediaStream: RTCMediaStream!
@@ -60,7 +61,7 @@ class SMTracksManager: NSObject {
     
     /// Captureres
     
-    func startCapturer(_ videoSourceDevice: AVCaptureDevice, _ completionHandler: CapturereCompletion? = nil) {
+    func startCapturer(_ videoSourceDevice: AVCaptureDevice?, _ completionHandler: SMCaptureCompletion? = nil) {
         if (videoCapturer != nil) {
             //TODO
             print("Video capturer already started")
@@ -72,7 +73,7 @@ class SMTracksManager: NSObject {
         videoCapturer.startCapture() { [weak self] error in
             if #available(iOS 13.0, *) {
                 let captureSessionConnections = self?.videoCapturer.getCaptureSession().connections
-                captureSessionConnections?.first!.videoOrientation = .portrait
+                captureSessionConnections?.first?.videoOrientation = .portrait
                 NSLog("Capture sessions retrieved")
                 completionHandler?(error)
             } else {
@@ -81,7 +82,7 @@ class SMTracksManager: NSObject {
         }
     }
 
-    func stopCapturer(completionHandler: CapturereCompletion? = nil) {
+    func stopCapturer(completionHandler: SMCaptureCompletion? = nil) {
         if (videoCapturer == nil) {
             //TODO
             print("Video capturer already stoped")
@@ -94,13 +95,22 @@ class SMTracksManager: NSObject {
     }
     
     func cleanup() {
+        if (self.videoCapturer != nil) {
+            self.videoCapturer.delegate = nil
+            (self.videoCapturer.getCaptureSession().outputs.first as? AVCaptureVideoDataOutput)?.setSampleBufferDelegate(nil, queue: nil)
+            self.videoCapturer.stopCapture { error in
+                
+            }
+        }
+       
+        self.videoCapturer = nil
         self.mediaStream = nil
         self.videoTrack.isEnabled = false
         self.videoTrack = nil
         self.videoSource = nil
     }
 
-    func changeCapturer(_ videoSourceDevice: AVCaptureDevice!, _ completionHandler: CapturereCompletion? = nil) {
+    func changeCapturer(_ videoSourceDevice: AVCaptureDevice!, _ completionHandler: SMCaptureCompletion? = nil) {
         if (videoCapturer != nil) {
             videoCapturer.stopCapture({error in
                 guard error == nil else {
@@ -115,7 +125,14 @@ class SMTracksManager: NSObject {
                         completionHandler?(error)
                         return
                     }
-                    newCapturer.startCapture(completionHandler)
+                    newCapturer.startCapture() { error in
+                        if #available(iOS 13.0, *) {
+                            let captureSessionConnections = newCapturer.getCaptureSession().connections
+                            captureSessionConnections.first?.videoOrientation = .portrait
+                        }
+                        
+                        completionHandler?(error)
+                    }
                     self.videoCapturer = newCapturer
                 })
             })

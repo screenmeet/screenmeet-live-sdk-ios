@@ -22,7 +22,7 @@ struct ConsumeOperation: Equatable {
 
 class SMMediasoupChannel: NSObject, SMChannel  {
     private var videoSourceDevice: AVCaptureDevice!
-    private var delegate: SMDelegate? = nil
+    private var delegate: ScreenMeetDelegate? = nil
     private var mediasoupTransportOptions: SMTransportOptions!
     private var tracksManager = SMTracksManager()
     
@@ -96,7 +96,6 @@ class SMMediasoupChannel: NSObject, SMChannel  {
             self.transport.webSocketClient.command(for: name, message: "set-capabilities", data: rtpCapabilities) { [self] data in
                 
                 self.createTransports()
-                self.startCapturer()
                 
                 self.transport.webSocketClient.command(for: name, message: "recv-all", data: rtpCapabilities) { data in
                     NSLog("Subscribed for all tracks")
@@ -113,7 +112,7 @@ class SMMediasoupChannel: NSObject, SMChannel  {
         createSwiftRecvTransport()
         createSwiftSendTransport()
         
-        addSwiftVideoTrack()
+        addSwiftVideoTrack(shouldAddAudioAfterCompletion: true)
     }
 
     func createSwiftSendTransport() {
@@ -135,6 +134,8 @@ class SMMediasoupChannel: NSObject, SMChannel  {
             }
             else {
                 self.sendTransport = sendTransport!
+                
+                checkBothTransportsCreated()
             }
         }
     }
@@ -159,6 +160,7 @@ class SMMediasoupChannel: NSObject, SMChannel  {
             }
             else {
                 self?.recvTransport = recvTransport!
+                checkBothTransportsCreated()
             }
         }
     }
@@ -175,13 +177,17 @@ class SMMediasoupChannel: NSObject, SMChannel  {
             }
             else {
                 self?.delegate?.onLocalAudioCreated()
-                self?.transactionCompletion?(nil)
                 self?.producers["audio"] = producer
+                
+                let channel = self?.transport.channelsManager.channel(for: .callerState) as! SMCallerStateChannel
+                channel.setAudioState(true)
             }
         }
     }
     
-    func addSwiftVideoTrack() {
+    func addSwiftVideoTrack(shouldAddAudioAfterCompletion: Bool = false) {
+        startCapturer()
+        
         let videoTrack = tracksManager.makeVideoTrack()
         let codecOptions = ["videoGoogleStartBitrate": 1000]
 
@@ -196,6 +202,9 @@ class SMMediasoupChannel: NSObject, SMChannel  {
             else {
                 self?.producers["video"] = producer
                 
+                let channel = self?.transport.channelsManager.channel(for: .callerState) as! SMCallerStateChannel
+                channel.setVideoState(true)
+
                 self?.delegate?.onLocalVideoCreated(videoTrack)
                 self?.addSwiftAudioTrack()
             }
@@ -206,12 +215,19 @@ class SMMediasoupChannel: NSObject, SMChannel  {
         tracksManager.startCapturer(videoSourceDevice)
     }
     
-    func changeCapturer(_ videoSourceDevice: AVCaptureDevice!, completionHandler: CapturereCompletion? = nil) {
-        tracksManager.changeCapturer(videoSourceDevice, completionHandler)
+    func changeCapturer(_ videoSourceDevice: AVCaptureDevice!, completionHandler: SMCaptureCompletion? = nil) {
+        self.videoSourceDevice = videoSourceDevice
+        
+        if (getVideoEnabled() == false) {
+            completionHandler?(SMError(code: .capturerInternalError, message: "Local video is currently stopped. Could not change capturer"))
+        }
+        else {
+            tracksManager.changeCapturer(videoSourceDevice, completionHandler)
+        }
     }
     
     func getVideoSourceDevice() -> AVCaptureDevice? {
-        return tracksManager.getVideoSourceDevice()
+        return self.videoSourceDevice
     }
     
     func consumeTrack(_ trackMessage: SMNewTrackAvailableMessage) {
@@ -229,6 +245,12 @@ class SMMediasoupChannel: NSObject, SMChannel  {
         
         if currentOperation == nil {
             queuOperation()
+        }
+    }
+    
+    private func checkBothTransportsCreated() {
+        if (sendTransport != nil && recvTransport != nil) {
+            transactionCompletion?(nil)
         }
     }
     
@@ -261,7 +283,6 @@ class SMMediasoupChannel: NSObject, SMChannel  {
                     self.consumers[consumer!.getId()]?.append(consumer!)
                     if consumer!.getKind() == "video" {
                         notifyParticipantVideoCreated(currentOperation.id)
-                        
                     }
                     if consumer!.getKind() == "audio" {
                         notifyParticipantAudioCreated(currentOperation.id)
@@ -296,6 +317,10 @@ class SMMediasoupChannel: NSObject, SMChannel  {
     }
     
     func notifyParticipantsMediaStateChanged(_ participantId: String, _ newCallerState: SMCallerState) {
+        
+        if (newCallerState.videoEnabled == false) {
+            removeVideoConsumer(participantId)
+        }
         let participantsChannel = transport.channelsManager.channel(for: .participants) as! SMParticipantsChannel
         let identity = participantsChannel.getIdentity(participantId)
         
@@ -417,7 +442,7 @@ class SMMediasoupChannel: NSObject, SMChannel  {
     
     func getVideoEnabled() -> Bool {
         if let producer = producers["video"] {
-            return producer.isPaused()
+            return true
         }
         
         return false
@@ -425,7 +450,7 @@ class SMMediasoupChannel: NSObject, SMChannel  {
     
     func getAudioEnabled() -> Bool {
         if let producer = producers["audio"] {
-            return producer.isPaused()
+            return true
         }
         
         return false
@@ -441,30 +466,33 @@ class SMMediasoupChannel: NSObject, SMChannel  {
     /// Outbound
     
     func setVideoState(_ isEnabled: Bool) {
-        if let producer = producers["video"] {
-            
-            if isEnabled {
-                producer.resume()
-            }
-            else {
-                producer.pause()
+        if isEnabled {
+            addSwiftVideoTrack()
+        }
+        else {
+            if let producer = producers["video"] {
+                producer.close()
+                producers["video"] = nil
+                tracksManager.cleanup()
+                
+                //xxxxxxx startCapturer()
             }
         }
     }
     
     func setAudioState(_ isEnabled: Bool) {
-        if let producer = producers["audio"] {
-            
-            if isEnabled {
-                producer.resume()
-            }
-            else {
-                producer.pause()
+        if isEnabled {
+            addSwiftAudioTrack()
+        }
+        else {
+            if let producer = producers["audio"] {
+                producer.close()
+                producers["audio"] = nil
             }
         }
     }
     
-    func setDelegate(_ delegate: SMDelegate?) {
+    func setDelegate(_ delegate: ScreenMeetDelegate?) {
         self.delegate = delegate
     }
     
@@ -487,6 +515,21 @@ class SMMediasoupChannel: NSObject, SMChannel  {
         return SMIceConnectionState(rawValue: state) ?? .disconnected
     }
     
+    private func removeVideoConsumer(_ participantId: String) {
+        var consumers = self.consumers[participantId]
+        
+        let videoConsumer = consumers?.first(where: { consumer -> Bool in
+            consumer.getKind() == "video"
+        })
+        
+        videoConsumer?.close()
+        consumers?.removeAll(where: { consumer -> Bool in
+            consumer.getKind() == "video"
+        })
+        
+        self.consumers[participantId] = consumers
+
+    }
     private func makeParticipant(_ participantId: String) -> SMParticipant {
         let callerStateChannel = transport.channelsManager.channel(for: .callerState) as! SMCallerStateChannel
         let participantChannel = transport.channelsManager.channel(for: .participants) as! SMParticipantsChannel
@@ -571,11 +614,11 @@ extension SMMediasoupChannel: MSSendTransportConnectDelegate {
     
     func onConnectionStateChange(_ transport: MSTransport, _ connectionState: String) {
         if transport is MSSendTransport {
-            delegate?.onIceConnectionStateChanged("send", SMIceConnectionState(rawValue: connectionState) ?? .closed)
+//            delegate?.onIceConnectionStateChanged("send", SMIceConnectionState(rawValue: connectionState) ?? .closed)
             NSLog("[MS] send transport connection state: " + connectionState)
         }
         else {
-            delegate?.onIceConnectionStateChanged("recv", SMIceConnectionState(rawValue: connectionState) ?? .closed)
+//            delegate?.onIceConnectionStateChanged("recv", SMIceConnectionState(rawValue: connectionState) ?? .closed)
             NSLog("[MS] recv transport connection state: " + connectionState)
         }
     }
