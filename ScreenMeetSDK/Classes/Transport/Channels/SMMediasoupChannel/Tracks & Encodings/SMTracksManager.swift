@@ -70,11 +70,13 @@ class SMTracksManager: NSObject {
         }
         
         videoCapturer = VideoCapturerFactory.videoCapturer(videoSourceDevice, delegate: self)
+        videoCapturer.delegate = nil
         videoCapturer.startCapture() { [weak self] error in
             if #available(iOS 13.0, *) {
                 let captureSessionConnections = self?.videoCapturer.getCaptureSession().connections
                 captureSessionConnections?.first?.videoOrientation = .portrait
-                NSLog("Capture sessions retrieved")
+                
+                self?.videoCapturer.delegate = self
                 completionHandler?(error)
             } else {
                 completionHandler?(SMError(code: .capturerInternalError, message: "Unsupportes OS version"))
@@ -111,12 +113,14 @@ class SMTracksManager: NSObject {
 
     func changeCapturer(_ videoSourceDevice: AVCaptureDevice!, _ completionHandler: SMCaptureCompletion? = nil) {
         if (videoCapturer != nil) {
+            videoCapturer.delegate = nil
             videoCapturer.stopCapture({error in
                 guard error == nil else {
                     completionHandler?(error)
                     return
                 }
                 let newCapturer = VideoCapturerFactory.videoCapturer(videoSourceDevice, delegate: self)
+                newCapturer.delegate = nil
                 newCapturer.startCapture({error in
                     guard error == nil else {
                         //restore capturing previous capturer
@@ -124,14 +128,14 @@ class SMTracksManager: NSObject {
                         completionHandler?(error)
                         return
                     }
-                    newCapturer.startCapture() { error in
-                        if #available(iOS 13.0, *) {
-                            let captureSessionConnections = newCapturer.getCaptureSession().connections
-                            captureSessionConnections.first?.videoOrientation = .portrait
-                        }
-                        
-                        completionHandler?(error)
+                    if #available(iOS 13.0, *) {
+                        let captureSessionConnections = newCapturer.getCaptureSession().connections
+                        captureSessionConnections.first?.videoOrientation = .portrait
                     }
+                    
+                    newCapturer.delegate = self
+                    
+                    completionHandler?(error)
                     self.videoCapturer = newCapturer
                 })
             })
@@ -158,7 +162,7 @@ class SMTracksManager: NSObject {
 
 extension SMTracksManager: RTCVideoCapturerDelegate {
     func capturer(_ capturer: RTCVideoCapturer, didCapture frame: RTCVideoFrame) {
-        //UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
+        UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
         self.videoSource?.capturer(capturer, didCapture: frame)
     }
 }

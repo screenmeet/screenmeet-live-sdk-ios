@@ -39,12 +39,14 @@ class SMAppStreamService {
     
     private let screenRecorder = RPScreenRecorder.shared()
     
-    func startStream(completion: @escaping (Result<CVPixelBuffer, SMAppStreamServiceError>) -> Void) {
+    func startStream(_ startHandler: SMCaptureCompletion?, completion: @escaping (Result<CVPixelBuffer, SMAppStreamServiceError>) -> Void) {
         guard !screenRecorder.isRecording else { return }
         
         screenRecorder.startCapture(handler: { [weak self] (sampleBuffer, sampleBufferType, error) in
             guard sampleBufferType == .video else { return }
-            guard error == nil else { return }
+            guard error == nil else {
+                return
+            }
             guard let pixelBuffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
             
             self?.frameProcessor.processFrame(pixelBuffer: pixelBuffer) { (pixelBuffer) in
@@ -53,6 +55,10 @@ class SMAppStreamService {
         }, completionHandler: { (error) in
             if error != nil {
                 completion(.failure(.startCaptureFailed))
+                startHandler?(SMError(code: .capturerInternalError, message: error!.localizedDescription))
+            }
+            else {
+                startHandler?(nil)
             }
         })
     }

@@ -28,7 +28,7 @@ class ScreenVideoCapturer: RTCVideoCapturer, SMVideoCapturer, AVCaptureVideoData
             self.reconfigureCaptureSessionInput()
             self.captureSession.startRunning()
             
-            ScreenVideoCapturer.appStreamService.startStream { (result) in
+            ScreenVideoCapturer.appStreamService.startStream(completionHandler) { (result) in
                 switch result {
                 case .success(let pixelBuffer):
                     let rotation = RTCVideoRotation._0 // Default rotation
@@ -118,6 +118,7 @@ class ScreenVideoCapturer: RTCVideoCapturer, SMVideoCapturer, AVCaptureVideoData
                     let inputs = self.captureSession.inputs.map { $0.copy() }
                     inputs.forEach({input in self.captureSession.removeInput(input as! AVCaptureInput)})
                     self.captureSession.stopRunning()
+                    self.delegate = nil
                     completionHandler?(nil)
                 })
             case .failure(let error):
