@@ -103,7 +103,6 @@ class MSPeerConnection: NSObject {
             }
             else {
                 completion(nil, MSError(type: .peerConnection, message: error!.localizedDescription))
-        
             }
         }
     }

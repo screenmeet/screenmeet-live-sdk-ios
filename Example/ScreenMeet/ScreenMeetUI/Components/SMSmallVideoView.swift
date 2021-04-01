@@ -115,7 +115,7 @@ class SMSmallVideoView: UIView {
     }
     
     func update(with participant: SMParticipant) {
-        update(with: participant.name, audioState: participant.callerState.audioEnabled, videoState: participant.callerState.videoEnabled, videoTrack: participant.videoTrack)
+        update(with: participant.name, audioState: participant.avState.audioState == .MICROPHONE, videoState: participant.avState.videoState == .CAMERA, videoTrack: participant.videoTrack)
     }
     
     func update(with name: String?, audioState: Bool, videoState: Bool, videoTrack: RTCVideoTrack?) {

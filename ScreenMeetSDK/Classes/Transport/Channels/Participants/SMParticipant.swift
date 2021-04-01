@@ -31,12 +31,78 @@ public struct SMParticipant {
         identity.connectionInfo.connectedAt
     }
 
-    /// Participant sate. Mute/Unmute, Camera or screen shared etc. See `SMCallerState`
-    public var callerState: SMCallerState
+    var callerState: SMCallerState
     
+    /// Participant sate. Mute/Unmute, Camera or screen shared etc. See `SMParticipantState`
+    public var avState: SMParticipantMediaState {
+        SMParticipantMediaState(callerState: self.callerState)
+    }
+    
+    /// Returns Is participant talking now
+    public var isTalking: Bool {
+        callerState.talking
+    }
+
     /// Participan's video track. Can be null if video is blocked by participant or not yet created  See `RTCVideoTrack`
     public var videoTrack: RTCVideoTrack?
     
     /// Participan's audio track. Can be null if aduio is blocked by participant or not yet created  See `RTCVideoTrack`
     public var aduioTrack: RTCAudioTrack?
 }
+
+/// Represents Audio and Video states of participant
+public struct SMParticipantMediaState {
+
+    var callerState: SMCallerState
+
+    /// Video state
+    public var videoState: VideoState {
+        if (callerState.screenEnabled) {
+            return .SCREEN
+        }
+        if (callerState.videoEnabled) {
+            return .CAMERA
+        }
+        return .NONE
+    }
+    
+    /// Is Video stream active
+    public var isVideoActive: Bool {
+        videoState != .NONE
+    }
+
+    /// Audio state
+    public var audioState: AudioState {
+        return callerState.audioEnabled ? .MICROPHONE : .NONE
+    }
+
+    /// Is Audio stream active
+    public var isAudioActive: Bool {
+        audioState != .NONE
+    }
+
+    /// Video state
+    public enum VideoState {
+        
+        /// Camera is shared
+        case CAMERA
+
+        /// Screen content is shared
+        case SCREEN
+        
+        /// Video stream is not shared
+        case NONE
+    }
+
+    /// Audio state
+    public enum AudioState {
+        
+        /// Microphone audio is shared
+        case MICROPHONE
+        
+        /// Audio stream is not shared
+        case NONE
+    }
+
+}
+

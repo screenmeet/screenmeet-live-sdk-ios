@@ -11,6 +11,7 @@ import ScreenMeetSDK
 
 class SMMainVideoView: UIView {
     
+    private weak var currentVideoVideTrack: RTCVideoTrack?
     var rtcVideoView: RTCEAGLVideoView = {
         let rtcVideoView = RTCEAGLVideoView()
         rtcVideoView.translatesAutoresizingMaskIntoConstraints = false
@@ -113,10 +114,13 @@ class SMMainVideoView: UIView {
     }
     
     func update(with participant: SMParticipant) {
-        update(with: participant.name, audioState: participant.callerState.audioEnabled, videoState: participant.callerState.videoEnabled, videoTrack: participant.videoTrack)
+        update(with: participant.name, audioState: participant.avState.audioState == .MICROPHONE, videoState: participant.avState.videoState == .CAMERA, videoTrack: participant.videoTrack)
     }
     
     func update(with name: String?, audioState: Bool, videoState: Bool, videoTrack: RTCVideoTrack?) {
+        currentVideoVideTrack?.remove(rtcVideoView)
+        currentVideoVideTrack = videoTrack
+        
         videoTrack?.add(rtcVideoView)
         nameLabel.text = name
         micImageView.isHidden = audioState

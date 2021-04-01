@@ -9,14 +9,13 @@
 [ScreenMeet.com](https://screenmeet.com)
 
 
-## Quick start
+## Usage
 
 Join ScreenMeetLive session
 ```swift
 ScreenMeet.config.organizationKey = yourMobileAPIKey //provided by ScreenMeet
-let code = "123456"             // session code
-let videoSource =  .backCamera  // select video source [ .backCamera | .frontCamera | .screen ]
-ScreenMeet.connect(code, videoSource) { [weak self] error in  
+let code = "OdeWGubyvsUh"             // session code
+ScreenMeet.connect(code) { [weak self] error in  
     if let error = error { 
         // session start error
     } else {
@@ -25,32 +24,74 @@ ScreenMeet.connect(code, videoSource) { [weak self] error in
 }
 ```
 
-Leave Session
+Retrieve Connection state
 ```swift
-ScreenMeet.disconnect { [weak self] error in
-    if let error = error { 
-        // error during disconnection
-    }
+let connectionState = ScreenMeet.getConnectionState() 
+
+switch connectionState {
+case .connecting:
+    print("waiting for connecting to call ...")
+case .connected:
+    print("joined the call")
+case .reconnecting:
+    print("trying to restore connection to call ...")
+case .disconnected(.callNotStarted):
+    print("Call disconnected. Call is not started")
+case .disconnected(.callEnded):
+    print("Call disconnected. Call is finished")
+case .disconnected(.leftCall):
+    print("Call disconnected. Client left call")
+case .disconnected(.networkError):
+    print("Call disconnected. Network error")
 }
 ```
 
-Retrieve Connection state
+Share Camera
 ```swift
-let connectionState = ScreenMeet.getConnectionState() // [ .connecting | .connected | .disconnected ]
+ScreenMeet.shareCamera() // by default start front camera sharing
+```
+To specify camera and/or camera configuration use `AVCaptureDevice`
+```swift
+let device = AVCaptureDevice.DiscoverySession.init(deviceTypes: [.builtInWideAngleCamera],
+                                                    mediaType: .video,
+                                                    position: .back).devices.first!
+ScreenMeet.shareCamera(device)
 ```
 
-Mute | Unmute Audio
+Share Screen
 ```swift
-let isAudioActive = ScreenMeet.isAudioActive() // true: unmuted, false: muted 
-
-ScreenMeet.toggleLocalAudio() // toggle mute/unmute
+ScreenMeet.shareScreen()
 ```
 
-Mute | Unmute Video
+Stop Video sharing
 ```swift
-let isVideoActive = ScreenMeet.isVideoActive() // true: unmuted, false: muted 
+ScreenMeet.stopVideoSharing() // Stop Camera or Screen sharing
+```
 
-ScreenMeet.toggleLocalVideo() // toggle mute/unmute
+Share Microphone
+```swift
+ScreenMeet.shareMicrophone()
+```
+
+Stop Audio sharing
+```swift
+ScreenMeet.stopAudioSharing() // Stop audio sharing
+```
+
+Retrieve Audio and Video states
+```swift
+let state = ScreenMeet.getMediaState()
+
+let isAudioActive = state.isAudioActive // true: unmuted, false: muted 
+let isVideoActive = state.isVideoActive // true: unmuted, false: muted 
+
+let videoState = state.videoState // VideoState enum [CAMERA, SCREEN, NONE]
+let audioState = state.audioState // AudioState enum [MICROPHONE, NONE]
+```
+
+Leave Session
+```swift
+ScreenMeet.disconnect()
 ```
 
 Call participants
@@ -58,18 +99,6 @@ Call participants
 let partisipantsList =  ScreenMeet.getParticipants() // Returns list of call participants [SMParticipant]
 ```
 
-Change Video Source
-
-- Camera: `.backCamera`, `.frontCamera`
-- Screen: `.screen`
-
-```swift
-ScreenMeet.changeVideoSource(.backCamera, {error in 
-    if let error = error { 
-        // change video source error
-    }
-})
-```
 ## Example
 
 To run the example project, clone the repo, and run `pod install` from the [Example](Example/) directory first.
@@ -183,22 +212,6 @@ To start work with SDK __organizationKey__ (mobileKey) is required
 ```swift
 //Set organization mobile Key
 ScreenMeet.shared.config.organizationKey = yourMobileAPIKey //provided by ScreenMeet
-```
-
-## Video Source
-Video source can be selected
-
-- Camera: `.backCamera`, `.frontCamera`
-- Screen: `.screen`
-
-```swift
-//Set video source
-config.setVideoSource(.backCamera) 
-```
-
-You can specify video device as video source. See `AVCaptureDevice`
-```swift
-config.setVideoSourceDevice(device: yourAVCaptureDevice)
 ```
 
 ## Logging level

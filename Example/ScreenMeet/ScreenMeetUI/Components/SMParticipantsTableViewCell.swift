@@ -87,7 +87,7 @@ class SMParticipantsTableViewCell: UITableViewCell {
         nameLabel.text = participant.name
         starImageView.isHidden = participant.role != .HOST
         
-        if participant.callerState.audioEnabled {
+        if participant.avState.audioState == .MICROPHONE {
             let image = UIImage(systemName: "mic.fill")
             micImageView.image = image
             micImageView.tintColor = UIColor(red: 33 / 255, green: 133 / 255, blue: 208 / 255, alpha: 1)
@@ -97,7 +97,7 @@ class SMParticipantsTableViewCell: UITableViewCell {
             micImageView.tintColor = UIColor(red: 54 / 255, green: 48 / 255, blue: 55 / 255, alpha: 1)
         }
         
-        if participant.callerState.videoEnabled {
+        if participant.avState.videoState == .CAMERA {
             let image = UIImage(systemName: "video.fill")
             cameraImageView.image = image
             cameraImageView.tintColor = UIColor(red: 33 / 255, green: 133 / 255, blue: 208 / 255, alpha: 1)

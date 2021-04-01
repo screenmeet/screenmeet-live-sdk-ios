@@ -105,7 +105,6 @@ class SMTracksManager: NSObject {
        
         self.videoCapturer = nil
         self.mediaStream = nil
-        self.videoTrack.isEnabled = false
         self.videoTrack = nil
         self.videoSource = nil
     }

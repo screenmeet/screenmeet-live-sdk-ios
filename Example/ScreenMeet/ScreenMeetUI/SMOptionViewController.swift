@@ -30,6 +30,8 @@ class SMOptionViewController: UIViewController {
         
         view = UIView()
         view.backgroundColor = tableView.backgroundColor
+        
+        headerLabel.text = "Call Participants (\(ScreenMeet.getParticipants().count + 1))"
 
         tableView.dataSource = self
         view.addSubview(tableView)
@@ -48,6 +50,7 @@ class SMOptionViewController: UIViewController {
     
     func reloadContent() {
         tableView.reloadData()
+        headerLabel.text = "Call Participants (\(ScreenMeet.getParticipants().count + 1))"
     }
 }
 
@@ -61,7 +64,7 @@ extension SMOptionViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SMParticipantsTableViewCell", for: indexPath) as! SMParticipantsTableViewCell
         let participants = ScreenMeet.getParticipants()
         if indexPath.row == 0 {
-            cell.setup(with: "Me", audioState: SMUserInterface.manager.isAudioEnabled, videoState: SMUserInterface.manager.isVideoEnabled)
+            cell.setup(with: "Me", audioState: SMUserInterface.manager.isAudioEnabled, videoState: SMUserInterface.manager.isCameraEnabled)
         } else {
             cell.setup(with: participants[indexPath.row - 1])
         }

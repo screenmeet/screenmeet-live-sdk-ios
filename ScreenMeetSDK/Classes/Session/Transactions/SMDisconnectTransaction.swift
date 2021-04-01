@@ -8,12 +8,11 @@
 import UIKit
 
 class SMDisconnectTransaction: SMTransaction {
-    private var completion: SMDisconnectCompletion!
     
-    func run(_ completion: @escaping SMDisconnectCompletion) {
+    func run() {
         transport.webSocketClient.diconnect()
         
         let channel = transport.channelsManager.channel(for: .mediasoup) as! SMMediasoupChannel
-        channel.disconnect(completion)
+        channel.disconnect()
     }
 }

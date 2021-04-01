@@ -10,7 +10,7 @@ import WebRTC
 
 protocol MSTransportConnectDelegate: class {
     func onConnect(_ transport: MSTransport, _ dtlsParameters: MSJson)
-    func onConnectionStateChange(_ transport: MSTransport, _ connectionState: String)
+    func onConnectionStateChange(_ transport: MSTransport, _ connectionState: RTCIceConnectionState)
 }
 
 class MSTransport: NSObject {
@@ -103,7 +103,7 @@ class MSTransport: NSObject {
         }
     }
     
-    func updateIceServers(_ iceServers: [String]) {
+    func updateIceServers(_ iceServers: MSJsonArray) {
         if closed {
             // Transport closed
         }
@@ -123,8 +123,7 @@ extension MSTransport: MSConnectDelegate {
     }
     
     func onConnectionStateChange(_ connectionState: RTCIceConnectionState) {
-        let state =  MSPeerConnection.iceConnectionState2String[connectionState]
-        transportConnectDelegate?.onConnectionStateChange(self, state ?? "unknown")
+        transportConnectDelegate?.onConnectionStateChange(self, connectionState)
     }
 }
 

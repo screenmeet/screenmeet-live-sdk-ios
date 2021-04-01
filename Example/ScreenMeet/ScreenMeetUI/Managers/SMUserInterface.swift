@@ -18,15 +18,15 @@ class SMUserInterface {
     weak var delegate: ScreenMeetDelegate?
     
     var isAudioEnabled: Bool {
-        return ScreenMeet.isAudioActive()
+        return ScreenMeet.getMediaState().isAudioActive
     }
     
-    var isVideoEnabled: Bool {
-        return ScreenMeet.isVideoActive()
+    var isCameraEnabled: Bool {
+        return ScreenMeet.getMediaState().isVideoActive && ScreenMeet.getMediaState().videoState == .CAMERA
     }
     
     var isScreenShareEnabled: Bool {
-        return ScreenMeet.getVideoSourceDevice() == nil
+        return ScreenMeet.getMediaState().isVideoActive && ScreenMeet.getMediaState().videoState == .SCREEN
     }
     
     var mainParticipantId: String?
@@ -47,6 +47,11 @@ extension SMUserInterface: ScreenMeetDelegate {
         delegate?.onLocalVideoCreated(videoTrack)
     }
     
+    func onLocalVideoSourceChanged() {
+        NSLog("[ScreenMeet] Video source for local video has changed")
+        delegate?.onLocalVideoSourceChanged()
+    }
+    
     func onLocalVideoStopped() {
         NSLog("[ScreenMeet] Local user stopped video")
         delegate?.onLocalVideoStopped()
@@ -64,7 +69,6 @@ extension SMUserInterface: ScreenMeetDelegate {
     
     func onParticipantVideoTrackCreated(_ participant: SMParticipant) {
         NSLog("[ScreenMeet] Participant " + participant.name + " started video")
-        mainParticipantId = participant.id
         delegate?.onParticipantVideoTrackCreated(participant)
     }
     
@@ -79,19 +83,17 @@ extension SMUserInterface: ScreenMeetDelegate {
     }
     
     func onParticipantMediaStateChanged(_ participant: SMParticipant) {
-        NSLog("[ScreenMeet] Participant " + participant.name + " has changed its media state (muted, resumed, etc) \(participant.callerState)")
-        mainParticipantId = participant.id
+        NSLog("[ScreenMeet] Participant " + participant.name + " has changed its media state (muted, resumed, etc) \(participant.avState)")
         delegate?.onParticipantMediaStateChanged(participant)
     }
     
     func onActiveSpeakerChanged(_ participant: SMParticipant) {
         NSLog("[ScreenMeet] Participant became active speaker: " + participant.name)
-        mainParticipantId = participant.id
         delegate?.onActiveSpeakerChanged(participant)
     }
     
     func onConnectionStateChanged(_ newState: SMConnectionState) {
-        NSLog("[ScreenMeet] Connection state: " + String(newState.rawValue))
-        delegate?.onConnectionStateChanged(newState)
+        NSLog("[ScreenMeet] Connection state: \(newState)")
+        delegate?.onConnectionStateChanged(newState)        
     }
 }

@@ -13,6 +13,7 @@ class ScreenVideoCapturer: RTCVideoCapturer, SMVideoCapturer, AVCaptureVideoData
         
     var frameQueue = DispatchQueue(label: "com.screenmeet.webrtc.screencapturer.video")
     let captureSession = AVCaptureSession()
+    static let appStreamService = SMAppStreamService()
     
     override init(delegate: RTCVideoCapturerDelegate) {
         super.init(delegate: delegate)
@@ -27,23 +28,18 @@ class ScreenVideoCapturer: RTCVideoCapturer, SMVideoCapturer, AVCaptureVideoData
             self.reconfigureCaptureSessionInput()
             self.captureSession.startRunning()
             
-            RPScreenRecorder.shared().startCapture(handler: { (sampleBuffer, sampleBufferType, error) in
-                guard sampleBufferType == .video else { return }
-                guard error == nil else { return }
-                guard let pixelBuffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
-                //videoScreenCapturer.sendPixelBufferToWebRTC(pixelBuffer: pixelBuffer)
-                let rotation = RTCVideoRotation._0 // Default rotation
-                let rtcPixelBuffer = RTCCVPixelBuffer(pixelBuffer: pixelBuffer)
-                let timeStampNs: Int64 = Int64(Date().timeIntervalSince1970 * 1000000000)
-                let videoFrame = RTCVideoFrame(buffer: rtcPixelBuffer, rotation: rotation, timeStampNs: timeStampNs)
-                self.delegate?.capturer(self, didCapture: videoFrame)
-            }, completionHandler: { (error) in
-                if error != nil {
-                    completionHandler?(SMError(code: .capturerInternalError, message: error!.localizedDescription))
+            ScreenVideoCapturer.appStreamService.startStream { (result) in
+                switch result {
+                case .success(let pixelBuffer):
+                    let rotation = RTCVideoRotation._0 // Default rotation
+                    let rtcPixelBuffer = RTCCVPixelBuffer(pixelBuffer: pixelBuffer)
+                    let timeStampNs: Int64 = Int64(Date().timeIntervalSince1970 * 1000000000)
+                    let videoFrame = RTCVideoFrame(buffer: rtcPixelBuffer, rotation: rotation, timeStampNs: timeStampNs)
+                    self.delegate?.capturer(self, didCapture: videoFrame)
+                case .failure(let error):
+                    completionHandler?(SMError(code: .capturerInternalError, message: error.localizedDescription))
                 }
-                //screen capturing started
-                completionHandler?(nil)
-            })
+            }
         })
     }
     
@@ -115,18 +111,19 @@ class ScreenVideoCapturer: RTCVideoCapturer, SMVideoCapturer, AVCaptureVideoData
     }
     
     public func stopCapture(_ completionHandler: SMCaptureCompletion? = nil) {
-        RPScreenRecorder.shared().stopCapture(handler: {error in
-            if let stopCaptureError = error {
-                completionHandler?(SMError(code: .capturerInternalError, message: stopCaptureError.localizedDescription))
-                return
+        ScreenVideoCapturer.appStreamService.stopStream { (result) in
+            switch result {
+            case .success:
+                RTCDispatcher.dispatchAsync(on: .typeCaptureSession, block: {
+                    let inputs = self.captureSession.inputs.map { $0.copy() }
+                    inputs.forEach({input in self.captureSession.removeInput(input as! AVCaptureInput)})
+                    self.captureSession.stopRunning()
+                    completionHandler?(nil)
+                })
+            case .failure(let error):
+                completionHandler?(SMError(code: .capturerInternalError, message: error.localizedDescription))
             }
-            RTCDispatcher.dispatchAsync(on: .typeCaptureSession, block: {
-                let inputs = self.captureSession.inputs.map { $0.copy() }
-                inputs.forEach({input in self.captureSession.removeInput(input as! AVCaptureInput)})
-                self.captureSession.stopRunning()
-                completionHandler?(nil)
-            })
-        })
+        }
     }
     
     func getCaptureSession() -> AVCaptureSession {

@@ -11,9 +11,6 @@ import WebRTC
 /// ScreenMeet initial connection callback
 public typealias SMConnectCompletion = (_ error: SMError?) -> Void
 
-/// ScreenMeet disconnection callback
-public typealias SMDisconnectCompletion = (_ error: SMError?) -> Void
-
 /// Protocol to handle session events
 public protocol ScreenMeetDelegate: class {
     
@@ -23,6 +20,9 @@ public protocol ScreenMeetDelegate: class {
     /// on Local Video stream created
     /// - Parameter videoTrack: Can be used to preview local video. See `RTCVideoTrack`
     func onLocalVideoCreated(_ videoTrack: RTCVideoTrack)
+    
+    /// Called when videosource for local video has changed (fro example from back camera to front camera, or fomr any camera to screen)
+    func onLocalVideoSourceChanged()
     
     /// on Local Video stream stoped
     func onLocalVideoStopped()
@@ -71,14 +71,12 @@ class SMSession: NSObject {
     /// - Parameter code: The string code of the room
     /// - Parameter config: Initial session configuration. See `SMSessionConfig`
     func connect(_ code: String,
-                 _ videoSourceDevice: AVCaptureDevice,
                  _ completion: @escaping SMConnectCompletion) {
         
             self.connectCompletion = completion
         
             SMHandshakeTransaction()
             .withCode(code)
-            .withDelegate(delegate)
             .withReconnectHandler({ [weak self] in self?.reconnect() })
             .withChannelMessageHandler { [weak self] channelMessage in
                 self?.processIncomingChannelMessage(channelMessage)
@@ -88,14 +86,14 @@ class SMSession: NSObject {
                 }
                 else {
                     self?.session = session
-                    self?.startWebRTC(session!.turn, videoSourceDevice)
+                    self?.startWebRTC(session!.turn)
                 }
         }
     }
     
     /// Disconnect, cancel all tracks, cleanup data
-    func disconnect(_ completion: @escaping SMDisconnectCompletion) {
-        SMDisconnectTransaction().run(completion)
+    func disconnect() {
+        SMDisconnectTransaction().run()
     }
     
     func toggleLocalVideo() {
@@ -121,26 +119,9 @@ class SMSession: NSObject {
         }
     }
     
-    func toggleLocalAudio() {
-        let channel = SMChannelsManager.shared.channel(for: .mediasoup) as! SMMediasoupChannel
-        var state = channel.getAudioEnabled()
-        state = !state
-        channel.setAudioState(state)
-        
-        SMAudioStateTransaction().run(state) { [weak self] error in
-            if let error = error {
-                NSLog("Could not toggle lcoal video: " + error.message)
-                //Could not toggle state of local video, hit some onError in delegate
-            }
-            else {
-                DispatchQueue.main.async {
-                    if !state {
-                        self?.delegate?.onLocalAudioStopped()
-                    }
-                    // state resumed will be delivered via onLocalAudioCreated later
-                }
-                
-            }
+    private func setVideoSourceDevice(videoDevice: AVCaptureDevice!) {
+        if let msChannel = SMChannelsManager.shared.channel(for: .mediasoup) as? SMMediasoupChannel {
+            msChannel.videoSourceDevice = videoDevice
         }
     }
     
@@ -164,8 +145,12 @@ class SMSession: NSObject {
         return channel.getIceConnectionState()
     }
     
-    private func startWebRTC(_ turnUrl: String, _ videoSourceDevice: AVCaptureDevice!) {
-        SMStartWebRTCTransaction(turnUrl, videoSourceDevice)
+    func getAppStreamService() -> SMAppStreamServiceProtocol {
+        ScreenVideoCapturer.appStreamService
+    }
+    
+    private func startWebRTC(_ turnUrl: String) {
+        SMStartWebRTCTransaction(turnUrl)
             .run { [weak self] error in
             if let error = error {
                 NSLog("WebRTC start failed: " + error.message)
@@ -195,31 +180,104 @@ class SMSession: NSObject {
 }
 
 extension SMSession {
-    
-    func changeVideoSource(_ to: ScreenMeet.VideoSourceType, _ completionHandler: SMCaptureCompletion? = nil) {
-        var newDevice: AVCaptureDevice! = nil
-        switch to {
-        case .backCamera:
-            newDevice = AVCaptureDevice.DiscoverySession.init(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .back).devices.first
-        case .frontCamera:
-            newDevice = AVCaptureDevice.DiscoverySession.init(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .front).devices.first
-        default:
-            newDevice = nil
-        }
-        self.changeVideoSourceDevice(newDevice, completionHandler)
+
+   func getAVState() -> SMParticipantMediaState {
+        var cState = SMCallerState()
+        cState.audioEnabled = getAudioEnabled()
+        cState.videoEnabled = getVideoEnabled()
+        cState.screenEnabled = getVideoEnabled() && getVideoSourceDevice() == nil
+        return SMParticipantMediaState(callerState: cState)
     }
     
-    func changeVideoSourceDevice(_ to: AVCaptureDevice!, _ completionHandler: SMCaptureCompletion? = nil) {
+    func startVideoSharing(_ cameraDevice: AVCaptureDevice) {
+        let msChannel = SMChannelsManager.shared.channel(for: .mediasoup) as! SMMediasoupChannel
+
+        if (getAVState().isVideoActive) {
+            /* if the video is running and it's not camera or the devices are different, just switch the source*/
+            if (getAVState().videoState != .CAMERA || getVideoSourceDevice()?.uniqueID != cameraDevice.uniqueID) {
+                setVideoSourceDevice(videoDevice: cameraDevice)
+                msChannel.changeCapturer(cameraDevice) { [weak self] error in
+                    if (error == nil) {
+                        DispatchQueue.main.async {
+                            self?.delegate?.onLocalVideoSourceChanged()
+                        }
+                    }
+                }
+            }
+            else {
+                NSLog("[ScreenMeet]", "Camrea video with the exact same device has been started already")
+            }
+        }
+        else {
+            setVideoSourceDevice(videoDevice: cameraDevice)
+            msChannel.setVideoState(true)
+            SMVideoStateTransaction().run(true)
+        }
+    }
+    
+    func startScreenSharing() {
+        let msChannel = SMChannelsManager.shared.channel(for: .mediasoup) as! SMMediasoupChannel
+        let audioVideoState = getAVState()
+        
+        /*If the video is running and it's not a screen, just change the source*/
+        if (audioVideoState.isVideoActive && audioVideoState.videoState != .SCREEN) {
+            msChannel.changeCapturer(nil) { [weak self] error in
+                if (error == nil) {
+                    DispatchQueue.main.async {
+                        self?.delegate?.onLocalVideoSourceChanged()
+                    }
+                }
+            }
+        }
+        /*The video is stopped - create video track*/
+        else if (!audioVideoState.isVideoActive) {
+            setVideoSourceDevice(videoDevice: nil)
+            msChannel.setVideoState(true)
+        }
+        
+    }
+
+    func stopVideoSharing() {
+        if (getAVState().isVideoActive) {
+            if let msChannel = SMChannelsManager.shared.channel(for: .mediasoup) as? SMMediasoupChannel {
+                msChannel.setVideoState(false)
+                
+                SMVideoStateTransaction().run(false) { [weak self] error in
+                    self?.delegate?.onLocalVideoStopped()
+                }
+            }
+        }
+        else {
+            NSLog("[ScreenMeet]", "Video has been stopped already")
+        }
+    }
+    
+    func stopAudioSharing() {
         if let msChannel = SMChannelsManager.shared.channel(for: .mediasoup) as? SMMediasoupChannel {
-            msChannel.changeCapturer(to, completionHandler: completionHandler)
-        } else {
-            completionHandler?(SMError(code: .capturerInternalError, message: "No MediaSoup channel"))
+            msChannel.setAudioState(false)
+            
+            SMAudioStateTransaction().run(false) { [weak self] error in
+                self?.delegate?.onLocalAudioStopped()
+            }
         }
     }
     
+    func startAudioSharing() {
+        if (getAVState().isAudioActive) {
+            NSLog("[ScreenMeet]", "Audio is being shared already")
+        }
+        else {
+            if let msChannel = SMChannelsManager.shared.channel(for: .mediasoup) as? SMMediasoupChannel {
+                msChannel.setAudioState(true)
+                
+                SMAudioStateTransaction().run(true)
+            }
+        }
+    }
+
     func getVideoSourceDevice() -> AVCaptureDevice! {
         if let msChannel = SMChannelsManager.shared.channel(for: .mediasoup) as? SMMediasoupChannel {
-            return msChannel.getVideoSourceDevice()
+            return msChannel.videoSourceDevice
         } else {
             return nil
         }

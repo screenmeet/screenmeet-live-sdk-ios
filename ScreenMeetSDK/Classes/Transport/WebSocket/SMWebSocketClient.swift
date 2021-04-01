@@ -12,10 +12,12 @@ class SMWebSocketClient: NSObject {
     typealias SocketReadyCompletion = (SMError?) -> Void
     typealias ChildConnectCompletion = (SMInitializationPayload?, _ sharedData: [String: Any]?, SMError?) -> Void
     
-    private var state: SMConnectionState = .disconnected {
+    private var state: SMConnectionState = .disconnected(.callNotStarted) {
         willSet {
             if (newValue != state) {
-                delegate?.onConnectionStateChanged(newValue)
+                DispatchQueue.main.async { [weak self] in
+                    ScreenMeet.session.delegate?.onConnectionStateChanged(newValue)
+                }
             }
         }
     }
@@ -26,21 +28,16 @@ class SMWebSocketClient: NSObject {
     
     private var reconnectHandler: ReconnectHandler?
     private var channelMessageHandler: ChannelMessageHandler?
-    private weak var delegate: ScreenMeetDelegate? = nil
     
     func connect(_ url: String,
                _ nameSpace: String,
                _ completion: @escaping SocketReadyCompletion) {
         
-        self.state = .connecting
-        /*let handleQueue = DispatchQueue(label: "socket.io-serial",
-                                                    qos: .userInitiated,
-                                                    attributes: [])*/
+        state = .connecting
         
         /* .connectParams is important! Without it server wont be able to register namespace... <- To investigate*/
         manager = SocketManager(socketURL: URL(string: url)!,
-                                config: [.log(true), .reconnects(false), .connectParams(["roomId": nameSpace])])
-        //manager.handleQueue = handleQueue
+                                config: [.log(true), .reconnects(true), .reconnectWait(1), .connectParams(["roomId": nameSpace])])
         
         socketIO = manager.socket(forNamespace: "/\(nameSpace)")
         
@@ -49,9 +46,12 @@ class SMWebSocketClient: NSObject {
             self.pingPongEvent()
             
             NSLog("SID: ", socketIO.sid)
+            NSLog("[SM Signalling] Ready")
         }
         
-        socketIO.on(clientEvent: .disconnect, callback: { [weak self] data, ack in
+        socketIO.on(clientEvent: .reconnect, callback: { [weak self] data, ack in
+            NSLog("[SM Signalling] Reconnect")
+            self?.state = .reconnecting
             self?.reconnectHandler?()
         })
         
@@ -79,15 +79,20 @@ class SMWebSocketClient: NSObject {
                     self?.channelMessageHandler?(channelMessage)
                 }
             }
-            
-           
         })
+        
         socketIO.on("removed", callback: { data, ack in
          
         })
         socketIO.on("terminate", callback: { [unowned self] data, ack in
-            self.state = .disconnected
+            state = .disconnected(.callEnded)
+            NSLog("[SM Signalling] Disconnected")
         })
+        
+        socketIO.on(clientEvent: .disconnect) { [unowned self] data, ack in
+            NSLog("[SM Signalling] Disconnect")
+            /* We do not update the state (to .disconnected) becasue a reconnecting may be happening soon*/
+        }
         
         socketIO.connect()
     }
@@ -104,7 +109,7 @@ class SMWebSocketClient: NSObject {
         let identityInfo = SMIdentityInfo()
         let handshakeOptions = SMHandshakeOptions(overrideDupe: nil, reconnect: true)
 
-        socketIO.emitWithAck("child-connect", identityInfo, handshakeOptions).timingOut(after: 0) { response in
+        socketIO.emitWithAck("child-connect", identityInfo, handshakeOptions).timingOut(after: 0) { [weak self] response in
             
             SMSocketDataParser().parse(response) { (initPayload: SMInitializationPayload?, error) in
                 if let error = error {
@@ -115,7 +120,7 @@ class SMWebSocketClient: NSObject {
                     /* we cant put shared data inside initPayload as it's very unstructured and not
                      strictly typed, so we pass it in the callback separately*/
                     if initPayload!.success {
-                        self.state = .connected
+                        self?.state = .connected
                         
                         let data = response[0] as? [String: Any]
                         completion(initPayload!, data!["sharedData"] as? [String : Any], nil)
@@ -123,8 +128,8 @@ class SMWebSocketClient: NSObject {
                     else {
                         completion(nil, nil, SMError(code: .socketError,
                                                      message: "Child connect failed. InitialPayload contains error..." + (initPayload!.error?.description ?? "N/A") ))
-                        self.diconnect()
-                        self.state = .disconnected
+                        self?.diconnect()
+                        self?.state = .disconnected(.networkError)
                     }
                 }
             }
@@ -150,16 +155,12 @@ class SMWebSocketClient: NSObject {
     }
     
     func diconnect() {
-        state = .disconnected
+        state = .disconnected(.leftCall)
         socketIO.disconnect()
     }
     
     func getConnectionState() -> SMConnectionState {
         return state
-    }
-    
-    func setDelegate(_ delegate: ScreenMeetDelegate?) {
-        self.delegate = delegate
     }
     
     var sid: String? {
@@ -178,5 +179,4 @@ class SMWebSocketClient: NSObject {
             ack.with("pong")
         }
     }
-    
 }

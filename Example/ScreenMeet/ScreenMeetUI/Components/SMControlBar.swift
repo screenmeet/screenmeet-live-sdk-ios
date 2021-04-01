@@ -26,23 +26,12 @@ class SMControlBar: UIStackView {
     
     var delegate: SMControlBarDelegate?
     
-    enum ButtonType: CaseIterable {
+    private enum ButtonType: CaseIterable {
         case mic
         case camera
         case screenShare
         case option
         case hangUp
-        
-        var defaultStatus: Bool {
-            switch self {
-            case .mic:
-                return true
-            case .camera:
-                return true
-            case .screenShare, .option, .hangUp:
-                return false
-            }
-        }
         
         var action: Selector {
             switch self {
@@ -59,29 +48,38 @@ class SMControlBar: UIStackView {
             }
         }
         
-        func colorForStatus(_ status: Bool) -> UIColor? {
+        func colorForStatus(_ status: ButtonStatus) -> UIColor? {
             switch self {
             case .mic, .camera, .screenShare:
-                if status {
-                    return UIColor(red: 33 / 255, green: 133 / 255, blue: 208 / 255, alpha: 1)
-                } else {
-                    return UIColor(red: 54 / 255, green: 48 / 255, blue: 55 / 255, alpha: 1)
+                switch status {
+                case .enabled:
+                    return UIColor(red: 53 / 255, green: 169 / 255, blue: 235 / 255, alpha: 1)
+                case .disabled, .unavailable:
+                    return UIColor(red: 122 / 255, green: 122 / 255, blue: 122 / 255, alpha: 1)
                 }
             case .option:
-                return UIColor(red: 54 / 255, green: 48 / 255, blue: 55 / 255, alpha: 1)
+                return UIColor(red: 122 / 255, green: 122 / 255, blue: 122 / 255, alpha: 1)
             case .hangUp:
-                return UIColor(red: 208 / 255, green: 25 / 255, blue: 25 / 255, alpha: 1)
+                return UIColor(red: 215 / 255, green: 57 / 255, blue: 48 / 255, alpha: 1)
             }
         }
         
-        func imageForStatus(_ status: Bool) -> UIImage? {
+        func imageForStatus(_ status: ButtonStatus) -> UIImage? {
+            let enabled: Bool
+            switch status {
+            case .enabled:
+                enabled = true
+            case .disabled, .unavailable:
+                enabled = false
+            }
+            
             switch self {
             case .mic:
-                return status ? UIImage(systemName: "mic.fill") : UIImage(systemName: "mic.slash.fill")
+                return enabled ? UIImage(systemName: "mic.fill") : UIImage(systemName: "mic.slash.fill")
             case .camera:
-                return status ? UIImage(systemName: "video.fill") : UIImage(systemName: "video.slash.fill")
+                return enabled ? UIImage(systemName: "video.fill") : UIImage(systemName: "video.slash.fill")
             case .screenShare:
-                return UIImage(systemName: "iphone")
+                return enabled ? UIImage(systemName: "iphone.badge.play") : UIImage(systemName: "iphone")
             case .option:
                 return UIImage(systemName: "ellipsis")
             case .hangUp:
@@ -90,39 +88,66 @@ class SMControlBar: UIStackView {
         }
     }
     
-    func setup() {
+    enum ButtonStatus {
+        case enabled
+        case disabled
+        case unavailable
+    }
+    
+    init() {
+        super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
         axis = .horizontal
         spacing = 10
         
         for buttonType in ButtonType.allCases {
-            let button = SMControlButton(type: .system)
-            button.setup()
+            let button = SMControlButton()
             
-            button.setImage(buttonType.imageForStatus(buttonType.defaultStatus), for: .normal)
+            button.setImage(buttonType.imageForStatus(.disabled), for: .normal)
             button.addTarget(self, action: buttonType.action, for: .touchUpInside)
-            button.backgroundColor = buttonType.colorForStatus(buttonType.defaultStatus)
+            button.backgroundColor = buttonType.colorForStatus(.disabled)
             
             addArrangedSubview(button)
             buttons[buttonType] = button
         }
     }
     
-    func micStatus(isEnabled: Bool) {
-        changeStatusFor(.mic, to: isEnabled)
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
-    func cameraStatus(isEnabled: Bool) {
-        changeStatusFor(.camera, to: isEnabled)
+    func micStatus(_ status: ButtonStatus) {
+        changeStatusFor(.mic, to: status)
     }
     
-    func screenShareStatus(isEnabled: Bool) {
-        changeStatusFor(.screenShare, to: isEnabled)
+    func cameraStatus(_ status: ButtonStatus) {
+        changeStatusFor(.camera, to: status)
     }
     
-    private func changeStatusFor(_ buttonType: ButtonType, to status: Bool) {
+    func screenShareStatus(_ status: ButtonStatus) {
+        changeStatusFor(.screenShare, to: status)
+    }
+    
+    func optionButtonBadgeCount(_ count: Int) {
+        let color = UIColor(red: 136 / 255, green: 217 / 255, blue: 215 / 255, alpha: 1)
+        if count <= 0 {
+            buttons[.option]?.setBadgeImage(nil)
+        } else if count <= 50 {
+            buttons[.option]?.setBadgeImage(UIImage(systemName: "\(count).square.fill"), color: color, backgroundColor: .white)
+        } else {
+            buttons[.option]?.setBadgeImage(UIImage(systemName: "dot.square.fill"), color: color, backgroundColor: .white)
+        }
+    }
+    
+    private func changeStatusFor(_ buttonType: ButtonType, to status: ButtonStatus) {
         buttons[buttonType]?.setImage(buttonType.imageForStatus(status), for: .normal)
         buttons[buttonType]?.backgroundColor = buttonType.colorForStatus(status)
+        
+        if status == .unavailable {
+            buttons[buttonType]?.setBadgeImage(UIImage(systemName: "exclamationmark.triangle.fill"), color: .red)
+        } else {
+            buttons[buttonType]?.setBadgeImage(nil)
+        }
     }
     
     @IBAction private func micButtonTapped() {

@@ -12,7 +12,6 @@ typealias ReconnectHandler = () -> Void
 typealias ChannelMessageHandler = (SMChannelMessage) -> Void
 
 class SMHandshakeTransaction: SMTransaction {
-    private var delegate: ScreenMeetDelegate?
     private var completion: HandshakeCompletion!
     private var reconnectHandler: ReconnectHandler!
     private var channelMessageHandler: ChannelMessageHandler!
@@ -22,11 +21,6 @@ class SMHandshakeTransaction: SMTransaction {
     func withCode(_ code: String) -> SMHandshakeTransaction {
         self.code = code
         
-        return self
-    }
-    
-    func withDelegate(_ delegate: ScreenMeetDelegate?) -> SMHandshakeTransaction {
-        self.delegate = delegate
         return self
     }
     
@@ -73,14 +67,12 @@ class SMHandshakeTransaction: SMTransaction {
     }
     
     private func performSocketHandshake(_ session: Session) {
-        transport.webSocketClient.setDelegate(delegate)
         
         transport.webSocketClient.setReconnectHandler(reconnectHandler)
         transport.webSocketClient.setChannelMessageHandler(channelMessageHandler)
         
         /* Assign teh delegate tp mediasoup channel so it can communicate back events*/
         let mediasoupChannel = transport.channelsManager.channel(for: .mediasoup) as! SMMediasoupChannel
-        mediasoupChannel.setDelegate(delegate)
         
         transport.webSocketClient.connect(session.servers.live.endpoint, session.id) {  error in
             if let error = error {

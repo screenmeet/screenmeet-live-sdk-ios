@@ -10,7 +10,6 @@ import UIKit
 struct SMTransport {
     let restClient = SMRestClient()
     let webSocketClient = SMWebSocketClient()
-    //let webRTCCLient = SMWebRTCClient()
     let channelsManager = SMChannelsManager.shared
     
     static let shared = SMTransport()

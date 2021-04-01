@@ -13,16 +13,15 @@ class SMStartWebRTCTransaction: SMTransaction {
     private var turnUrl: String
     private var videoSourceDevice: AVCaptureDevice! = nil
     
-    init(_ turnUrl: String, _ videoSourceDevice: AVCaptureDevice!) {
+    init(_ turnUrl: String) {
         self.turnUrl = turnUrl
-        self.videoSourceDevice = videoSourceDevice
     }
     
     func run(_ completion: @escaping StartWebRTCTransactionCompletion) {
         let mediasoupChannel = transport.channelsManager.channel(for: .mediasoup) as! SMMediasoupChannel
         let turnConfig = SMTurnConfiguration(turnHostName: turnUrl)
             
-        mediasoupChannel.startTransportAndChannels(turnConfig, videoSourceDevice, completion)
+        mediasoupChannel.startTransportAndChannels(turnConfig, completion)
     }
 }
 

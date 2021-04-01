@@ -21,6 +21,16 @@ class WebViewController: UIViewController {
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        ScreenMeet.getAppStreamService().setConfidential(webView: webView)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        ScreenMeet.getAppStreamService().unsetConfidential(webView: webView)
+    }
+    
     @IBAction func back(sender: Any) {
         if (self.webView.canGoBack) {
             self.webView.goBack()

@@ -14,7 +14,7 @@ import WebRTC
 /// Main class to work with ScreenMeet SDK
 public class ScreenMeet: NSObject {
     
-    private static let session = SMSession()
+    static let session = SMSession()
 
     /// ScreenMeet Configuration
     public static let config = ScreenMeetConfig()
@@ -28,81 +28,50 @@ public class ScreenMeet: NSObject {
     
     /// Starts ScreenMeet session. No code specified, user will be asked to enter code value
     /// - Parameter code: Identify session created by agent
-    /// - Parameter videoSourceDevice: New video source device to capture frames (see `AVCaptureDevice`)
     /// - Parameter completion: Session start callback with status `SMConnectCompletion`
     public static func connect(_ code: String,
-                        _ videoSourceDevice: AVCaptureDevice! = nil,
                         _ completion: @escaping SMConnectCompletion) {
-        session.connect(code, videoSourceDevice, completion)
-    }
-    
-    /// Video Source types
-    public enum VideoSourceType {
-        /// Back camera as video source device
-        case backCamera
-        /// Front camera as video source device
-        case frontCamera
-        /// Screen capturing as video source device
-        case screen
-    }
-
-    /// Starts ScreenMeet session. No code specified, user will be asked to enter code value
-    /// - Parameter code: Identify session created by agent
-    /// - Parameter videoSource: New video source that session should use. See `ScreenMeet.VideoSourceType`
-    /// - Parameter completion: Session start callback with status `SMConnectCompletion`
-    public static func connect(_ code: String,
-                        _ videoSource: VideoSourceType,
-                        _ completion: @escaping SMConnectCompletion) {
-        var videoSourceDevice: AVCaptureDevice! = nil
-        switch videoSource {
-            case .backCamera:
-                videoSourceDevice = AVCaptureDevice.DiscoverySession.init(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .back).devices.first
-            case .frontCamera:
-                videoSourceDevice = AVCaptureDevice.DiscoverySession.init(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .front).devices.first
-            default:
-                videoSourceDevice = nil
-        }
-        session.connect(code, videoSourceDevice, completion)
+        session.connect(code, completion)
     }
     
     /// Close screenmeet session and hangup.
-    /// - Parameter completion: Session start callback with status `SMConnectCompletion`
-    public static func disconnect(_ completion: @escaping SMDisconnectCompletion) {
-        session.disconnect(completion)
+    public static func disconnect() {
+        session.disconnect()
     }
     
-    /// Is Audio stream active (is unmuted)
-    public static func isAudioActive() -> Bool {
-        return session.getAudioEnabled()
+    /// Get caller audio/video states
+    public static func getMediaState() -> SMParticipantMediaState {
+        return session.getAVState()
+    }
+
+    /// Start camera sharing
+    /// - Parameter cameraDevice: Device to capture frames (see `AVCaptureDevice`). Default is front camera.
+    public static func shareCamera(_ cameraDevice: AVCaptureDevice!) {
+        if let device = cameraDevice {
+            session.startVideoSharing(device)
+        } else {
+            session.startVideoSharing(AVCaptureDevice.DiscoverySession.init(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .front).devices.first!)
+        }
+    }
+
+    /// Start screen sharing
+    public static func shareScreen() {
+        session.startScreenSharing()
+    }
+
+    /// Stop video sharing
+    public static func stopVideoSharing() {
+        session.stopVideoSharing()
     }
     
-    /// Is Video stream active (is unmuted)
-    public static func isVideoActive() -> Bool {
-        return session.getVideoEnabled()
-    }
-        
-    /// Toggle mute|unmute state for video
-    public static func toggleLocalVideo() {
-        session.toggleLocalVideo()
+    /// Start audio sharing
+    public static func shareMicrophone() {
+        session.startAudioSharing()
     }
     
-    /// Toggle mute|unmute state for audio
-    public static func toggleLocalAudio() {
-        session.toggleLocalAudio()
-    }
-    
-    /// Change source of video stream
-    /// - Parameter to: New video source that session should use. See `ScreenMeet.VideoSourceType`
-    /// - Parameter completionHandler: Handle error during source switch
-    public static func changeVideoSource(_ to: VideoSourceType, _ completionHandler: SMCaptureCompletion? = nil) {
-        session.changeVideoSource(to, completionHandler)
-    }
-    
-    /// Change source of video stream
-    /// - Parameter to: New video source device to capture frames (see `AVCaptureDevice`)
-    /// - Parameter completionHandler: Handle error during source switch
-    public static func changeVideoSourceDevice(_ to: AVCaptureDevice!, _ completionHandler: SMCaptureCompletion? = nil) {
-        session.changeVideoSourceDevice(to, completionHandler)
+    /// Stop audio sharing
+    public static func stopAudioSharing() {
+        session.stopAudioSharing()
     }
     
     /// Returns current video source device.
@@ -119,6 +88,11 @@ public class ScreenMeet: NSObject {
     /// Returns connection state. This is basically the signalling socket state. See `SMConnectionState`
     public static func getConnectionState() -> SMConnectionState {
         return session.getConnectionState()
+    }
+    
+    /// Returns SMAppStreamServiceProtocol. See `SMAppStreamServiceProtocol`
+    public static func getAppStreamService() -> SMAppStreamServiceProtocol {
+        session.getAppStreamService()
     }
     
 }
@@ -234,16 +208,58 @@ public class ScreenMeetConfig {
 }
 
 /// Represents current connection state
-public enum SMConnectionState: Int {
+public enum SMConnectionState: Equatable, CustomStringConvertible {
     
     /// Client is in initial connecting state
-    case connecting = 0
+    case connecting
     
     /// Client successfully connected (Connection is active)
-    case connected = 1
+    case connected
+    
+    /// Client is reconnecting
+    case reconnecting
 
     /// Client is disconnected or state before initial connection
-    case disconnected = 2
+    case disconnected(_ value: SMDisconnectionReason)
+    
+    public static func ==(l: SMConnectionState, r: SMConnectionState) -> Bool {
+        switch (l, r) {
+        case (.connecting, .connecting):
+            return true
+        case (.connected, .connected):
+            return true
+        case (.reconnecting, .reconnecting):
+            return true
+        case let (.disconnected(v0), .disconnected(v1)):
+            return v0 == v1
+        default:
+            return false
+        }
+    }
+    
+    public var description : String {
+      switch self {
+          case .connecting: return "connecting"
+          case .connected: return "connected"
+          case .reconnecting: return "reconnecting"
+          case .disconnected: return "disconnected"
+      }
+    }
+}
+
+/// Call disconnection reason
+public enum SMDisconnectionReason {
+    /// Call is finished
+    case callEnded
+
+    /// Client left call
+    case leftCall
+
+    /// Network error
+    case networkError
+    
+    /// Initial state before session is started
+    case callNotStarted
 }
 
 enum SMIceConnectionState: String {
@@ -255,3 +271,4 @@ enum SMIceConnectionState: String {
     case completed = "completed"
     case closed = "closed"
 }
+

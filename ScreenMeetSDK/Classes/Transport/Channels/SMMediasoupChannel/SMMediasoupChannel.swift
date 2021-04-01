@@ -9,6 +9,8 @@ import UIKit
 import WebRTC
 import SocketIO
 
+typealias MSTrackCreateCompletion = (MSError?) -> Void
+
 struct ConsumeOperation: Equatable {
     var kind: String
     var id: String
@@ -21,10 +23,12 @@ struct ConsumeOperation: Equatable {
 }
 
 class SMMediasoupChannel: NSObject, SMChannel  {
-    private var videoSourceDevice: AVCaptureDevice!
-    private var delegate: ScreenMeetDelegate? = nil
+    var videoSourceDevice: AVCaptureDevice!
     private var mediasoupTransportOptions: SMTransportOptions!
     private var tracksManager = SMTracksManager()
+    
+    private var shouldCreteVideoTrackAfterReconnect = false
+    private var shouldCreteAudioTrackAfterReconnect = false
     
     private var device: MSDevice!
     private var sendTransport: MSSendTransport!
@@ -56,9 +60,15 @@ class SMMediasoupChannel: NSObject, SMChannel  {
     /// Signalling
     
     func startTransportAndChannels(_ turnConfig: SMTurnConfiguration,
-                                   _ videoSourceDevice: AVCaptureDevice!,
                                    _ completion: @escaping StartWebRTCTransactionCompletion) {
-        self.videoSourceDevice = videoSourceDevice
+        
+        /* If transports are initialized - we are probably reconnecting now*/
+        if (sendTransport != nil && recvTransport != nil) {
+            shouldCreteVideoTrackAfterReconnect = getVideoEnabled()
+            shouldCreteAudioTrackAfterReconnect = getAudioEnabled()
+            
+            disconnect()
+        }
         
         transport.webSocketClient.command(for: name,
                                           message: "peer",
@@ -109,13 +119,11 @@ class SMMediasoupChannel: NSObject, SMChannel  {
     }
     
     func createTransports() {
-        createSwiftRecvTransport()
-        createSwiftSendTransport()
-        
-        addSwiftVideoTrack(shouldAddAudioAfterCompletion: true)
+        createRecvTransport()
+        createSendTransport()
     }
 
-    func createSwiftSendTransport() {
+    func createSendTransport() {
         let json = mediasoupTransportOptions.result.inbound.socketRepresentation() as! MSJson
         
         var iceParameters = json["iceParameters"] as! MSJson
@@ -140,7 +148,7 @@ class SMMediasoupChannel: NSObject, SMChannel  {
         }
     }
     
-    func createSwiftRecvTransport() {
+    func createRecvTransport() {
         let json = mediasoupTransportOptions.result.outbound.socketRepresentation() as! MSJson
         
         var iceParameters = json["iceParameters"] as! MSJson
@@ -165,7 +173,7 @@ class SMMediasoupChannel: NSObject, SMChannel  {
         }
     }
     
-    func addSwiftAudioTrack() {
+    func addAudioTrack(_ completion: MSTrackCreateCompletion? = nil) {
         let audioTrack = self.tracksManager.makeAudioTrack()
         
         let codecOptions = [ "audioStartBitrate": 24000]
@@ -174,19 +182,21 @@ class SMMediasoupChannel: NSObject, SMChannel  {
         sendTransport.produce(self, audioTrack, nil, codecOptions, nil) { [weak self] producer, error in
             if let error = error {
                 NSLog("Could not create audio track: " + error.message)
+                completion?(error)
             }
             else {
-                self?.delegate?.onLocalAudioCreated()
+                ScreenMeet.session.delegate?.onLocalAudioCreated()
                 self?.producers["audio"] = producer
                 
                 let channel = self?.transport.channelsManager.channel(for: .callerState) as! SMCallerStateChannel
                 channel.setAudioState(true)
+                completion?(nil)
             }
         }
     }
     
-    func addSwiftVideoTrack(shouldAddAudioAfterCompletion: Bool = false) {
-        startCapturer()
+    func addVideoTrack(_ completion: MSTrackCreateCompletion? = nil) {
+        tracksManager.startCapturer(videoSourceDevice)
         
         let videoTrack = tracksManager.makeVideoTrack()
         let codecOptions = ["videoGoogleStartBitrate": 1000]
@@ -197,6 +207,7 @@ class SMMediasoupChannel: NSObject, SMChannel  {
         
         sendTransport.produce(self, videoTrack, encodings, codecOptions, appData) { [weak self] producer, error in
             if let error = error {
+                completion?(error)
                 NSLog("Could not create video track: ", error.message)
             }
             else {
@@ -205,14 +216,10 @@ class SMMediasoupChannel: NSObject, SMChannel  {
                 let channel = self?.transport.channelsManager.channel(for: .callerState) as! SMCallerStateChannel
                 channel.setVideoState(true)
 
-                self?.delegate?.onLocalVideoCreated(videoTrack)
-                self?.addSwiftAudioTrack()
+                ScreenMeet.session.delegate?.onLocalVideoCreated(videoTrack)
+                completion?(nil)
             }
         }
-    }
-    
-    func startCapturer() {
-        tracksManager.startCapturer(videoSourceDevice)
     }
     
     func changeCapturer(_ videoSourceDevice: AVCaptureDevice!, completionHandler: SMCaptureCompletion? = nil) {
@@ -224,10 +231,6 @@ class SMMediasoupChannel: NSObject, SMChannel  {
         else {
             tracksManager.changeCapturer(videoSourceDevice, completionHandler)
         }
-    }
-    
-    func getVideoSourceDevice() -> AVCaptureDevice? {
-        return self.videoSourceDevice
     }
     
     func consumeTrack(_ trackMessage: SMNewTrackAvailableMessage) {
@@ -251,6 +254,15 @@ class SMMediasoupChannel: NSObject, SMChannel  {
     private func checkBothTransportsCreated() {
         if (sendTransport != nil && recvTransport != nil) {
             transactionCompletion?(nil)
+            
+            /* check if the tracks should be restored (after reconnecting)*/
+            if (shouldCreteVideoTrackAfterReconnect) {
+                addVideoTrack() { [weak self] error in
+                    if (error == nil && self?.shouldCreteAudioTrackAfterReconnect == true) {
+                        self?.addAudioTrack()
+                    }
+                }
+            }
         }
     }
     
@@ -313,7 +325,7 @@ class SMMediasoupChannel: NSObject, SMChannel  {
         consumers[participantId]?.removeAll()
         
         let participant = SMParticipant(id: participantId, identity: identity, callerState: SMCallerState())
-        delegate?.onParticipantLeft(participant)
+        ScreenMeet.session.delegate?.onParticipantLeft(participant)
     }
     
     func notifyParticipantsMediaStateChanged(_ participantId: String, _ newCallerState: SMCallerState) {
@@ -326,7 +338,7 @@ class SMMediasoupChannel: NSObject, SMChannel  {
         
         var participant = SMParticipant(id: participantId, identity: identity ?? SMIdentityInfo(), callerState: newCallerState)
         participant = extendParticipantWithTracks(participant)
-        delegate?.onParticipantMediaStateChanged(participant)
+        ScreenMeet.session.delegate?.onParticipantMediaStateChanged(participant)
     }
     
     func handleActiveSpeaker() {
@@ -354,7 +366,7 @@ class SMMediasoupChannel: NSObject, SMChannel  {
                     var participant = makeParticipant(currentActiveSpeakerId!)
                     participant = extendParticipantWithTracks(participant)
                     
-                    delegate?.onActiveSpeakerChanged(participant)
+                    ScreenMeet.session.delegate?.onActiveSpeakerChanged(participant)
                 }
             }
         }
@@ -399,7 +411,7 @@ class SMMediasoupChannel: NSObject, SMChannel  {
             
             participant = extendParticipantWithTracks(participant)
             
-            delegate?.onParticipantVideoTrackCreated(participant)
+            ScreenMeet.session.delegate?.onParticipantVideoTrackCreated(participant)
         }
     }
     
@@ -418,7 +430,7 @@ class SMMediasoupChannel: NSObject, SMChannel  {
             
             participant = extendParticipantWithTracks(participant)
             
-            delegate?.onParticipantAudioTrackCreated(participant)
+            ScreenMeet.session.delegate?.onParticipantAudioTrackCreated(participant)
         }
         
     }
@@ -430,7 +442,7 @@ class SMMediasoupChannel: NSObject, SMChannel  {
                                             callerState:SMCallerState()) // real callerstate should be deliverd via media state changed right after this call
             
             participant = extendParticipantWithTracks(participant)
-            delegate?.onParticipantJoined(participant)
+            ScreenMeet.session.delegate?.onParticipantJoined(participant)
         }
     }
     
@@ -441,7 +453,7 @@ class SMMediasoupChannel: NSObject, SMChannel  {
     /// Get tracks state
     
     func getVideoEnabled() -> Bool {
-        if let producer = producers["video"] {
+        if producers["video"] != nil {
             return true
         }
         
@@ -449,7 +461,7 @@ class SMMediasoupChannel: NSObject, SMChannel  {
     }
     
     func getAudioEnabled() -> Bool {
-        if let producer = producers["audio"] {
+        if producers["audio"] != nil {
             return true
         }
         
@@ -467,22 +479,20 @@ class SMMediasoupChannel: NSObject, SMChannel  {
     
     func setVideoState(_ isEnabled: Bool) {
         if isEnabled {
-            addSwiftVideoTrack()
+            addVideoTrack()
         }
         else {
             if let producer = producers["video"] {
                 producer.close()
                 producers["video"] = nil
                 tracksManager.cleanup()
-                
-                //xxxxxxx startCapturer()
             }
         }
     }
     
     func setAudioState(_ isEnabled: Bool) {
         if isEnabled {
-            addSwiftAudioTrack()
+            addAudioTrack()
         }
         else {
             if let producer = producers["audio"] {
@@ -492,19 +502,21 @@ class SMMediasoupChannel: NSObject, SMChannel  {
         }
     }
     
-    func setDelegate(_ delegate: ScreenMeetDelegate?) {
-        self.delegate = delegate
-    }
-    
-    func disconnect(_ completion: @escaping SMDisconnectCompletion) {
-        sendTransport.close()
-        recvTransport.close()
-        producers = [String: MSProducer]()
-        consumers = [String: [MSConsumer]]()
+    func disconnect() {
+        if (sendTransport != nil) {
+            sendTransport.close()
+            producers = [String: MSProducer]()
+            sendTransport = nil
+        }
+        
+        if (recvTransport != nil) {
+            recvTransport.close()
+            consumers = [String: [MSConsumer]]()
+            recvTransport = nil
+        }
         
         tracksManager.stopCapturer { [weak self] error in
             DispatchQueue.main.async {
-                completion(nil)
                 self?.tracksManager.cleanup()
             }
         }
@@ -530,6 +542,7 @@ class SMMediasoupChannel: NSObject, SMChannel  {
         self.consumers[participantId] = consumers
 
     }
+    
     private func makeParticipant(_ participantId: String) -> SMParticipant {
         let callerStateChannel = transport.channelsManager.channel(for: .callerState) as! SMCallerStateChannel
         let participantChannel = transport.channelsManager.channel(for: .participants) as! SMParticipantsChannel
@@ -540,6 +553,51 @@ class SMMediasoupChannel: NSObject, SMChannel  {
                                         identity: identity ?? SMIdentityInfo(),
                                         callerState: callerState ?? SMCallerState())
         return participant
+    }
+    
+    private func reconnectSendTransport() {
+        transport.webSocketClient.command(for: name,
+                                          message: "restart-ice",
+                                          data: ["transportType": "inbound"]) { [weak self] dataToParse in
+            
+            if let string = dataToParse[0] as? String {
+                NSLog("[MS] Send transport ICE reconnect failed: " + string)
+            }
+            if let data = dataToParse[0] as? MSJson {
+                if data["error"] == nil {
+                    let result = data["result"] as! MSJson
+                    
+                    let iceServers = result["iceServers"] as! MSJsonArray
+                    let iceParameters = result["iceParameters"] as! MSJson
+                    
+                    self?.sendTransport.updateIceServers(iceServers)
+                    self?.sendTransport.restartIce(iceParameters)
+                }
+            }
+        }
+    }
+    
+    private func reconnectRecvTransport() {
+        transport.webSocketClient.command(for: name,
+                                          message: "restart-ice",
+                                          data: ["transportType": "outbound"]) { [weak self] dataToParse in
+            if let string = dataToParse[0] as? String {
+                NSLog("[MS] Recv transport ICE reconnect failed: " + string)
+            }
+            if let data = dataToParse[0] as? MSJson {
+                if data["error"] == nil {
+                    let result = data["result"] as! MSJson
+                    
+                    let iceServers = result["iceServers"] as! MSJsonArray
+                    let iceParameters = result["iceParameters"] as! MSJson
+                    
+                    self?.recvTransport.updateIceServers(iceServers)
+                    self?.recvTransport.restartIce(iceParameters)
+                }
+            }
+            
+            
+        }
     }
 }
 
@@ -612,14 +670,20 @@ extension SMMediasoupChannel: MSSendTransportConnectDelegate {
         NSLog("[MS] on connect")
     }
     
-    func onConnectionStateChange(_ transport: MSTransport, _ connectionState: String) {
+    func onConnectionStateChange(_ transport: MSTransport, _ connectionState: RTCIceConnectionState) {
+        let stringState = MSPeerConnection.iceConnectionState2String[connectionState]
+        
         if transport is MSSendTransport {
-//            delegate?.onIceConnectionStateChanged("send", SMIceConnectionState(rawValue: connectionState) ?? .closed)
-            NSLog("[MS] send transport connection state: " + connectionState)
+            if connectionState == .failed || connectionState == .disconnected {
+                reconnectSendTransport()
+            }
+            NSLog("[MS] send transport connection state: " + (stringState ?? "unknown"))
         }
         else {
-//            delegate?.onIceConnectionStateChanged("recv", SMIceConnectionState(rawValue: connectionState) ?? .closed)
-            NSLog("[MS] recv transport connection state: " + connectionState)
+            if connectionState == .failed || connectionState == .disconnected {
+                reconnectRecvTransport()
+            }
+            NSLog("[MS] recv transport connection state: " + (stringState ?? "unknown"))
         }
     }
 }

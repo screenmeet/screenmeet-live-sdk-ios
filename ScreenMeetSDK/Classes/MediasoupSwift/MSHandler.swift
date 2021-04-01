@@ -78,18 +78,19 @@ class MSHandler: NSObject {
             completion(stats)
         }
     }
-    
-    func updateIceServers(_ iceServerUris: [String]) {
-        let configuration = pc.getConfiguration()
-        configuration.iceServers = []
 
-        for iceServerUri in iceServerUris {
-            let iceServer = RTCIceServer(urlStrings: [iceServerUri])
+    func updateIceServers(_ iceServers: MSJsonArray) {
+        let configuration = pc.getConfiguration()
+        
+        let servers = iceServers.map { iceServer -> RTCIceServer in
+            let uri = iceServer["urls"] as! String
+            let credential = iceServer["credential"] as! String
+            let username = iceServer["username"] as! String
             
-            var array = configuration.iceServers
-            array.append(iceServer)
-            configuration.iceServers = array
+            return RTCIceServer(urlStrings: [uri], username: username, credential: credential)
         }
+        
+        configuration.iceServers = servers
 
         if (pc.setConfiguration(configuration)) {
             return
@@ -99,36 +100,7 @@ class MSHandler: NSObject {
     }
     
     func restartIce(_ iceParameters: MSJson) {
-        NSLog("[MS] restart ice")
-        // Provide the remote SDP handler with new remote ICE parameters.
-        remoteSdp.updateIceParameters(iceParameters)
-
-        if (!transportReady) {
-            return
-        }
-        
-        let constraints = RTCMediaConstraints(mandatoryConstraints: ["iceRestart": "true"], optionalConstraints: nil)
-   
-        pc.createOffer(constraints) { [self] offer, error in
-            if let error = error {
-                NSLog("[MS] pc.createOffer() issue: " + error.message)
-            }
-            else {
-                NSLog("[MS] calling pc.setLocalDescription(): " + offer!)
-                pc.setLocalDescription(.offer, offer!) { error in
-                    let sdp = remoteSdp.getSdp()
-                    NSLog("[MS] calling pc.setRemoteDescription(): " + sdp)
-                    pc.setRemoteDescription(.answer, sdp) { error in
-                        if let error = error {
-                            NSLog("[MS] calling pc.setLocalDescription() issue: " + error.message)
-                        }
-                        else {
-                            // Ok
-                        }
-                    }
-                }
-            }
-        }
+       
     }
     
     static func getNativeRtpCapabilities(_ completion: @escaping MSGetNativeCapabilitiesCompletion) {
@@ -257,6 +229,10 @@ class MSSendHandler: MSHandler {
         let offerConstraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: optional)
         
         pc.createOffer(offerConstraints, completion: { [self] sdp, error in
+            if let error = error {
+                completion(nil, MSError(type: .peerConnection, message: error.message))
+                return
+            }
             
             let offer: String! = sdp
             let localSdpObject = SDPTransform.parse(offer)
@@ -478,7 +454,39 @@ class MSSendHandler: MSHandler {
     }
      
     override func restartIce(_ iceParameters: MSJson) {
+
+        // Provide the remote SDP handler with new remote ICE parameters.
+        remoteSdp.updateIceParameters(iceParameters)
+
+        if (!transportReady) {
+            return
+        }
         
+        let constraints = RTCMediaConstraints(mandatoryConstraints: ["iceRestart": "true"], optionalConstraints: nil)
+   
+        pc.createOffer(constraints) { [self] offer, error in
+            if let error = error {
+                NSLog("[MS] pc.createOffer() issue: " + error.message)
+            }
+            else {
+                NSLog("[MS] calling pc.setLocalDescription(): " + offer!)
+                pc.setLocalDescription(.offer, offer!) { error in
+                    
+                    let localSdpObj = SDPTransform.parse(pc.getLocalDescription())
+                    let answer = remoteSdp.getSdp()
+                    
+                    pc.setRemoteDescription(.answer, answer) { error in
+                        if let error = error {
+                            NSLog("[MS] restart ice for send transport failed: " + error.message)
+                        }
+                        else {
+                            NSLog("[MS] restart ice for send transport success")
+                        }
+                    }
+                    
+                }
+            }
+        }
     }
 }
 
@@ -658,7 +666,10 @@ class MSRecvHandler: MSHandler {
             else {
                 pc.setLocalDescription(.answer, answer!) { error in
                     if let error = error {
-                        NSLog("[MS] Could not restart ice for recv transport. pc.setLocalDescription() failed: " + error.message)
+                        NSLog("[MS] restart ice for recv transport failed: " + error.message)
+                    }
+                    else {
+                        NSLog("[MS] restart ice for recv transport success")
                     }
                 }
             }

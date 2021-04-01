@@ -9,7 +9,7 @@ import UIKit
 import SocketIO
 
 /// Represents participant state
-public struct SMCallerState: SocketData {
+struct SMCallerState: SocketData {
     
     /// Is Audio enabled
     public var audioEnabled: Bool = false
