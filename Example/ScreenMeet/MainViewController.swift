@@ -28,6 +28,7 @@ class MainViewController: UIViewController {
         codeTextField.isHidden = false
         codeTextField.isEnabled = true
         
+        ScreenMeet.config.endpoint = URL(string: "https://qa-edge.screenmeet.com")!
         NotificationCenter.default.addObserver(self, selector: #selector(screenMeetSessionEnd), name: Notification.Name("ScreenMeetSessionEnd"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(screenMeetUIDidAppear), name: Notification.Name("ScreenMeetUIDidAppear"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(screenMeetUIWillDisappear), name: Notification.Name("ScreenMeetUIWillDisappear"), object: nil)
@@ -80,7 +81,7 @@ class MainViewController: UIViewController {
                 codeTextField.isEnabled = false
                 
                 ScreenMeet.delegate = SMUserInterface.manager
-                ScreenMeet.connect(code) { [weak self] (error) in
+                ScreenMeet.connect(code, "Frank") { [weak self] (error) in
                     guard error == nil else {
                         self?.connectButton.setTitle("Connect", for: .normal)
                         self?.connectButton.isEnabled = true

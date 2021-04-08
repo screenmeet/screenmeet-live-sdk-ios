@@ -161,9 +161,9 @@ class SMIdentityInfo: Codable, SocketData {
         self.identityType = .GUEST
         //self.role = .AGENT
         //self.credential = SMIdentityInfoAuthCredential()
-        self.user = SMIdentityInfoUser(name: "Bob")
+        self.user = SMIdentityInfoUser(name: "Anonymous")
         self.clientApp = SMIdentityInfoClientApp(clientType: .native,
-                                                 version: "6.49.0",
+                                                 version: "1.0.0",
                                                  userAgent: "",
                                                  name: "v5-test-client")
     }

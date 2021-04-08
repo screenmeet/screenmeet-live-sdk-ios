@@ -12,6 +12,7 @@ import ScreenMeetSDK
 class SMMainVideoView: UIView {
     
     private weak var currentVideoVideTrack: RTCVideoTrack?
+    
     var rtcVideoView: RTCEAGLVideoView = {
         let rtcVideoView = RTCEAGLVideoView()
         rtcVideoView.translatesAutoresizingMaskIntoConstraints = false
@@ -121,7 +122,9 @@ class SMMainVideoView: UIView {
         currentVideoVideTrack?.remove(rtcVideoView)
         currentVideoVideTrack = videoTrack
         
+        rtcVideoView.contentMode = .scaleAspectFill
         videoTrack?.add(rtcVideoView)
+        
         nameLabel.text = name
         micImageView.isHidden = audioState
         imageView.isHidden = videoState

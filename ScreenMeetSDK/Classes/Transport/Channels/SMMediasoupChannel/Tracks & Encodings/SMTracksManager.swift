@@ -8,13 +8,13 @@
 import UIKit
 import WebRTC
 
-/// Start/Stop Capturer callback
-public typealias SMCaptureCompletion = (SMError?) -> Void
-
 class SMTracksManager: NSObject {
+    var videoSourceDevice: AVCaptureDevice?
+    
     private var mediaStream: RTCMediaStream!
     private var videoSource: RTCVideoSource!
     private var videoTrack: RTCVideoTrack!
+    private var audioTrack: RTCAudioTrack!
     
     private var videoCapturer: SMVideoCapturer!
     
@@ -26,17 +26,14 @@ class SMTracksManager: NSObject {
         }
                 
         videoSource = factory.videoSource()
-        videoSource.adaptOutputFormat(toWidth: 480, height: 640, fps: 30)
         
         videoTrack = factory.videoTrack(with: videoSource, trackId: "ARDAMSv0")
-        self.mediaStream.addVideoTrack(videoTrack)
-        videoTrack.isEnabled = true
-        
+        self.mediaStream.addVideoTrack(videoTrack)        
         return videoTrack
     }
     
     func makeAudioTrack() -> RTCAudioTrack {
-        let audioTrack: RTCAudioTrack = factory.audioTrack(withTrackId: "ARDAMSa0")
+        audioTrack = factory.audioTrack(withTrackId: "ARDAMSa0")
         audioTrack.isEnabled = true
         
         if mediaStream == nil {
@@ -61,12 +58,23 @@ class SMTracksManager: NSObject {
     
     /// Captureres
     
-    func startCapturer(_ videoSourceDevice: AVCaptureDevice?, _ completionHandler: SMCaptureCompletion? = nil) {
+    func startCapturer(_ videoSourceDevice: AVCaptureDevice?, _ completionHandler: SMCapturerOperationCompletion? = nil) {
         if (videoCapturer != nil) {
             //TODO
             print("Video capturer already started")
             completionHandler?(nil)
             return
+        }
+        
+        if videoSourceDevice == nil {
+            /* screen capture video source*/
+            videoSource.adaptOutputFormat(toWidth: Int32(Int(UIScreen.main.bounds.size.width)), height: Int32(UIScreen.main.bounds.size.height), fps: 30)
+        }
+        else {
+            let trackDimensions = CMVideoFormatDescriptionGetPresentationDimensions(videoSourceDevice!.activeFormat.formatDescription, usePixelAspectRatio: true, useCleanAperture: true)
+            videoSource.adaptOutputFormat(toWidth: Int32(trackDimensions.width),
+                                          height: Int32(trackDimensions.height),
+                                          fps: 30)
         }
         
         videoCapturer = VideoCapturerFactory.videoCapturer(videoSourceDevice, delegate: self)
@@ -76,15 +84,16 @@ class SMTracksManager: NSObject {
                 let captureSessionConnections = self?.videoCapturer.getCaptureSession().connections
                 captureSessionConnections?.first?.videoOrientation = .portrait
                 
+                completionHandler?(nil)
                 self?.videoCapturer.delegate = self
-                completionHandler?(error)
+                
             } else {
                 completionHandler?(SMError(code: .capturerInternalError, message: "Unsupportes OS version"))
             }
         }
     }
 
-    func stopCapturer(completionHandler: SMCaptureCompletion? = nil) {
+    func stopCapturer(completionHandler: SMCapturerOperationCompletion? = nil) {
         if (videoCapturer == nil) {
             //TODO
             print("Video capturer already stoped")
@@ -96,10 +105,8 @@ class SMTracksManager: NSObject {
         videoCapturer = nil
     }
     
-    func cleanup() {
+    func cleanupVideo() {
         if (self.videoCapturer != nil) {
-            self.videoCapturer.delegate = nil
-            (self.videoCapturer.getCaptureSession().outputs.first as? AVCaptureVideoDataOutput)?.setSampleBufferDelegate(nil, queue: nil)
             self.videoCapturer.stopCapture { error in
                 
             }
@@ -110,15 +117,34 @@ class SMTracksManager: NSObject {
         self.videoTrack = nil
         self.videoSource = nil
     }
+    
+    func cleanupAudio() {
+        if (self.audioTrack != nil) {
+            self.audioTrack.isEnabled = false
+            self.audioTrack = nil
+        }
+    }
 
-    func changeCapturer(_ videoSourceDevice: AVCaptureDevice!, _ completionHandler: SMCaptureCompletion? = nil) {
+    func changeCapturer(_ videoSourceDevice: AVCaptureDevice!, _ completionHandler: SMCapturerOperationCompletion? = nil) {
         if (videoCapturer != nil) {
             videoCapturer.delegate = nil
-            videoCapturer.stopCapture({error in
+            videoCapturer.stopCapture({ [self] error in
                 guard error == nil else {
                     completionHandler?(error)
                     return
                 }
+                
+                if videoSourceDevice == nil {
+                    /* screen capture video source*/
+                    videoSource.adaptOutputFormat(toWidth: Int32(Int(UIScreen.main.bounds.size.width)), height: Int32(UIScreen.main.bounds.size.height), fps: 30)
+                }
+                else {
+                    let trackDimensions = CMVideoFormatDescriptionGetPresentationDimensions(videoSourceDevice!.activeFormat.formatDescription, usePixelAspectRatio: true, useCleanAperture: true)
+                    self.videoSource.adaptOutputFormat(toWidth: Int32(trackDimensions.height),
+                                                       height: Int32(trackDimensions.width),
+                                                       fps: 30)
+                }
+                
                 let newCapturer = VideoCapturerFactory.videoCapturer(videoSourceDevice, delegate: self)
                 newCapturer.delegate = nil
                 newCapturer.startCapture({error in

@@ -37,7 +37,7 @@ class SMWebSocketClient: NSObject {
         
         /* .connectParams is important! Without it server wont be able to register namespace... <- To investigate*/
         manager = SocketManager(socketURL: URL(string: url)!,
-                                config: [.log(true), .reconnects(true), .reconnectWait(1), .connectParams(["roomId": nameSpace])])
+                                config: [.log(false), .reconnects(true), .reconnectWait(1), .connectParams(["roomId": nameSpace])])
         
         socketIO = manager.socket(forNamespace: "/\(nameSpace)")
         
@@ -105,8 +105,9 @@ class SMWebSocketClient: NSObject {
         self.channelMessageHandler = handler
     }
     
-    func childConnect(_ completion: @escaping ChildConnectCompletion) {
+    func childConnect(_ userName: String, _ completion: @escaping ChildConnectCompletion) {
         let identityInfo = SMIdentityInfo()
+        identityInfo.user = SMIdentityInfoUser(name: userName)
         let handshakeOptions = SMHandshakeOptions(overrideDupe: nil, reconnect: true)
 
         socketIO.emitWithAck("child-connect", identityInfo, handshakeOptions).timingOut(after: 0) { [weak self] response in

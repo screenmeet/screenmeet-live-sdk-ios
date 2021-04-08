@@ -241,7 +241,7 @@ class MSSendHandler: MSHandler {
                 setupTransport("server", localSdpObject)
             }
             
-            print("[MS] Calling pc->SetLocalDescription(): %s", offer.utf8)
+            //print("[MS] Calling pc->SetLocalDescription(): %s", offer.utf8)
 
             pc.setLocalDescription(.offer, offer) { [self] error in
                 if let error = error {
@@ -330,7 +330,7 @@ class MSSendHandler: MSHandler {
                                    codecOptions)
                    
                     let answer = remoteSdp.getSdp()
-                    print("[MS] Calling pc->SetRemoteDescription(): %s", answer.utf8)
+                    //print("[MS] Calling pc->SetRemoteDescription(): %s", answer.utf8)
                     
                    // DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { [self] in
                         pc.setRemoteDescription(.answer, answer) { error in
@@ -386,7 +386,7 @@ class MSSendHandler: MSHandler {
                 return
             }
             else {
-                NSLog("[MS] calling pc.setLocalDescription(): " + offer!)
+                //NSLog("[MS] calling pc.setLocalDescription(): " + offer!)
 
                 pc.setLocalDescription(.offer, offer!) { error in
                     if let error = error {
@@ -396,7 +396,7 @@ class MSSendHandler: MSHandler {
                     else {
                         let answer = remoteSdp.getSdp()
 
-                        NSLog("[MS] calling pc.setRemoteDescription(): " + answer)
+                        //NSLog("[MS] calling pc.setRemoteDescription(): " + answer)
                         pc.setRemoteDescription(.answer, answer) { error in
                             if let error = error {
                                 NSLog("[MS] pc.setRemoteDescription issue: " + error.message)
@@ -469,7 +469,7 @@ class MSSendHandler: MSHandler {
                 NSLog("[MS] pc.createOffer() issue: " + error.message)
             }
             else {
-                NSLog("[MS] calling pc.setLocalDescription(): " + offer!)
+                //NSLog("[MS] calling pc.setLocalDescription(): " + offer!)
                 pc.setLocalDescription(.offer, offer!) { error in
                     
                     let localSdpObj = SDPTransform.parse(pc.getLocalDescription())

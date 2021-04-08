@@ -28,10 +28,12 @@ public class ScreenMeet: NSObject {
     
     /// Starts ScreenMeet session. No code specified, user will be asked to enter code value
     /// - Parameter code: Identify session created by agent
+    /// - Parameter localUserName: The name of your local user. It will be visible to all attendees
     /// - Parameter completion: Session start callback with status `SMConnectCompletion`
     public static func connect(_ code: String,
-                        _ completion: @escaping SMConnectCompletion) {
-        session.connect(code, completion)
+                               _ localUserName: String,
+                               _ completion: @escaping SMConnectCompletion) {
+        session.connect(code, localUserName, completion)
     }
     
     /// Close screenmeet session and hangup.

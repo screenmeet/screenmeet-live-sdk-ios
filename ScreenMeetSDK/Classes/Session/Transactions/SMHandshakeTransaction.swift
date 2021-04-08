@@ -17,9 +17,16 @@ class SMHandshakeTransaction: SMTransaction {
     private var channelMessageHandler: ChannelMessageHandler!
     
     private var code: String!
+    private var localUserName: String = "Anonymous"
     
     func withCode(_ code: String) -> SMHandshakeTransaction {
         self.code = code
+        
+        return self
+    }
+    
+    func withLocalUserName(_ localUserName: String) -> SMHandshakeTransaction {
+        self.localUserName = localUserName
         
         return self
     }
@@ -67,12 +74,8 @@ class SMHandshakeTransaction: SMTransaction {
     }
     
     private func performSocketHandshake(_ session: Session) {
-        
         transport.webSocketClient.setReconnectHandler(reconnectHandler)
         transport.webSocketClient.setChannelMessageHandler(channelMessageHandler)
-        
-        /* Assign teh delegate tp mediasoup channel so it can communicate back events*/
-        let mediasoupChannel = transport.channelsManager.channel(for: .mediasoup) as! SMMediasoupChannel
         
         transport.webSocketClient.connect(session.servers.live.endpoint, session.id) {  error in
             if let error = error {
@@ -80,8 +83,7 @@ class SMHandshakeTransaction: SMTransaction {
                 return
             }
             else {
-                
-                self.transport.webSocketClient.childConnect { initialPayload, sharedData, error in
+                self.transport.webSocketClient.childConnect(self.localUserName) { initialPayload, sharedData, error in
                     if let error = error {
                         self.completion(nil, error)
                     }

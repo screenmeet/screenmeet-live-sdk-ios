@@ -19,11 +19,11 @@ class ScreenVideoCapturer: RTCVideoCapturer, SMVideoCapturer, AVCaptureVideoData
         super.init(delegate: delegate)
     }
     
-    func startCapture(_ completionHandler: SMCaptureCompletion? = nil) {
+    func startCapture(_ completionHandler: SMCapturerOperationCompletion? = nil) {
         self.startCaptureScreen(completionHandler)
     }
 
-    public func startCaptureScreen(_ completionHandler: SMCaptureCompletion? = nil) {
+    public func startCaptureScreen(_ completionHandler: SMCapturerOperationCompletion? = nil) {
         RTCDispatcher.dispatchAsync(on: .typeCaptureSession, block: {
             self.reconfigureCaptureSessionInput()
             self.captureSession.startRunning()
@@ -110,7 +110,7 @@ class ScreenVideoCapturer: RTCVideoCapturer, SMVideoCapturer, AVCaptureVideoData
         }
     }
     
-    public func stopCapture(_ completionHandler: SMCaptureCompletion? = nil) {
+    public func stopCapture(_ completionHandler: SMCapturerOperationCompletion? = nil) {
         ScreenVideoCapturer.appStreamService.stopStream { (result) in
             switch result {
             case .success:

@@ -413,6 +413,10 @@ extension SMMainViewController: ScreenMeetDelegate {
         }
         updateContent()
     }
+    
+    func onError(_ error: SMError) {
+        
+    }
 }
 
 extension SMMainViewController {

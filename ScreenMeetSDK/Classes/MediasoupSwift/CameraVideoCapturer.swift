@@ -18,20 +18,20 @@ class CameraVideoCapturer: RTCCameraVideoCapturer /*MSCameraVideoCapturer*/, SMV
         super.init(delegate: delegate)
     }
     
-    func startCapture(_ completionHandler: SMCaptureCompletion? = nil) {
+    func startCapture(_ completionHandler: SMCapturerOperationCompletion? = nil) {
         self.startCapture(with: device!, format: device!.activeFormat, fps: 30) { [weak self] (error: Error?) in
-            if error == nil {
-                completionHandler?(nil)
-                let queue = (self?.captureSession.outputs.first! as! AVCaptureVideoDataOutput).sampleBufferCallbackQueue
-                (self?.captureSession.outputs.first! as! AVCaptureVideoDataOutput).setSampleBufferDelegate(self, queue: queue)
-            }
-            else {
-                completionHandler?(SMError(code: .capturerInternalError, message: error!.localizedDescription))
-            }
+            RTCDispatcher.dispatchAsync(on: .typeCaptureSession, block: {
+                if error == nil {
+                    completionHandler?(nil)
+                }
+                else {
+                    completionHandler?(SMError(code: .capturerInternalError, message: error!.localizedDescription))
+                }
+            })
         }
     }
     
-    func stopCapture(_ completionHandler: SMCaptureCompletion? = nil) {
+    func stopCapture(_ completionHandler: SMCapturerOperationCompletion? = nil) {
         self.stopCapture(completionHandler: {
             RTCDispatcher.dispatchAsync(on: .typeCaptureSession, block: {
                 let inputs = self.captureSession.inputs.map { $0.copy() }

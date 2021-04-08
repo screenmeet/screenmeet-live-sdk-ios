@@ -10,6 +10,7 @@ import WebRTC
 import ScreenMeetSDK
 
 class SMSmallVideoView: UIView {
+    private weak var currentVideoTrack: RTCVideoTrack?
     
     var rtcVideoView: RTCEAGLVideoView = {
         let rtcVideoView = RTCEAGLVideoView()
@@ -119,6 +120,11 @@ class SMSmallVideoView: UIView {
     }
     
     func update(with name: String?, audioState: Bool, videoState: Bool, videoTrack: RTCVideoTrack?) {
+        currentVideoTrack?.remove(rtcVideoView)
+        currentVideoTrack = videoTrack
+        
+        rtcVideoView.contentMode = .scaleAspectFill
+        
         videoTrack?.add(rtcVideoView)
         nameLabel.text = name
         micImageView.isHidden = audioState

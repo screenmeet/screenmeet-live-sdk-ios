@@ -9,7 +9,9 @@ import UIKit
 import WebRTC
 import SocketIO
 
-typealias MSTrackCreateCompletion = (MSError?) -> Void
+typealias SMAudioOperationCompletion = (SMError?) -> Void
+typealias SMVideoOperationCompletion = (SMError?, RTCVideoTrack?) -> Void
+typealias SMCapturerOperationCompletion = (SMError?) -> Void
 
 struct ConsumeOperation: Equatable {
     var kind: String
@@ -22,8 +24,27 @@ struct ConsumeOperation: Equatable {
     }
 }
 
+protocol ProduceOperation {
+    
+}
+
+struct AudioOperation: ProduceOperation {
+    var isEnabled: Bool
+    var completion: SMAudioOperationCompletion
+}
+
+struct VideoOperation: ProduceOperation {
+    var isEnabled: Bool
+    var device: AVCaptureDevice?
+    var completion: SMVideoOperationCompletion
+}
+
+struct ChangeCapturerOperation: ProduceOperation {
+    var device: AVCaptureDevice?
+    var completion: SMCapturerOperationCompletion?
+}
+
 class SMMediasoupChannel: NSObject, SMChannel  {
-    var videoSourceDevice: AVCaptureDevice!
     private var mediasoupTransportOptions: SMTransportOptions!
     private var tracksManager = SMTracksManager()
     
@@ -36,10 +57,18 @@ class SMMediasoupChannel: NSObject, SMChannel  {
     private var producers = [String: MSProducer]()
     private var consumers = [String: [MSConsumer]]()
     
-    private let consumersQueue = DispatchQueue(label: "mediasoup.consumers.serial.queue", attributes: .concurrent)
-    private var operations = [ConsumeOperation]()
-    private var currentOperation: ConsumeOperation!
-    let group = DispatchGroup()
+    private let consumersQueue = DispatchQueue(label: "mediasoup.consumers.serial.queue")
+    private let consumersGroup = DispatchGroup()
+    
+    private let producersQueue = DispatchQueue(label: "mediasoup.producers.serial.queue", qos: .userInitiated)
+    //private let producersGroup = DispatchGroup()
+
+    private var consumeOperations = [ConsumeOperation]()
+    private var produceOperations = [ProduceOperation]()
+    
+    private var currentConsumerOperation: ConsumeOperation!
+    private var currentProducerOperation: ProduceOperation!
+    
     private var transactionCompletion: StartWebRTCTransactionCompletion? = nil
     
     private var newActiveSpeakerIdToSend: String? = nil
@@ -61,6 +90,7 @@ class SMMediasoupChannel: NSObject, SMChannel  {
     
     func startTransportAndChannels(_ turnConfig: SMTurnConfiguration,
                                    _ completion: @escaping StartWebRTCTransactionCompletion) {
+        
         
         /* If transports are initialized - we are probably reconnecting now*/
         if (sendTransport != nil && recvTransport != nil) {
@@ -173,7 +203,7 @@ class SMMediasoupChannel: NSObject, SMChannel  {
         }
     }
     
-    func addAudioTrack(_ completion: MSTrackCreateCompletion? = nil) {
+    func addAudioTrack(_ completion: SMAudioOperationCompletion? = nil) {
         let audioTrack = self.tracksManager.makeAudioTrack()
         
         let codecOptions = [ "audioStartBitrate": 24000]
@@ -182,23 +212,27 @@ class SMMediasoupChannel: NSObject, SMChannel  {
         sendTransport.produce(self, audioTrack, nil, codecOptions, nil) { [weak self] producer, error in
             if let error = error {
                 NSLog("Could not create audio track: " + error.message)
-                completion?(error)
+                completion?(SMError(code: .mediaTrackError, message: error.message))
             }
             else {
-                ScreenMeet.session.delegate?.onLocalAudioCreated()
                 self?.producers["audio"] = producer
                 
                 let channel = self?.transport.channelsManager.channel(for: .callerState) as! SMCallerStateChannel
-                channel.setAudioState(true)
-                completion?(nil)
+                channel.setAudioState(true) { error in
+                    if let error = error {
+                        completion?(error)
+                    }
+                    else {
+                        completion?(nil)
+                    }
+                }
             }
         }
     }
     
-    func addVideoTrack(_ completion: MSTrackCreateCompletion? = nil) {
-        tracksManager.startCapturer(videoSourceDevice)
-        
+    func addVideoTrack(_ completion: SMVideoOperationCompletion? = nil) {
         let videoTrack = tracksManager.makeVideoTrack()
+        videoTrack.isEnabled = false
         let codecOptions = ["videoGoogleStartBitrate": 1000]
 
         let appData = [ "profile": "cam"]
@@ -207,7 +241,7 @@ class SMMediasoupChannel: NSObject, SMChannel  {
         
         sendTransport.produce(self, videoTrack, encodings, codecOptions, appData) { [weak self] producer, error in
             if let error = error {
-                completion?(error)
+                completion?(SMError(code: .mediaTrackError, message: error.message), nil)
                 NSLog("Could not create video track: ", error.message)
             }
             else {
@@ -215,23 +249,15 @@ class SMMediasoupChannel: NSObject, SMChannel  {
                 
                 let channel = self?.transport.channelsManager.channel(for: .callerState) as! SMCallerStateChannel
                 channel.setVideoState(true)
-
-                ScreenMeet.session.delegate?.onLocalVideoCreated(videoTrack)
-                completion?(nil)
+                
+                self?.tracksManager.startCapturer(self?.tracksManager.videoSourceDevice ?? nil) { error in
+                    completion?(nil, videoTrack)
+                    videoTrack.isEnabled = true
+                }
             }
         }
     }
     
-    func changeCapturer(_ videoSourceDevice: AVCaptureDevice!, completionHandler: SMCaptureCompletion? = nil) {
-        self.videoSourceDevice = videoSourceDevice
-        
-        if (getVideoEnabled() == false) {
-            completionHandler?(SMError(code: .capturerInternalError, message: "Local video is currently stopped. Could not change capturer"))
-        }
-        else {
-            tracksManager.changeCapturer(videoSourceDevice, completionHandler)
-        }
-    }
     
     func consumeTrack(_ trackMessage: SMNewTrackAvailableMessage) {
         let kind: String = trackMessage.consumerParams.kind
@@ -244,77 +270,10 @@ class SMMediasoupChannel: NSObject, SMChannel  {
                                          producerId: producerId,
                                          rtpParameters: rtpParameters)
         
-        operations.insert(operation, at: operations.count)
+        consumeOperations.insert(operation, at: consumeOperations.count)
         
-        if currentOperation == nil {
-            queuOperation()
-        }
-    }
-    
-    private func checkBothTransportsCreated() {
-        if (sendTransport != nil && recvTransport != nil) {
-            transactionCompletion?(nil)
-            
-            /* check if the tracks should be restored (after reconnecting)*/
-            if (shouldCreteVideoTrackAfterReconnect) {
-                addVideoTrack() { [weak self] error in
-                    if (error == nil && self?.shouldCreteAudioTrackAfterReconnect == true) {
-                        self?.addAudioTrack()
-                    }
-                }
-            }
-        }
-    }
-    
-    private func queuOperation() {
-        if operations.isEmpty {
-            handleActiveSpeaker()
-            return
-        }
-        
-        currentOperation = operations.first!
-        group.enter()
-        
-        consumersQueue.async(flags: .barrier) { [self] in
-            recvTransport.consume(self,
-                                  currentOperation.id,
-                                  currentOperation.producerId,
-                                  currentOperation.kind,
-                                  &currentOperation.rtpParameters,
-                                  nil) { [self] consumer, error in
-                
-                if let error = error {
-                    NSLog("Could not handle remote track: " + error.message)
-                }
-                else {
-                    NSLog(consumer!.getKind() +  " consumer id: " + consumer!.getId())
-                    
-                    if (self.consumers[consumer!.getId()] == nil) {
-                        self.consumers[consumer!.getId()] = [MSConsumer]()
-                    }
-                    self.consumers[consumer!.getId()]?.append(consumer!)
-                    if consumer!.getKind() == "video" {
-                        notifyParticipantVideoCreated(currentOperation.id)
-                    }
-                    if consumer!.getKind() == "audio" {
-                        notifyParticipantAudioCreated(currentOperation.id)
-                    }
-                    
-                    let payload = SMResumeTrackPayload(_target_cid: currentOperation.id,
-                                                   kind: currentOperation.kind)
-                    transport.webSocketClient.command(for: .mediasoup, message: "resume-track", data: payload.socketRepresentation()) { data in
-                        NSLog("Resume track sent")
-                        
-                        group.leave()
-                    }
-                }
-            }
-        }
-        
-        group.notify(queue: .global()) { [weak self] in
-            self?.operations.remove(at: 0)
-            self?.currentOperation = nil
-            self?.queuOperation()
+        if currentConsumerOperation == nil {
+            queueConsumerOperation()
         }
     }
     
@@ -477,29 +436,53 @@ class SMMediasoupChannel: NSObject, SMChannel  {
     
     /// Outbound
     
-    func setVideoState(_ isEnabled: Bool) {
-        if isEnabled {
-            addVideoTrack()
+    func setVideoState(_ isEnabled: Bool, _ completion: @escaping SMVideoOperationCompletion) {
+        /* if there's a pending video operation - do nothing. Just wait till it completes*/
+        if let _ = produceOperations.first(where: { operation -> Bool in operation as? VideoOperation != nil }) {
+            return
         }
-        else {
-            if let producer = producers["video"] {
-                producer.close()
-                producers["video"] = nil
-                tracksManager.cleanup()
-            }
+        
+        let videoOperation = VideoOperation(isEnabled: isEnabled,
+                                            device: tracksManager.videoSourceDevice,
+                                            completion: completion)
+        produceOperations.append(videoOperation)
+        if currentProducerOperation == nil {
+            queueProducerOperation()
         }
     }
     
-    func setAudioState(_ isEnabled: Bool) {
-        if isEnabled {
-            addAudioTrack()
+    func setAudioState(_ isEnabled: Bool,  _ completion: @escaping SMAudioOperationCompletion) {
+        /* if there's a pending audio operation - do nothing. Just wait till it completes*/
+        if let _ = produceOperations.first(where: { operation -> Bool in operation as? AudioOperation != nil }) {
+            return
         }
-        else {
-            if let producer = producers["audio"] {
-                producer.close()
-                producers["audio"] = nil
-            }
+        
+        let audioOperation = AudioOperation(isEnabled: isEnabled, completion: completion)
+        produceOperations.append(audioOperation)
+        if currentProducerOperation == nil {
+            queueProducerOperation()
         }
+    }
+    
+    func changeCapturer(_ videoSourceDevice: AVCaptureDevice!, completionHandler: SMCapturerOperationCompletion? = nil) {
+        /* if there's a pending change capturer operation - do nothing. Just wait till it completes*/
+        if let _ = produceOperations.first(where: { operation -> Bool in operation as? ChangeCapturerOperation != nil }) {
+            return
+        }
+        
+        let changeCapturerOperation = ChangeCapturerOperation(device: videoSourceDevice, completion: completionHandler)
+        produceOperations.append(changeCapturerOperation)
+        if currentProducerOperation == nil {
+            queueProducerOperation()
+        }
+    }
+    
+    func setVideoSourceDevice(_ device: AVCaptureDevice?) {
+        tracksManager.videoSourceDevice = device
+    }
+    
+    func getVideoSourceDevice() -> AVCaptureDevice? {
+        return tracksManager.videoSourceDevice
     }
     
     func disconnect() {
@@ -517,7 +500,8 @@ class SMMediasoupChannel: NSObject, SMChannel  {
         
         tracksManager.stopCapturer { [weak self] error in
             DispatchQueue.main.async {
-                self?.tracksManager.cleanup()
+                self?.tracksManager.cleanupVideo()
+                self?.tracksManager.cleanupAudio()
             }
         }
     }
@@ -553,6 +537,176 @@ class SMMediasoupChannel: NSObject, SMChannel  {
                                         identity: identity ?? SMIdentityInfo(),
                                         callerState: callerState ?? SMCallerState())
         return participant
+    }
+    
+    private func checkBothTransportsCreated() {
+        if (sendTransport != nil && recvTransport != nil) {
+            transactionCompletion?(nil)
+            
+            /* check if the tracks should be restored (after reconnecting)*/
+            if (shouldCreteVideoTrackAfterReconnect) {
+                addVideoTrack() { [weak self] error, videoTrack in
+                    if (error == nil && self?.shouldCreteAudioTrackAfterReconnect == true) {
+                        DispatchQueue.main.async {
+                            ScreenMeet.session.delegate?.onLocalVideoCreated(videoTrack!)
+                        }
+                        
+                        self?.addAudioTrack()
+                    }
+                }
+            }
+        }
+    }
+    
+    private func changeCapturerInternal(_ videoSourceDevice: AVCaptureDevice!, completionHandler: SMCapturerOperationCompletion? = nil) {
+        self.tracksManager.videoSourceDevice = videoSourceDevice
+        
+        if (getVideoEnabled() == false) {
+            completionHandler?(SMError(code: .capturerInternalError, message: "Local video is currently stopped. Could not change capturer"))
+        }
+        else {
+            tracksManager.changeCapturer(videoSourceDevice, completionHandler)
+        }
+    }
+    
+    private func setAudioStateInternal(_ isEnabled: Bool,  _ completion: @escaping SMAudioOperationCompletion) {
+        if isEnabled {
+            addAudioTrack(completion)
+        }
+        else {
+            if let producer = producers["audio"] {
+                producer.close()
+                producers["audio"] = nil
+                tracksManager.cleanupAudio()
+                
+                let channel = transport.channelsManager.channel(for: .callerState) as! SMCallerStateChannel
+                channel.setAudioState(false) { error in
+                    if let error = error {
+                        completion(error)
+                    }
+                    else {
+                        completion(nil)
+                    }
+                }
+            }
+            else {
+                completion(nil)
+            }
+        }
+    }
+    
+    private func setVideoStateInternal(_ isEnabled: Bool, _ completion: @escaping SMVideoOperationCompletion) {
+        if isEnabled {
+            addVideoTrack(completion)
+        }
+        else {
+            if let producer = producers["video"] {
+                producer.close()
+                producers["video"] = nil
+                tracksManager.cleanupVideo()
+                
+                let channel = transport.channelsManager.channel(for: .callerState) as! SMCallerStateChannel
+                channel.setVideoState(false) { error in
+                    if let error = error {
+                        completion(error, nil)
+                    }
+                    else {
+                        completion(nil, nil)
+                    }
+                }
+            }
+            else {
+                completion(nil, nil)
+            }
+        }
+    }
+    
+    private func queueProducerOperation() {
+        if produceOperations.isEmpty {
+            return
+        }
+        
+        currentProducerOperation = produceOperations.first!
+        producersQueue.async(flags: .inheritQoS) { [self] in
+            if let videoOperation = currentProducerOperation as? VideoOperation {
+                tracksManager.videoSourceDevice = videoOperation.device
+                setVideoStateInternal(videoOperation.isEnabled) { [weak self] error, videoTrack in
+                    self?.proceedWithNextProduceOperation()
+                    videoOperation.completion(error, videoTrack)
+                }
+            }
+            if let audioOperation = currentProducerOperation as? AudioOperation {
+                setAudioStateInternal(audioOperation.isEnabled) { [weak self] error in
+                    self?.proceedWithNextProduceOperation()
+                    audioOperation.completion(error)
+                }
+            }
+            
+            if let changeCapturerOperation = currentProducerOperation as? ChangeCapturerOperation {
+                changeCapturerInternal(changeCapturerOperation.device) { [weak self] error in
+                    self?.proceedWithNextProduceOperation()
+                    changeCapturerOperation.completion?(error)
+                }
+            }
+        }
+    }
+    
+    private func proceedWithNextProduceOperation() {
+        produceOperations.remove(at: 0)
+        currentProducerOperation = nil
+        queueProducerOperation()
+    }
+    
+    private func queueConsumerOperation() {
+        if consumeOperations.isEmpty {
+            handleActiveSpeaker()
+            return
+        }
+        
+        currentConsumerOperation = consumeOperations.first!
+        consumersGroup.enter()
+        
+        consumersQueue.async(flags: .barrier) { [self] in
+            recvTransport.consume(self,
+                                  currentConsumerOperation.id,
+                                  currentConsumerOperation.producerId,
+                                  currentConsumerOperation.kind,
+                                  &currentConsumerOperation.rtpParameters,
+                                  nil) { [self] consumer, error in
+                
+                if let error = error {
+                    NSLog("Could not handle remote track: " + error.message)
+                }
+                else {
+                    NSLog(consumer!.getKind() +  " consumer id: " + consumer!.getId())
+                    
+                    if (self.consumers[consumer!.getId()] == nil) {
+                        self.consumers[consumer!.getId()] = [MSConsumer]()
+                    }
+                    self.consumers[consumer!.getId()]?.append(consumer!)
+                    if consumer!.getKind() == "video" {
+                        notifyParticipantVideoCreated(currentConsumerOperation.id)
+                    }
+                    if consumer!.getKind() == "audio" {
+                        notifyParticipantAudioCreated(currentConsumerOperation.id)
+                    }
+                    
+                    let payload = SMResumeTrackPayload(_target_cid: currentConsumerOperation.id,
+                                                              kind: currentConsumerOperation.kind)
+                    transport.webSocketClient.command(for: .mediasoup, message: "resume-track", data: payload.socketRepresentation()) { data in
+                        NSLog("Resume track sent")
+                        
+                        consumersGroup.leave()
+                    }
+                }
+            }
+        }
+        
+        consumersGroup.notify(queue: .global()) { [weak self] in
+            self?.consumeOperations.remove(at: 0)
+            self?.currentConsumerOperation = nil
+            self?.queueConsumerOperation()
+        }
     }
     
     private func reconnectSendTransport() {
@@ -595,8 +749,6 @@ class SMMediasoupChannel: NSObject, SMChannel  {
                     self?.recvTransport.restartIce(iceParameters)
                 }
             }
-            
-            
         }
     }
 }
@@ -654,9 +806,7 @@ extension SMMediasoupChannel: MSSendTransportConnectDelegate {
         if transport is MSRecvTransport {
             transportType = "recv"
         }
-        else {
-            NSLog("")
-        }
+        
         let connectTransportPayload = SMConnectTransportPayload(transportId: transport.getId(),
                                             transportType: transportType,
                                             dtlsParameters: dtls)

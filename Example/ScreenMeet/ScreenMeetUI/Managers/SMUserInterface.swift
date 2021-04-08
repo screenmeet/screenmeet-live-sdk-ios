@@ -96,4 +96,9 @@ extension SMUserInterface: ScreenMeetDelegate {
         NSLog("[ScreenMeet] Connection state: \(newState)")
         delegate?.onConnectionStateChanged(newState)        
     }
+    
+    func onError(_ error: SMError) {
+        NSLog("[ScreenMeet] Error: \(error.message)")
+        delegate?.onError(error)
+    }
 }

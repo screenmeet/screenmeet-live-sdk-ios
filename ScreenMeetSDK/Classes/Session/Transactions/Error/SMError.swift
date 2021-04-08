@@ -24,6 +24,9 @@ public enum SMErrorCode: Int {
     
     /// Video capturer error
     case capturerInternalError = 100005
+    
+    /// Media track error
+    case mediaTrackError = 100006
 }
 
 /// Represents ScreenMeet error
