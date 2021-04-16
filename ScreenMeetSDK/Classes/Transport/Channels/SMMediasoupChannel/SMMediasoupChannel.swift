@@ -251,8 +251,23 @@ class SMMediasoupChannel: NSObject, SMChannel  {
                 channel.setVideoState(true)
                 
                 self?.tracksManager.startCapturer(self?.tracksManager.videoSourceDevice ?? nil) { error in
-                    completion?(nil, videoTrack)
-                    videoTrack.isEnabled = true
+                    
+                    if let capturerError = error {
+                        
+                        //this completion is needed to properly fail the pending startVideo operation (that is pending in the queue)
+                        completion?(capturerError, nil)
+                        
+                        // capturer failed, should stop video track
+                        self?.setVideoState(false) { error, videoTrack in
+                            ScreenMeet.session.delegate?.onLocalVideoStopped()
+                            ScreenMeet.session.delegate?.onError(capturerError)
+                        }
+                    }
+                    else {
+                        completion?(nil, videoTrack)
+                        videoTrack.isEnabled = true
+                    }
+                    
                 }
             }
         }
@@ -559,15 +574,28 @@ class SMMediasoupChannel: NSObject, SMChannel  {
     }
     
     private func changeCapturerInternal(_ videoSourceDevice: AVCaptureDevice!, completionHandler: SMCapturerOperationCompletion? = nil) {
-        self.tracksManager.videoSourceDevice = videoSourceDevice
-        
-        if (getVideoEnabled() == false) {
-            completionHandler?(SMError(code: .capturerInternalError, message: "Local video is currently stopped. Could not change capturer"))
+            self.tracksManager.videoSourceDevice = videoSourceDevice
+            
+            if (getVideoEnabled() == false) {
+                completionHandler?(SMError(code: .capturerInternalError, message: "Local video is currently stopped. Could not change capturer"))
+            }
+            else {
+                tracksManager.changeCapturer(videoSourceDevice) { [weak self] capturerError in
+                    if let capturerError = capturerError {
+                        completionHandler?(capturerError)
+                        
+                        // capturer failed, should stop video track
+                        self?.setVideoState(false) { error, videoTrack in
+                            ScreenMeet.session.delegate?.onLocalVideoStopped()
+                            ScreenMeet.session.delegate?.onError(capturerError)
+                        }
+                    }
+                    else {
+                        completionHandler?(nil)
+                    }
+                }
+            }
         }
-        else {
-            tracksManager.changeCapturer(videoSourceDevice, completionHandler)
-        }
-    }
     
     private func setAudioStateInternal(_ isEnabled: Bool,  _ completion: @escaping SMAudioOperationCompletion) {
         if isEnabled {

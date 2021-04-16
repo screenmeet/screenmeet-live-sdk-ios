@@ -80,16 +80,23 @@ class SMTracksManager: NSObject {
         videoCapturer = VideoCapturerFactory.videoCapturer(videoSourceDevice, delegate: self)
         videoCapturer.delegate = nil
         videoCapturer.startCapture() { [weak self] error in
-            if #available(iOS 13.0, *) {
-                let captureSessionConnections = self?.videoCapturer.getCaptureSession().connections
-                captureSessionConnections?.first?.videoOrientation = .portrait
-                
-                completionHandler?(nil)
-                self?.videoCapturer.delegate = self
-                
-            } else {
-                completionHandler?(SMError(code: .capturerInternalError, message: "Unsupportes OS version"))
+            if let error = error {
+                completionHandler?(error)
             }
+            else {
+                if #available(iOS 13.0, *) {
+                    let captureSessionConnections = self?.videoCapturer.getCaptureSession().connections
+                    captureSessionConnections?.first?.videoOrientation = .portrait
+                    
+                    completionHandler?(nil)
+                    self?.videoCapturer.delegate = self
+                    
+                }
+                else {
+                    completionHandler?(SMError(code: .capturerInternalError, message: "Unsupported iOS version"))
+                }
+            }
+            
         }
     }
 
@@ -149,8 +156,6 @@ class SMTracksManager: NSObject {
                 newCapturer.delegate = nil
                 newCapturer.startCapture({error in
                     guard error == nil else {
-                        //restore capturing previous capturer
-                        self.videoCapturer.startCapture(completionHandler)
                         completionHandler?(error)
                         return
                     }

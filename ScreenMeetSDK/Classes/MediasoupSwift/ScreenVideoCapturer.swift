@@ -37,7 +37,13 @@ class ScreenVideoCapturer: RTCVideoCapturer, SMVideoCapturer, AVCaptureVideoData
                     let videoFrame = RTCVideoFrame(buffer: rtcPixelBuffer, rotation: rotation, timeStampNs: timeStampNs)
                     self.delegate?.capturer(self, didCapture: videoFrame)
                 case .failure(let error):
-                    completionHandler?(SMError(code: .capturerInternalError, message: error.localizedDescription))
+                    switch error {
+                        case .startCaptureFailed(let captureError):
+                            completionHandler?(SMError(code: .capturerInternalError, message: captureError.localizedDescription))
+                        case .stopCaptureFailed:
+                            NSLog("Stop capture error ocurreced when starting capturing")
+                    }
+                    
                 }
             }
         })

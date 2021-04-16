@@ -10,7 +10,7 @@ import WebKit
 import ReplayKit
 
 enum SMAppStreamServiceError: Error {
-    case startCaptureFailed
+    case startCaptureFailed(error: Error)
     case stopCaptureFailed
 }
 
@@ -54,8 +54,7 @@ class SMAppStreamService {
             }
         }, completionHandler: { (error) in
             if error != nil {
-                completion(.failure(.startCaptureFailed))
-                startHandler?(SMError(code: .capturerInternalError, message: error!.localizedDescription))
+                completion(.failure(.startCaptureFailed(error: error!)))
             }
             else {
                 startHandler?(nil)
