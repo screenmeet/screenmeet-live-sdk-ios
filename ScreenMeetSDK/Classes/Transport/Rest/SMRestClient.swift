@@ -14,12 +14,60 @@ class SMRestClient: NSObject {
         return requestService
     }()
     
+    public func disoverySessionByPin(_ pin: String,
+                                completion: @escaping (SMDiscoverySessionByPinResponse?, TransportError?, ErrorPayload?) -> Void) {
+        let discoveryRequest = SMDiscoverySessionByPinRequest(pin: pin)
+        
+        service?.send(request: discoveryRequest) {
+            (response: SMDiscoverySessionByPinResponse?, error: TransportError?, errorPayload: ErrorPayload?) in
+            
+            if let response = response {
+                completion(response, nil, nil)
+            } else {
+                completion(nil, error, errorPayload)
+            }
+        }
+    }
+    
+    public func getChallenge(completion: @escaping (SMGetChallengeResponse?, TransportError?) -> Void) {
+        let getChallengeRequest = SMGetChallengeRequest()
+        
+        service?.send(request: getChallengeRequest) {
+            (response: SMGetChallengeResponse?, error: TransportError?, errorPayload: ErrorPayload?) in
+            
+            if let response = response {
+                completion(response, nil)
+            } else {
+                completion(nil, error)
+            }
+        }
+    }
+    
+    public func resolveChallenge(_ pin: String,
+                                 _ answerUuid: String,
+                                 _ answerValue: String,
+                                 _ completion: @escaping (SMDiscoverySessionByPinResponse?, TransportError?, ErrorPayload?) -> Void) {
+        let resolveChallengeRequest = SMResolveChallengeRequest(pin: pin,
+                                                                answerUuid: answerUuid,
+                                                                answerValue: answerValue)
+        
+        service?.send(request: resolveChallengeRequest) {
+            (response: SMDiscoverySessionByPinResponse?, error: TransportError?, errorPayload: ErrorPayload?) in
+            
+            if let response = response {
+                completion(response, nil, nil)
+            } else {
+                completion(nil, error, errorPayload)
+            }
+        }
+    }
+    
     public func disoveryServer(_ code: String,
                                completion: @escaping (SMDiscoveryResponse?, TransportError?) -> Void) {
         let discoveryRequest = SMDiscoveryRequest(code: code)
         
         service?.send(request: discoveryRequest) {
-            (response: SMDiscoveryResponse?, error: TransportError?) in
+            (response: SMDiscoveryResponse?, error: TransportError?, errorPayload: ErrorPayload?) in
             
             if let response = response {
                 completion(response, nil)
@@ -35,7 +83,7 @@ class SMRestClient: NSObject {
         let connectRequest = SMConnectRequest(roomId: roomId, serverUrl: serverUrl)
         
         service?.send(request: connectRequest) {
-            (response: SMConnectResponse?, error: TransportError?) in
+            (response: SMConnectResponse?, error: TransportError?, errorPayload: ErrorPayload?) in
             
             if let response = response {
                 completion(response, nil)

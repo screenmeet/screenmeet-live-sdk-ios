@@ -50,21 +50,30 @@
                                     <constraint firstAttribute="width" secondItem="EXc-Yz-ziq" secondAttribute="height" multiplier="500:253" id="bQq-Pp-P6O"/>
                                 </constraints>
                             </imageView>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Error" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="F9N-wx-X5n">
+                                <rect key="frame" x="40" y="819" width="334" height="20"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                <color key="textColor" systemColor="systemRedColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="X4W-ar-0jp" firstAttribute="leading" secondItem="VgL-f1-Qa0" secondAttribute="leadingMargin" constant="50" id="8uZ-yU-d3k"/>
                             <constraint firstItem="EXc-Yz-ziq" firstAttribute="top" secondItem="5ka-yB-5dO" secondAttribute="bottom" constant="30" id="MJU-6L-PbC"/>
                             <constraint firstAttribute="trailingMargin" secondItem="EXc-Yz-ziq" secondAttribute="trailing" constant="50" id="Mdp-J5-sBS"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="F9N-wx-X5n" secondAttribute="trailing" constant="20" id="OOa-LX-Hrx"/>
                             <constraint firstItem="EXc-Yz-ziq" firstAttribute="centerX" secondItem="VgL-f1-Qa0" secondAttribute="centerX" id="PAi-I2-kG7"/>
+                            <constraint firstItem="F9N-wx-X5n" firstAttribute="leading" secondItem="VgL-f1-Qa0" secondAttribute="leadingMargin" constant="20" id="PBs-3N-pOV"/>
                             <constraint firstItem="X4W-ar-0jp" firstAttribute="centerX" secondItem="VgL-f1-Qa0" secondAttribute="centerX" id="i9V-Om-uzj"/>
                             <constraint firstAttribute="trailingMargin" secondItem="X4W-ar-0jp" secondAttribute="trailing" constant="50" id="ngF-xY-ObM"/>
                             <constraint firstItem="X4W-ar-0jp" firstAttribute="centerY" secondItem="VgL-f1-Qa0" secondAttribute="centerY" id="t2n-70-bl4"/>
+                            <constraint firstItem="G3c-5J-dYh" firstAttribute="top" secondItem="F9N-wx-X5n" secondAttribute="bottom" constant="23" id="u5V-GJ-39A"/>
                             <constraint firstItem="EXc-Yz-ziq" firstAttribute="leading" secondItem="VgL-f1-Qa0" secondAttribute="leadingMargin" constant="50" id="x7J-90-feQ"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Main" id="Lcy-0R-i29">
-                        <barButtonItem key="rightBarButtonItem" image="network" catalog="system" style="plain" id="hCb-u6-HKp">
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="hCb-u6-HKp">
                             <connections>
                                 <segue destination="oKw-1b-LIO" kind="show" id="yt2-gA-2Mu"/>
                             </connections>
@@ -73,6 +82,7 @@
                     <connections>
                         <outlet property="codeTextField" destination="Rfn-Nh-Rdc" id="aee-BM-Ggf"/>
                         <outlet property="connectButton" destination="ctz-Bs-RaG" id="lC8-F0-sOn"/>
+                        <outlet property="errorLabel" destination="F9N-wx-X5n" id="IXr-gG-S14"/>
                         <outlet property="gifImageView" destination="EXc-Yz-ziq" id="59n-Us-lLZ"/>
                     </connections>
                 </viewController>
@@ -186,16 +196,90 @@
             </objects>
             <point key="canvasLocation" x="1230" y="-338"/>
         </scene>
+        <!--Captcha View Controller-->
+        <scene sceneID="vfl-5x-NVm">
+            <objects>
+                <viewController storyboardIdentifier="CaptchaViewController" id="4BR-1X-mdW" customClass="CaptchaViewController" customModule="ScreenMeet" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="1Zx-Wq-8OY"/>
+                        <viewControllerLayoutGuide type="bottom" id="QDI-12-nue"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Omo-Xs-Ji9">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter captcha" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2gu-QC-vPZ">
+                                <rect key="frame" x="137" y="204" width="140" height="34"/>
+                                <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.94901960784313721" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="140" id="c9l-va-JJJ"/>
+                                    <constraint firstAttribute="height" constant="34" id="rOn-ay-BwC"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <action selector="captchaTextFieldTextChanged" destination="4BR-1X-mdW" eventType="editingChanged" id="XQj-2O-ewF"/>
+                                </connections>
+                            </textField>
+                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hVY-fS-yxx">
+                                <rect key="frame" x="125" y="104" width="164" height="80"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="80" id="D2w-GO-rc7"/>
+                                    <constraint firstAttribute="width" constant="164" id="VuA-24-UrQ"/>
+                                </constraints>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
+                            <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Vg-fe-HIQ">
+                                <rect key="frame" x="137" y="288" width="140" height="44"/>
+                                <color key="backgroundColor" red="0.85490196078431369" green="0.85490196078431369" blue="0.85490196078431369" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="jLc-wT-ZnT"/>
+                                    <constraint firstAttribute="width" constant="140" id="luK-gz-Ej9"/>
+                                </constraints>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <inset key="contentEdgeInsets" minX="20" minY="10" maxX="20" maxY="10"/>
+                                <state key="normal" title="Verify"/>
+                                <connections>
+                                    <action selector="verifyButtonClicked" destination="4BR-1X-mdW" eventType="touchUpInside" id="euQ-pU-KRZ"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="hVY-fS-yxx" firstAttribute="top" secondItem="1Zx-Wq-8OY" secondAttribute="bottom" constant="60" id="1Ug-3a-RMY"/>
+                            <constraint firstItem="1Vg-fe-HIQ" firstAttribute="top" secondItem="2gu-QC-vPZ" secondAttribute="bottom" constant="50" id="DAF-3D-PTQ"/>
+                            <constraint firstItem="1Vg-fe-HIQ" firstAttribute="centerX" secondItem="Omo-Xs-Ji9" secondAttribute="centerX" id="Esa-2t-lJb"/>
+                            <constraint firstItem="2gu-QC-vPZ" firstAttribute="top" secondItem="hVY-fS-yxx" secondAttribute="bottom" constant="20" id="Oba-rR-GC6"/>
+                            <constraint firstItem="2gu-QC-vPZ" firstAttribute="centerX" secondItem="Omo-Xs-Ji9" secondAttribute="centerX" id="lnl-G3-SER"/>
+                            <constraint firstItem="hVY-fS-yxx" firstAttribute="centerX" secondItem="Omo-Xs-Ji9" secondAttribute="centerX" id="pZS-Ww-ma2"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="captchaTextField" destination="2gu-QC-vPZ" id="OKt-2f-84v"/>
+                        <outlet property="verifyButton" destination="1Vg-fe-HIQ" id="R6D-hH-BY0"/>
+                        <outlet property="webView" destination="hVY-fS-yxx" id="Vg1-jY-LaD"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lmb-j0-p5o" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="324.63768115942031" y="358.92857142857139"/>
+        </scene>
     </scenes>
     <resources>
         <image name="arrow.left" catalog="system" width="128" height="98"/>
         <image name="arrow.right" catalog="system" width="128" height="98"/>
-        <image name="network" catalog="system" width="128" height="121"/>
         <namedColor name="AccentColor">
             <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemRedColor">
+            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

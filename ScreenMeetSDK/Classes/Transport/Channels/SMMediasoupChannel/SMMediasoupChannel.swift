@@ -519,6 +519,7 @@ class SMMediasoupChannel: NSObject, SMChannel  {
                 self?.tracksManager.cleanupAudio()
             }
         }
+        
     }
     
     func getIceConnectionState() -> SMIceConnectionState {

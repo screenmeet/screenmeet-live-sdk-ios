@@ -37,4 +37,7 @@ public struct SMError {
     
     /// Error description
     public var message: String
+    
+    /// Challenge
+    public var challenge: SMChallenge? = nil
 }

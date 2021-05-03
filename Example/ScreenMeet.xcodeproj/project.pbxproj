@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0463B25625E3BD4800734DAD /* UIImage+Gif.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0463B25525E3BD4800734DAD /* UIImage+Gif.swift */; };
+		049C222C26236C9500C999CB /* CaptchaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049C222B26236C9300C999CB /* CaptchaViewController.swift */; };
+		049C222E26236CC200C999CB /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 049C222D26236CC200C999CB /* WebKit.framework */; };
 		04CC0AE025AC6A6500B8C4E2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CC0ADF25AC6A6500B8C4E2 /* AppDelegate.swift */; };
 		04CC0AE225AC6A6500B8C4E2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CC0AE125AC6A6500B8C4E2 /* SceneDelegate.swift */; };
 		04CC0AE725AC6A6500B8C4E2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 04CC0AE525AC6A6500B8C4E2 /* Main.storyboard */; };
@@ -47,6 +49,8 @@
 /* Begin PBXFileReference section */
 		04553E5925AF9B1D00159844 /* ScreenMeet-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ScreenMeet-Bridging-Header.h"; sourceTree = "<group>"; };
 		0463B25525E3BD4800734DAD /* UIImage+Gif.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Gif.swift"; sourceTree = "<group>"; };
+		049C222B26236C9300C999CB /* CaptchaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptchaViewController.swift; sourceTree = "<group>"; };
+		049C222D26236CC200C999CB /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		04CC0ADC25AC6A6500B8C4E2 /* ScreenMeet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScreenMeet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		04CC0ADF25AC6A6500B8C4E2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		04CC0AE125AC6A6500B8C4E2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -79,6 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				049C222E26236CC200C999CB /* WebKit.framework in Frameworks */,
 				A3AEC24E0588CAEFB800D9FF /* Pods_ScreenMeet.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -123,6 +128,7 @@
 				04CC0AE125AC6A6500B8C4E2 /* SceneDelegate.swift */,
 				A946497225F7CE9500FDB22C /* MainViewController.swift */,
 				A946498D25FA5EC400FDB22C /* WebViewController.swift */,
+				049C222B26236C9300C999CB /* CaptchaViewController.swift */,
 				04CC0AE525AC6A6500B8C4E2 /* Main.storyboard */,
 				04CC0AE825AC6A6900B8C4E2 /* Assets.xcassets */,
 				04CC0AEA25AC6A6900B8C4E2 /* LaunchScreen.storyboard */,
@@ -135,6 +141,7 @@
 		614114E2C60DDD81C04F5864 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				049C222D26236CC200C999CB /* WebKit.framework */,
 				F57D6F3DE8F95A515928F9F0 /* Pods_ScreenMeet.framework */,
 			);
 			name = Frameworks;
@@ -319,6 +326,7 @@
 				A946497C25F8E06D00FDB22C /* SMOptionViewController.swift in Sources */,
 				0463B25625E3BD4800734DAD /* UIImage+Gif.swift in Sources */,
 				A95BFBF325F7C55000432305 /* SMControlBar.swift in Sources */,
+				049C222C26236C9500C999CB /* CaptchaViewController.swift in Sources */,
 				A946498A25FA529100FDB22C /* SMRemoteVideosView.swift in Sources */,
 				A946497E25F8EFD700FDB22C /* SMParticipantsTableViewCell.swift in Sources */,
 				A946498C25FA547F00FDB22C /* SMRemoteVideoTableViewCell.swift in Sources */,

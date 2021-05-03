@@ -89,7 +89,9 @@ class SMSession: NSObject {
                 self?.processIncomingChannelMessage(channelMessage)
             }.run { [weak self] session, error in
                 if let error = error {
-                    self?.connectCompletion?(SMError(code: .httpError, message: "Could not connect to server. " + error.message))
+                    self?.connectCompletion?(SMError(code: .httpError,
+                                                     message: "Could not connect. " + error.message,
+                                                     challenge: error.challenge))
                 }
                 else {
                     self?.session = session

@@ -12,7 +12,10 @@ class SMDisconnectTransaction: SMTransaction {
     func run() {
         transport.webSocketClient.diconnect()
         
-        let channel = transport.channelsManager.channel(for: .mediasoup) as! SMMediasoupChannel
-        channel.disconnect()
+        let mediasoupChannel = transport.channelsManager.channel(for: .mediasoup) as! SMMediasoupChannel
+        mediasoupChannel.disconnect()
+        
+        let participantsChannel = transport.channelsManager.channel(for: .participants) as! SMParticipantsChannel
+        participantsChannel.removeAllParticipants()
     }
 }

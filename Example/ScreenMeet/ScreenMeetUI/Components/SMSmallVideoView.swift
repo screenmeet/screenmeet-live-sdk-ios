@@ -55,8 +55,11 @@ class SMSmallVideoView: UIView {
         return view
     }()
     
+    private var rtcVideoViewAspectRatioConstraint: NSLayoutConstraint!
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
+        rtcVideoView.delegate = self
         
         addSubview(rtcVideoView)
         addSubview(imageView)
@@ -71,11 +74,14 @@ class SMSmallVideoView: UIView {
             nameLabel.trailingAnchor.constraint(equalTo: bottomView.trailingAnchor),
         ])
         
+        rtcVideoViewAspectRatioConstraint = rtcVideoView.heightAnchor.constraint(equalTo: rtcVideoView.widthAnchor)
+        
         NSLayoutConstraint.activate([
-            rtcVideoView.topAnchor.constraint(equalTo: topAnchor),
-            rtcVideoView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            rtcVideoView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            rtcVideoView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            rtcVideoView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            rtcVideoView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            rtcVideoView.heightAnchor.constraint(greaterThanOrEqualTo: heightAnchor),
+            rtcVideoView.widthAnchor.constraint(greaterThanOrEqualTo: widthAnchor),
+            rtcVideoViewAspectRatioConstraint,
             
             imageView.topAnchor.constraint(equalTo: topAnchor, constant: 16),
             imageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
@@ -131,5 +137,15 @@ class SMSmallVideoView: UIView {
         imageView.isHidden = videoState
         rtcVideoView.isHidden = !videoState
         layer.borderColor = audioState ? UIColor.white.cgColor : UIColor(red: 219 / 255, green: 40 / 255, blue: 40 / 255, alpha: 1).cgColor
+    }
+}
+
+extension SMSmallVideoView: RTCVideoViewDelegate {
+    
+    func videoView(_ videoView: RTCVideoRenderer, didChangeVideoSize size: CGSize) {
+        rtcVideoViewAspectRatioConstraint.isActive = false
+        rtcVideoViewAspectRatioConstraint = rtcVideoView.heightAnchor.constraint(equalTo: rtcVideoView.widthAnchor, multiplier: size.height / size.width)
+        rtcVideoViewAspectRatioConstraint.isActive = true
+        layoutIfNeeded()
     }
 }

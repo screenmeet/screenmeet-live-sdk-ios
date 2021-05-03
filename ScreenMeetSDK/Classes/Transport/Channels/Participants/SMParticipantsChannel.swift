@@ -18,6 +18,8 @@ extension SMParticipantsChannel: SMChannel {
     }
     
     func buildState(from initialPayload: [String: Any]) {
+        participants = [String: SMIdentityInfo]()
+        
         for (participantId, identityInfoDict) in initialPayload {
             let identityInfo = (identityInfoDict as! [String: Any])["value"]
             parseParticipantsIdentityInfo(participantId, identityInfo as! [String: Any])
@@ -71,6 +73,10 @@ extension SMParticipantsChannel: SMChannel {
     
     func getIdentity(_ participantId: String) -> SMIdentityInfo? {
         return participants[participantId]
+    }
+    
+    func removeAllParticipants() {
+        participants = [String: SMIdentityInfo]()
     }
     
     func getParticipants() -> [SMParticipant] {

@@ -17,6 +17,8 @@ class MainViewController: UIViewController {
     
     @IBOutlet weak var connectButton: UIButton!
     
+    @IBOutlet weak var errorLabel: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -28,7 +30,7 @@ class MainViewController: UIViewController {
         codeTextField.isHidden = false
         codeTextField.isEnabled = true
         
-        ScreenMeet.config.endpoint = URL(string: "https://qa-edge.screenmeet.com")!
+        ScreenMeet.config.endpoint = URL(string: "https://edge.screenmeet.com")!
         NotificationCenter.default.addObserver(self, selector: #selector(screenMeetSessionEnd), name: Notification.Name("ScreenMeetSessionEnd"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(screenMeetUIDidAppear), name: Notification.Name("ScreenMeetUIDidAppear"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(screenMeetUIWillDisappear), name: Notification.Name("ScreenMeetUIWillDisappear"), object: nil)
@@ -83,10 +85,16 @@ class MainViewController: UIViewController {
                 ScreenMeet.delegate = SMUserInterface.manager
                 ScreenMeet.connect(code, "Frank") { [weak self] (error) in
                     guard error == nil else {
-                        self?.connectButton.setTitle("Connect", for: .normal)
-                        self?.connectButton.isEnabled = true
-                        self?.codeTextField.isHidden = false
-                        self?.codeTextField.isEnabled = true
+                        if let challenge = error!.challenge {
+                            self?.showCaptchaScreen(challenge)
+                        }
+                        else {
+                            self?.connectButton.setTitle("Connect", for: .normal)
+                            self?.connectButton.isEnabled = true
+                            self?.codeTextField.isHidden = false
+                            self?.codeTextField.isEnabled = true
+                            self?.showError(error!)
+                        }
                         return
                     }
                     
@@ -98,6 +106,35 @@ class MainViewController: UIViewController {
                     }
                 }
             }
+        }
+    }
+    
+    private func showError(_ error: SMError) {
+        errorLabel.text = error.message
+        errorLabel.alpha = 0.0
+        errorLabel.isHidden = false
+        
+        UIView.animate(withDuration: 0.4) { [weak self] in
+            self?.errorLabel.alpha = 1.0
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+            UIView.animate(withDuration: 0.4) {
+                self?.errorLabel.alpha = 0.0
+            }
+        }
+    }
+    
+    private func showCaptchaScreen(_ challenge: SMChallenge) {
+        if let captchaViewController = storyboard?.instantiateViewController(identifier: "CaptchaViewController") as? CaptchaViewController {
+            
+            captchaViewController.isModalInPresentation = true
+            captchaViewController.svg = challenge.getSvg()
+            captchaViewController.verifyCompletion = { captcha in
+                challenge.solve(captcha)
+            }
+            
+            present(captchaViewController, animated: true, completion: nil)
         }
     }
 }

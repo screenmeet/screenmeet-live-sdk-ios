@@ -56,9 +56,15 @@ class SMMainVideoView: UIView {
         return view
     }()
     
+    private var rtcVideoViewAspectRatioConstraint: NSLayoutConstraint!
+    
+    private let gradientLayer = CAGradientLayer()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
+        rtcVideoView.delegate = self
         
+        topView.layer.insertSublayer(gradientLayer, at: 0)
         topView.addSubview(micImageView)
         topView.addSubview(nameLabel)
         
@@ -78,11 +84,13 @@ class SMMainVideoView: UIView {
         addSubview(imageView)
         addSubview(topView)
         
+        rtcVideoViewAspectRatioConstraint = rtcVideoView.heightAnchor.constraint(equalTo: rtcVideoView.widthAnchor)
+        
         NSLayoutConstraint.activate([
-            rtcVideoView.topAnchor.constraint(equalTo: topAnchor),
-            rtcVideoView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            rtcVideoView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            rtcVideoView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            rtcVideoView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            rtcVideoView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            rtcVideoView.widthAnchor.constraint(equalTo: widthAnchor),
+            rtcVideoViewAspectRatioConstraint,
             
             imageView.topAnchor.constraint(equalTo: topAnchor, constant: 50),
             imageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -50),
@@ -104,14 +112,11 @@ class SMMainVideoView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        let gradientLayer = CAGradientLayer()
         gradientLayer.colors = [UIColor.clear.cgColor, UIColor.black.withAlphaComponent(0.6).cgColor]
         gradientLayer.startPoint = CGPoint(x: 0.5, y: 1.0)
         gradientLayer.endPoint = CGPoint(x: 0.5, y: 0.0)
         gradientLayer.locations = [0, 1]
         gradientLayer.frame = topView.bounds
-
-        topView.layer.insertSublayer(gradientLayer, at: 0)
     }
     
     func update(with participant: SMParticipant) {
@@ -129,5 +134,15 @@ class SMMainVideoView: UIView {
         micImageView.isHidden = audioState
         imageView.isHidden = videoState
         rtcVideoView.isHidden = !videoState
+    }
+}
+
+extension SMMainVideoView: RTCVideoViewDelegate {
+    
+    func videoView(_ videoView: RTCVideoRenderer, didChangeVideoSize size: CGSize) {
+        rtcVideoViewAspectRatioConstraint.isActive = false
+        rtcVideoViewAspectRatioConstraint = rtcVideoView.heightAnchor.constraint(equalTo: rtcVideoView.widthAnchor, multiplier: size.height / size.width)
+        rtcVideoViewAspectRatioConstraint.isActive = true
+        layoutIfNeeded()
     }
 }

@@ -17,17 +17,18 @@ class SMRequestHTTPService: NSObject, SMRequestService {
         session = URLSession(configuration: URLSessionConfiguration.default, delegate: self, delegateQueue: nil)
     }
     
-    internal func send<T>(request: SMRequest, completion: @escaping (T?, TransportError?) -> Void) where T: SMResponse, T: Deserializable {
+    internal func send<T>(request: SMRequest, completion: @escaping (T?, TransportError?, ErrorPayload?) -> Void) where T: SMResponse, T: Deserializable {
         
         guard let request = prepareHttpRequestFor(request: request) else {
-            completion(nil, TransportError.SerializationFailed)
+            completion(nil, TransportError.SerializationFailed, nil)
             return
         }
         
-        session?.dataTask(with: request) {
+        session?.dataTask(with: request) { [weak self]
             (responseData, urlResponse, requestError) in
             
             var error: TransportError? = nil
+            var errorPayload: ErrorPayload? = nil
             var response: T? = nil
             let httpUrlResponse = urlResponse as? HTTPURLResponse
             
@@ -46,6 +47,7 @@ class SMRequestHTTPService: NSObject, SMRequestService {
                     }
                 } else {
                     error = TransportError.ServerError(code: httpUrlResponse!.statusCode)
+                    errorPayload = self?.dataToDict(responseData)
                 }    
             } else {
                 error = TransportError.RequestFailed(error: requestError)
@@ -53,7 +55,7 @@ class SMRequestHTTPService: NSObject, SMRequestService {
             }
                         
             DispatchQueue.main.async {
-                completion(response, error)
+                completion(response, error, errorPayload)
             }
         }.resume()
     }
@@ -98,6 +100,18 @@ class SMRequestHTTPService: NSObject, SMRequestService {
         
         request.httpMethod = httpRequest.httpMethod
         return request
+    }
+    
+    private func dataToDict(_ data: Data) -> ErrorPayload? {
+        do {
+            if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                return json
+            }
+        } catch let error as NSError {
+            print("Failed to load: \(error.localizedDescription)")
+        }
+        
+        return nil
     }
 }
 
