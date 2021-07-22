@@ -13,8 +13,8 @@ class SMMainVideoView: UIView {
     
     private weak var currentVideoVideTrack: RTCVideoTrack?
     
-    var rtcVideoView: RTCEAGLVideoView = {
-        let rtcVideoView = RTCEAGLVideoView()
+    var rtcVideoView: RTCMTLVideoView = {
+        let rtcVideoView = RTCMTLVideoView()
         rtcVideoView.translatesAutoresizingMaskIntoConstraints = false
         return rtcVideoView
     }()
@@ -62,7 +62,6 @@ class SMMainVideoView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        rtcVideoView.delegate = self
         
         topView.layer.insertSublayer(gradientLayer, at: 0)
         topView.addSubview(micImageView)
@@ -124,25 +123,21 @@ class SMMainVideoView: UIView {
     }
     
     func update(with name: String?, audioState: Bool, videoState: Bool, videoTrack: RTCVideoTrack?) {
+        
+        #if arch(arm64)
+            NSLog("ARM64")
+        #else
+            NSLog("Not ARM64")
+        #endif
         currentVideoVideTrack?.remove(rtcVideoView)
         currentVideoVideTrack = videoTrack
         
-        rtcVideoView.contentMode = .scaleAspectFill
+        rtcVideoView.contentMode = .scaleAspectFit
         videoTrack?.add(rtcVideoView)
         
         nameLabel.text = name
         micImageView.isHidden = audioState
         imageView.isHidden = videoState
         rtcVideoView.isHidden = !videoState
-    }
-}
-
-extension SMMainVideoView: RTCVideoViewDelegate {
-    
-    func videoView(_ videoView: RTCVideoRenderer, didChangeVideoSize size: CGSize) {
-        rtcVideoViewAspectRatioConstraint.isActive = false
-        rtcVideoViewAspectRatioConstraint = rtcVideoView.heightAnchor.constraint(equalTo: rtcVideoView.widthAnchor, multiplier: size.height / size.width)
-        rtcVideoViewAspectRatioConstraint.isActive = true
-        layoutIfNeeded()
     }
 }

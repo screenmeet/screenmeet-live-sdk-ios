@@ -9,8 +9,7 @@ import UIKit
 import WebRTC
 
 class SMTracksManager: NSObject {
-    var videoSourceDevice: AVCaptureDevice?
-    
+    var videoSourceDevice: AVCaptureDevice?    
     private var mediaStream: RTCMediaStream!
     private var videoSource: RTCVideoSource!
     private var videoTrack: RTCVideoTrack!
@@ -41,18 +40,6 @@ class SMTracksManager: NSObject {
         }
         
         self.mediaStream.addAudioTrack(audioTrack)
-        var encodings: Array = Array<RTCRtpEncodingParameters>.init()
-        let e = RTCRtpEncodingParameters.init()
-        e.rid = "l"
-        e.bitratePriority = 1.0
-        e.maxBitrateBps = 48000
-        e.maxFramerate = 30
-        e.isActive = true
-        e.minBitrateBps = 0
-        e.numTemporalLayers = 0
-        e.scaleResolutionDownBy = 1.0
-        encodings.append(e)
-        
         return audioTrack
     }
     

@@ -26,6 +26,10 @@ class SMChannelsManager: NSObject {
             channel = SMMediasoupChannel()
         case .callerState:
             channel = SMCallerStateChannel()
+        case .capabilities:
+            channel = SMCapabilitiesChannel()
+        case .laserPointer:
+            channel = SMLaserPointerChannel()
         default:
             channel = nil
         }

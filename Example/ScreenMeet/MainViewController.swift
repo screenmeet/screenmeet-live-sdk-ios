@@ -15,20 +15,27 @@ class MainViewController: UIViewController {
     
     @IBOutlet weak var codeTextField: UITextField!
     
-    @IBOutlet weak var connectButton: UIButton!
+    @IBOutlet weak var connectButton: TransitionButton!
+    
+    @IBOutlet weak var waitingView: UIView!
     
     @IBOutlet weak var errorLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let gif = UIImage.gifImageWithName("stars")
+        let gif = UIImage.gifImageWithName("mushrooms")
         gifImageView.image = gif
         
         connectButton.setTitle("Connect", for: .normal)
         connectButton.isEnabled = true
         codeTextField.isHidden = false
         codeTextField.isEnabled = true
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tap)
+        codeTextField.attributedPlaceholder = NSAttributedString(string: "Room code",
+                                     attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray])
         
         ScreenMeet.config.endpoint = URL(string: "https://edge.screenmeet.com")!
         NotificationCenter.default.addObserver(self, selector: #selector(screenMeetSessionEnd), name: Notification.Name("ScreenMeetSessionEnd"), object: nil)
@@ -75,12 +82,15 @@ class MainViewController: UIViewController {
             print("Connecting...")
         case .reconnecting:
             print("Reconnecting...")
+        case .waitingEntrancePermission:
+            print("Waiting for host to let us in")
         case .disconnected:
             if let code = codeTextField.text {
-                connectButton.setTitle("Connecting...", for: .normal)
+                connectButton.startAnimation()
                 connectButton.isEnabled = false
                 codeTextField.isHidden = false
                 codeTextField.isEnabled = false
+                waitingView.isHidden = true
                 
                 ScreenMeet.delegate = SMUserInterface.manager
                 ScreenMeet.connect(code, "Frank") { [weak self] (error) in
@@ -88,29 +98,67 @@ class MainViewController: UIViewController {
                         if let challenge = error!.challenge {
                             self?.showCaptchaScreen(challenge)
                         }
-                        else {
-                            self?.connectButton.setTitle("Connect", for: .normal)
+                        else if error!.code == .knockEntryPermissionRequiredError {
+                            // Knock is on, host has to let you in, just show an error and wait for success completion in case we are let in
+                            self?.waitingView.isHidden = false
+                            self?.showError(error!)
+                        }
+                        else if error!.code == .knockWaitTimeForEntryExpiredError {
+                            self?.connectButton.stopAnimation(animationStyle: .shake)
+                            self?.connectButton.setTitleColor(.white, for: .normal)
                             self?.connectButton.isEnabled = true
                             self?.codeTextField.isHidden = false
                             self?.codeTextField.isEnabled = true
+                            self?.waitingView.isHidden = true
+                            self?.showError(error!)
+                        }
+                        else {
+                            self?.connectButton.stopAnimation()
+                            self?.connectButton.setTitleColor(.white, for: .normal)
+                            self?.connectButton.isEnabled = true
+                            self?.codeTextField.isHidden = false
+                            self?.codeTextField.isEnabled = true
+                            self?.waitingView.isHidden = true
                             self?.showError(error!)
                         }
                         return
                     }
                     
-                    SMMainViewController.presentScreenMeetUI { [weak self] in
-                        self?.codeTextField.isHidden = true
-                        self?.codeTextField.isEnabled = true
-                        self?.connectButton.isEnabled = true
-                        self?.connectButton.setTitle("Present ScreenMeet UI", for: .normal)
-                    }
+                    self?.connectButton.stopAnimation(animationStyle: .expand, revertAfterDelay: 1.0, completion: {
+                        self?.waitingView.isHidden = true
+                        
+                        SMMainViewController.presentScreenMeetUI { [weak self] in
+                            self?.codeTextField.isHidden = true
+                            self?.codeTextField.isEnabled = true
+                            self?.connectButton.isEnabled = true
+                            self?.connectButton.setTitle("Present ScreenMeet UI", for: .normal)
+                            self?.connectButton.setTitleColor(.white, for: .normal)
+                        }
+                    })
                 }
             }
         }
     }
     
+    @IBAction func quitWaitingButtonTapped(_ sender: UIButton) {
+        ScreenMeet.disconnect()
+        
+        connectButton.stopAnimation()
+        connectButton.setTitleColor(.white, for: .normal)
+        connectButton.isEnabled = true
+        codeTextField.isHidden = false
+        codeTextField.isEnabled = true
+        waitingView.isHidden = true
+    }
+    
     private func showError(_ error: SMError) {
-        errorLabel.text = error.message
+        
+        var message = error.message
+        if (error.code == .httpError(.notFound)) {
+            message = "Could not find the room with such id..."
+        }
+        
+        errorLabel.text = message
         errorLabel.alpha = 0.0
         errorLabel.isHidden = false
         
@@ -118,7 +166,7 @@ class MainViewController: UIViewController {
             self?.errorLabel.alpha = 1.0
         }
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.5) { [weak self] in
             UIView.animate(withDuration: 0.4) {
                 self?.errorLabel.alpha = 0.0
             }
@@ -136,5 +184,9 @@ class MainViewController: UIViewController {
             
             present(captchaViewController, animated: true, completion: nil)
         }
+    }
+    
+    @objc private func dismissKeyboard() {
+        codeTextField.endEditing(true)
     }
 }

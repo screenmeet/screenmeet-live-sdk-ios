@@ -59,6 +59,7 @@ class MSLogger: NSObject {
         }
     }
     
+    /*
     func startLoggingWebRtc() {
         RTCInitializeSSL()
         RTCSetMinDebugLogLevel(.verbose)
@@ -83,8 +84,7 @@ class MSLogger: NSObject {
         }
                 
         RTCStartInternalCapture(url.path)
-        RTCSetMinDebugLogLevel(.warning)
-    }
+    }*/
     
     func printAllLogsFromDump() {
         stopLoggingWebRtc()

@@ -25,6 +25,8 @@ enum SMChannelName: String {
     case laserPointer       = "lp"
     case permissionRequests = "permission_requests"
     case permissionGrants   = "permission_grants"
+    
+    case capabilities       = "capabilities"
 }
 
 typealias SMChannelOperationCompletion = (_ error: SMError?) -> Void

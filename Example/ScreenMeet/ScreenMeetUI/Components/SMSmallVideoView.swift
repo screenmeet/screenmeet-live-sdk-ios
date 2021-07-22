@@ -12,8 +12,8 @@ import ScreenMeetSDK
 class SMSmallVideoView: UIView {
     private weak var currentVideoTrack: RTCVideoTrack?
     
-    var rtcVideoView: RTCEAGLVideoView = {
-        let rtcVideoView = RTCEAGLVideoView()
+    var rtcVideoView: RTCMTLVideoView = {
+        let rtcVideoView = RTCMTLVideoView()
         rtcVideoView.translatesAutoresizingMaskIntoConstraints = false
         return rtcVideoView
     }()
@@ -59,7 +59,6 @@ class SMSmallVideoView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        rtcVideoView.delegate = self
         
         addSubview(rtcVideoView)
         addSubview(imageView)
@@ -129,7 +128,7 @@ class SMSmallVideoView: UIView {
         currentVideoTrack?.remove(rtcVideoView)
         currentVideoTrack = videoTrack
         
-        rtcVideoView.contentMode = .scaleAspectFill
+        rtcVideoView.contentMode = .scaleAspectFit
         
         videoTrack?.add(rtcVideoView)
         nameLabel.text = name
@@ -140,12 +139,3 @@ class SMSmallVideoView: UIView {
     }
 }
 
-extension SMSmallVideoView: RTCVideoViewDelegate {
-    
-    func videoView(_ videoView: RTCVideoRenderer, didChangeVideoSize size: CGSize) {
-        rtcVideoViewAspectRatioConstraint.isActive = false
-        rtcVideoViewAspectRatioConstraint = rtcVideoView.heightAnchor.constraint(equalTo: rtcVideoView.widthAnchor, multiplier: size.height / size.width)
-        rtcVideoViewAspectRatioConstraint.isActive = true
-        layoutIfNeeded()
-    }
-}

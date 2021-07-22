@@ -103,28 +103,30 @@ class MSHandler: NSObject {
        
     }
     
+    private static var pc: MSPeerConnection?
+    
     static func getNativeRtpCapabilities(_ completion: @escaping MSGetNativeCapabilitiesCompletion) {
         let constraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil)
         
-        let pc = MSPeerConnection(nil)
-        _ = pc.addTransceiver(.video)
-        _ = pc.addTransceiver(.audio)
+        pc = MSPeerConnection(nil)
+        _ = pc?.addTransceiver(.video)
+        _ = pc?.addTransceiver(.audio)
         
-        pc.createOffer(constraints) { sdp, error in
+        pc?.createOffer(constraints) { sdp, error in
             
             if let error = error {
                 completion(nil, MSError(type: .device, message: error.message))
-                pc.close()
+                pc?.close()
             }
             else {
-                pc.close()
+                pc?.close()
                 
                 NSLog("SDP::" + sdp!)
                 let sdpObject = SDPTransform.parse(sdp!)
                 let nativeRtpCapabilities = SDPUtils.extractRtpCapabilities(sdpObject)
                 
                 completion(nativeRtpCapabilities, nil)
-                pc.close()
+                pc?.close()
             }
         }
     }

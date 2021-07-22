@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0463B25625E3BD4800734DAD /* UIImage+Gif.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0463B25525E3BD4800734DAD /* UIImage+Gif.swift */; };
+		047F36DA266152210036CA54 /* ScreenMeetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 047F36D9266152210036CA54 /* ScreenMeetTests.swift */; };
 		049C222C26236C9500C999CB /* CaptchaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049C222B26236C9300C999CB /* CaptchaViewController.swift */; };
 		049C222E26236CC200C999CB /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 049C222D26236CC200C999CB /* WebKit.framework */; };
 		04CC0AE025AC6A6500B8C4E2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04CC0ADF25AC6A6500B8C4E2 /* AppDelegate.swift */; };
@@ -15,6 +16,14 @@
 		04CC0AE725AC6A6500B8C4E2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 04CC0AE525AC6A6500B8C4E2 /* Main.storyboard */; };
 		04CC0AE925AC6A6900B8C4E2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04CC0AE825AC6A6900B8C4E2 /* Assets.xcassets */; };
 		04CC0AEC25AC6A6900B8C4E2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 04CC0AEA25AC6A6900B8C4E2 /* LaunchScreen.storyboard */; };
+		20763F264906CF27021B177C /* Pods_ScreenMeetTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C98A68467DC54BAECFEB76 /* Pods_ScreenMeetTests.framework */; };
+		91865567266FBCC3008AC955 /* SpinerLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91865562266FBCC3008AC955 /* SpinerLayer.swift */; };
+		91865568266FBCC3008AC955 /* FadeTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91865563266FBCC3008AC955 /* FadeTransition.swift */; };
+		91865569266FBCC3008AC955 /* TransitionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91865564266FBCC3008AC955 /* TransitionButton.swift */; };
+		9186556A266FBCC3008AC955 /* CustomTransitionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91865565266FBCC3008AC955 /* CustomTransitionViewController.swift */; };
+		9186556B266FBCC3008AC955 /* CGRectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91865566266FBCC3008AC955 /* CGRectExtension.swift */; };
+		918655A4266FC86B008AC955 /* UnderLineTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 918655A3266FC86B008AC955 /* UnderLineTextField.swift */; };
+		918655A7266FCC36008AC955 /* mushrooms.gif in Resources */ = {isa = PBXBuildFile; fileRef = 918655A6266FCC36008AC955 /* mushrooms.gif */; };
 		A3AEC24E0588CAEFB800D9FF /* Pods_ScreenMeet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F57D6F3DE8F95A515928F9F0 /* Pods_ScreenMeet.framework */; };
 		A946497325F7CE9500FDB22C /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A946497225F7CE9500FDB22C /* MainViewController.swift */; };
 		A946497A25F8C64100FDB22C /* SMUserInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = A946497925F8C64100FDB22C /* SMUserInterface.swift */; };
@@ -29,9 +38,18 @@
 		A95BFBF125F7C53F00432305 /* SMControlButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95BFBF025F7C53F00432305 /* SMControlButton.swift */; };
 		A95BFBF325F7C55000432305 /* SMControlBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A95BFBF225F7C55000432305 /* SMControlBar.swift */; };
 		A95BFBF625F7C5A300432305 /* sm_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = A95BFBF525F7C5A300432305 /* sm_logo.png */; };
-		A95BFC0925F7C96A00432305 /* ladywalking.gif in Resources */ = {isa = PBXBuildFile; fileRef = A95BFC0725F7C96A00432305 /* ladywalking.gif */; };
 		A95BFC0A25F7C96A00432305 /* stars.gif in Resources */ = {isa = PBXBuildFile; fileRef = A95BFC0825F7C96A00432305 /* stars.gif */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		047F36DC266152210036CA54 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 04CC0AD425AC6A6500B8C4E2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 04CC0ADB25AC6A6500B8C4E2;
+			remoteInfo = ScreenMeet;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		045A714125CB0B38004A3E1D /* Embed Frameworks */ = {
@@ -49,6 +67,9 @@
 /* Begin PBXFileReference section */
 		04553E5925AF9B1D00159844 /* ScreenMeet-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ScreenMeet-Bridging-Header.h"; sourceTree = "<group>"; };
 		0463B25525E3BD4800734DAD /* UIImage+Gif.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Gif.swift"; sourceTree = "<group>"; };
+		047F36D7266152210036CA54 /* ScreenMeetTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ScreenMeetTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		047F36D9266152210036CA54 /* ScreenMeetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenMeetTests.swift; sourceTree = "<group>"; };
+		047F36DB266152210036CA54 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		049C222B26236C9300C999CB /* CaptchaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptchaViewController.swift; sourceTree = "<group>"; };
 		049C222D26236CC200C999CB /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		04CC0ADC25AC6A6500B8C4E2 /* ScreenMeet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScreenMeet.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -59,7 +80,17 @@
 		04CC0AEB25AC6A6900B8C4E2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		04CC0AED25AC6A6900B8C4E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		148E30CA7C218518B7C57077 /* Pods-ScreenMeet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScreenMeet.release.xcconfig"; path = "Target Support Files/Pods-ScreenMeet/Pods-ScreenMeet.release.xcconfig"; sourceTree = "<group>"; };
+		47A14B1D7CEB36205A4BA5CD /* Pods-ScreenMeetTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScreenMeetTests.debug.xcconfig"; path = "Target Support Files/Pods-ScreenMeetTests/Pods-ScreenMeetTests.debug.xcconfig"; sourceTree = "<group>"; };
 		608E0CA996BC6302C9735526 /* Pods-ScreenMeet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScreenMeet.debug.xcconfig"; path = "Target Support Files/Pods-ScreenMeet/Pods-ScreenMeet.debug.xcconfig"; sourceTree = "<group>"; };
+		77709DFECD64545BD377F7B2 /* Pods-ScreenMeetTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScreenMeetTests.release.xcconfig"; path = "Target Support Files/Pods-ScreenMeetTests/Pods-ScreenMeetTests.release.xcconfig"; sourceTree = "<group>"; };
+		86C98A68467DC54BAECFEB76 /* Pods_ScreenMeetTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ScreenMeetTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		91865562266FBCC3008AC955 /* SpinerLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpinerLayer.swift; sourceTree = "<group>"; };
+		91865563266FBCC3008AC955 /* FadeTransition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FadeTransition.swift; sourceTree = "<group>"; };
+		91865564266FBCC3008AC955 /* TransitionButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionButton.swift; sourceTree = "<group>"; };
+		91865565266FBCC3008AC955 /* CustomTransitionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTransitionViewController.swift; sourceTree = "<group>"; };
+		91865566266FBCC3008AC955 /* CGRectExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGRectExtension.swift; sourceTree = "<group>"; };
+		918655A3266FC86B008AC955 /* UnderLineTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderLineTextField.swift; sourceTree = "<group>"; };
+		918655A6266FCC36008AC955 /* mushrooms.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = mushrooms.gif; sourceTree = "<group>"; };
 		A946497225F7CE9500FDB22C /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		A946497925F8C64100FDB22C /* SMUserInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMUserInterface.swift; sourceTree = "<group>"; };
 		A946497B25F8E06D00FDB22C /* SMOptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMOptionViewController.swift; sourceTree = "<group>"; };
@@ -73,12 +104,19 @@
 		A95BFBF025F7C53F00432305 /* SMControlButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMControlButton.swift; sourceTree = "<group>"; };
 		A95BFBF225F7C55000432305 /* SMControlBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMControlBar.swift; sourceTree = "<group>"; };
 		A95BFBF525F7C5A300432305 /* sm_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sm_logo.png; sourceTree = "<group>"; };
-		A95BFC0725F7C96A00432305 /* ladywalking.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = ladywalking.gif; sourceTree = "<group>"; };
 		A95BFC0825F7C96A00432305 /* stars.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = stars.gif; sourceTree = "<group>"; };
 		F57D6F3DE8F95A515928F9F0 /* Pods_ScreenMeet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ScreenMeet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		047F36D4266152210036CA54 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				20763F264906CF27021B177C /* Pods_ScreenMeetTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		04CC0AD925AC6A6500B8C4E2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -94,17 +132,27 @@
 		0463B25225E3BD2600734DAD /* Gif */ = {
 			isa = PBXGroup;
 			children = (
-				A95BFC0725F7C96A00432305 /* ladywalking.gif */,
+				918655A6266FCC36008AC955 /* mushrooms.gif */,
 				A95BFC0825F7C96A00432305 /* stars.gif */,
 				0463B25525E3BD4800734DAD /* UIImage+Gif.swift */,
 			);
 			path = Gif;
 			sourceTree = "<group>";
 		};
+		047F36D8266152210036CA54 /* ScreenMeetTests */ = {
+			isa = PBXGroup;
+			children = (
+				047F36D9266152210036CA54 /* ScreenMeetTests.swift */,
+				047F36DB266152210036CA54 /* Info.plist */,
+			);
+			path = ScreenMeetTests;
+			sourceTree = "<group>";
+		};
 		04CC0AD325AC6A6500B8C4E2 = {
 			isa = PBXGroup;
 			children = (
 				04CC0ADE25AC6A6500B8C4E2 /* ScreenMeet */,
+				047F36D8266152210036CA54 /* ScreenMeetTests */,
 				04CC0ADD25AC6A6500B8C4E2 /* Products */,
 				E27F251FE7E1E1B7230C7D30 /* Pods */,
 				614114E2C60DDD81C04F5864 /* Frameworks */,
@@ -115,6 +163,7 @@
 			isa = PBXGroup;
 			children = (
 				04CC0ADC25AC6A6500B8C4E2 /* ScreenMeet.app */,
+				047F36D7266152210036CA54 /* ScreenMeetTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -143,8 +192,22 @@
 			children = (
 				049C222D26236CC200C999CB /* WebKit.framework */,
 				F57D6F3DE8F95A515928F9F0 /* Pods_ScreenMeet.framework */,
+				86C98A68467DC54BAECFEB76 /* Pods_ScreenMeetTests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		91865561266FBC96008AC955 /* ThirdParty */ = {
+			isa = PBXGroup;
+			children = (
+				91865566266FBCC3008AC955 /* CGRectExtension.swift */,
+				91865565266FBCC3008AC955 /* CustomTransitionViewController.swift */,
+				91865563266FBCC3008AC955 /* FadeTransition.swift */,
+				91865562266FBCC3008AC955 /* SpinerLayer.swift */,
+				91865564266FBCC3008AC955 /* TransitionButton.swift */,
+				918655A3266FC86B008AC955 /* UnderLineTextField.swift */,
+			);
+			path = ThirdParty;
 			sourceTree = "<group>";
 		};
 		A946498825FA4AFD00FDB22C /* Managers */ = {
@@ -170,6 +233,7 @@
 		A95BFBEF25F7C52900432305 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				91865561266FBC96008AC955 /* ThirdParty */,
 				A95BFBF225F7C55000432305 /* SMControlBar.swift */,
 				A95BFBF025F7C53F00432305 /* SMControlButton.swift */,
 				A946497D25F8EFD700FDB22C /* SMParticipantsTableViewCell.swift */,
@@ -194,6 +258,8 @@
 			children = (
 				608E0CA996BC6302C9735526 /* Pods-ScreenMeet.debug.xcconfig */,
 				148E30CA7C218518B7C57077 /* Pods-ScreenMeet.release.xcconfig */,
+				47A14B1D7CEB36205A4BA5CD /* Pods-ScreenMeetTests.debug.xcconfig */,
+				77709DFECD64545BD377F7B2 /* Pods-ScreenMeetTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -201,6 +267,26 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		047F36D6266152210036CA54 /* ScreenMeetTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 047F36E0266152210036CA54 /* Build configuration list for PBXNativeTarget "ScreenMeetTests" */;
+			buildPhases = (
+				41251BC16B7458C0788365A5 /* [CP] Check Pods Manifest.lock */,
+				047F36D3266152210036CA54 /* Sources */,
+				047F36D4266152210036CA54 /* Frameworks */,
+				047F36D5266152210036CA54 /* Resources */,
+				2F095C6265BBBAC91A0ADD89 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				047F36DD266152210036CA54 /* PBXTargetDependency */,
+			);
+			name = ScreenMeetTests;
+			productName = ScreenMeetTests;
+			productReference = 047F36D7266152210036CA54 /* ScreenMeetTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		04CC0ADB25AC6A6500B8C4E2 /* ScreenMeet */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 04CC0AF025AC6A6900B8C4E2 /* Build configuration list for PBXNativeTarget "ScreenMeet" */;
@@ -227,9 +313,13 @@
 		04CC0AD425AC6A6500B8C4E2 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1220;
-				LastUpgradeCheck = 1220;
+				LastSwiftUpdateCheck = 1230;
+				LastUpgradeCheck = 1240;
 				TargetAttributes = {
+					047F36D6266152210036CA54 = {
+						CreatedOnToolsVersion = 12.3;
+						TestTargetID = 04CC0ADB25AC6A6500B8C4E2;
+					};
 					04CC0ADB25AC6A6500B8C4E2 = {
 						CreatedOnToolsVersion = 12.2;
 						LastSwiftMigration = 1220;
@@ -250,11 +340,19 @@
 			projectRoot = "";
 			targets = (
 				04CC0ADB25AC6A6500B8C4E2 /* ScreenMeet */,
+				047F36D6266152210036CA54 /* ScreenMeetTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		047F36D5266152210036CA54 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		04CC0ADA25AC6A6500B8C4E2 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -264,13 +362,52 @@
 				A95BFBF625F7C5A300432305 /* sm_logo.png in Resources */,
 				04CC0AE725AC6A6500B8C4E2 /* Main.storyboard in Resources */,
 				A95BFC0A25F7C96A00432305 /* stars.gif in Resources */,
-				A95BFC0925F7C96A00432305 /* ladywalking.gif in Resources */,
+				918655A7266FCC36008AC955 /* mushrooms.gif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		2F095C6265BBBAC91A0ADD89 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ScreenMeetTests/Pods-ScreenMeetTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ScreenMeetTests/Pods-ScreenMeetTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ScreenMeetTests/Pods-ScreenMeetTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		41251BC16B7458C0788365A5 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ScreenMeetTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		6C918A676D6F3912B5DC3988 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -313,6 +450,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		047F36D3266152210036CA54 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				047F36DA266152210036CA54 /* ScreenMeetTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		04CC0AD825AC6A6500B8C4E2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -320,12 +465,18 @@
 				A95BFBEE25F7C4E900432305 /* SMMainViewController.swift in Sources */,
 				A946498725FA3ACB00FDB22C /* SMMainVideoView.swift in Sources */,
 				A95BFBF125F7C53F00432305 /* SMControlButton.swift in Sources */,
+				9186556B266FBCC3008AC955 /* CGRectExtension.swift in Sources */,
 				A946497A25F8C64100FDB22C /* SMUserInterface.swift in Sources */,
+				9186556A266FBCC3008AC955 /* CustomTransitionViewController.swift in Sources */,
+				91865567266FBCC3008AC955 /* SpinerLayer.swift in Sources */,
+				91865569266FBCC3008AC955 /* TransitionButton.swift in Sources */,
+				918655A4266FC86B008AC955 /* UnderLineTextField.swift in Sources */,
 				A946498025F919AC00FDB22C /* SMSmallVideoView.swift in Sources */,
 				04CC0AE025AC6A6500B8C4E2 /* AppDelegate.swift in Sources */,
 				A946497C25F8E06D00FDB22C /* SMOptionViewController.swift in Sources */,
 				0463B25625E3BD4800734DAD /* UIImage+Gif.swift in Sources */,
 				A95BFBF325F7C55000432305 /* SMControlBar.swift in Sources */,
+				91865568266FBCC3008AC955 /* FadeTransition.swift in Sources */,
 				049C222C26236C9500C999CB /* CaptchaViewController.swift in Sources */,
 				A946498A25FA529100FDB22C /* SMRemoteVideosView.swift in Sources */,
 				A946497E25F8EFD700FDB22C /* SMParticipantsTableViewCell.swift in Sources */,
@@ -337,6 +488,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		047F36DD266152210036CA54 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 04CC0ADB25AC6A6500B8C4E2 /* ScreenMeet */;
+			targetProxy = 047F36DC266152210036CA54 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		04CC0AE525AC6A6500B8C4E2 /* Main.storyboard */ = {
@@ -358,11 +517,54 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		047F36DE266152210036CA54 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 47A14B1D7CEB36205A4BA5CD /* Pods-ScreenMeetTests.debug.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = U3AQW9824Q;
+				INFOPLIST_FILE = ScreenMeetTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.clusteronegmbh.reports.ScreenMeetTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ScreenMeet.app/ScreenMeet";
+			};
+			name = Debug;
+		};
+		047F36DF266152210036CA54 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 77709DFECD64545BD377F7B2 /* Pods-ScreenMeetTests.release.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = U3AQW9824Q;
+				INFOPLIST_FILE = ScreenMeetTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.clusteronegmbh.reports.ScreenMeetTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ScreenMeet.app/ScreenMeet";
+			};
+			name = Release;
+		};
 		04CC0AEE25AC6A6900B8C4E2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = arm64;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -427,7 +629,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = arm64;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -487,7 +688,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 608E0CA996BC6302C9735526 /* Pods-ScreenMeet.debug.xcconfig */;
 			buildSettings = {
-				ARCHS = arm64;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
@@ -504,7 +704,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				PRODUCT_BUNDLE_IDENTIFIER = com.projector.screenmeet.mediasoup;
+				PRODUCT_BUNDLE_IDENTIFIER = com.projector.screenmeet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "ScreenMeet/ScreenMeet-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -517,7 +717,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 148E30CA7C218518B7C57077 /* Pods-ScreenMeet.release.xcconfig */;
 			buildSettings = {
-				ARCHS = arm64;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
@@ -535,7 +734,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.projector.screenmeet.mediasoup;
+				PRODUCT_BUNDLE_IDENTIFIER = com.projector.screenmeet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "ScreenMeet/ScreenMeet-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -547,6 +746,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		047F36E0266152210036CA54 /* Build configuration list for PBXNativeTarget "ScreenMeetTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				047F36DE266152210036CA54 /* Debug */,
+				047F36DF266152210036CA54 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		04CC0AD725AC6A6500B8C4E2 /* Build configuration list for PBXProject "ScreenMeet" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

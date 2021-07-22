@@ -9,7 +9,6 @@ import UIKit
 
 typealias ChallengeAnswerHandler = (String) -> Void
 typealias HandshakeCompletion = (Session?, SMError?) -> Void
-typealias ReconnectHandler = () -> Void
 typealias ChannelMessageHandler = (SMChannelMessage) -> Void
 
 public class SMChallenge {
@@ -34,12 +33,11 @@ class SMHandshakeTransaction: SMTransaction {
     private let SESSION_PIN_LENGTH = 6
     private let TOO_MANY_INCORRECT_ATTEMPTS_REF_CODE = 169400
     
-    private var completion: HandshakeCompletion!
-    private var reconnectHandler: ReconnectHandler!
     private var channelMessageHandler: ChannelMessageHandler!
     
     private var code: String!
     private var localUserName: String = "Anonymous"
+    private var reconnectWaitTimeout: Int = 15
     
     func withCode(_ code: String) -> SMHandshakeTransaction {
         self.code = code
@@ -59,22 +57,21 @@ class SMHandshakeTransaction: SMTransaction {
         return self
     }
     
-    func withReconnectHandler(_ handler: @escaping ReconnectHandler) -> SMHandshakeTransaction {
-        self.reconnectHandler = handler
+    func withReconnectWait(_ timeout: Int) -> SMHandshakeTransaction {
+        self.reconnectWaitTimeout = timeout
         
         return self
     }
         
     func run(_ completion: @escaping HandshakeCompletion) {
-        self.completion = completion
         
         guard let code = code else {
-            self.completion(nil, SMError(code: .transactionInternalError, message: "No code/room id provided"))
+            completion(nil, SMError(code: .transactionInternalError, message: "No code/room id provided"))
             return
         }
         
         guard !code.isEmpty else {
-            self.completion(nil, SMError(code: .transactionInternalError, message: "Empty code/room id provided"))
+            completion(nil, SMError(code: .transactionInternalError, message: "Empty code/room id provided"))
             return
         }
         
@@ -86,81 +83,81 @@ class SMHandshakeTransaction: SMTransaction {
             transport.restClient.disoverySessionByPin(code) { [self] response, error, errorPayload in
                 if let error = error {
                     if let payload = errorPayload, payload["refcode"] as? Int == TOO_MANY_INCORRECT_ATTEMPTS_REF_CODE {
-                        self.getCaptcha(code, payload["description"] as? String)
+                        self.getCaptcha(code, payload["description"] as? String, completion)
                     }
                     else {
                         if let payload = errorPayload, let description = payload["description"] as? String {
-                            completion(nil, SMError(code: .httpError, message: description))
+                            completion(nil, SMError(code: .httpError(SMHTTPCode(rawValue: error.code) ?? .unknown), message: description))
                         }
                         else {
-                            completion(nil, SMError(code: .httpError, message: error.localizedDescription))
+                            completion(nil, SMError(code: .httpError(SMHTTPCode(rawValue: error.code) ?? .unknown), message: error.localizedDescription))
                         }
                     }
                 }
                 else {
-                    self.discovery(response!.id)
+                    self.discovery(response!.id, completion)
                 }
             }
         }
         // room code
         else {
-            discovery(code)
+            discovery(code, completion)
         }
     }
     
-    private func discovery(_ code: String) {
+    private func discovery(_ code: String, _ completion: @escaping  HandshakeCompletion) {
         transport.restClient.disoveryServer(code) { [self] response, error in
             if let error = error {
-                self.completion(nil, SMError(code: .httpError, message: error.localizedDescription))
+                completion(nil, SMError(code: .httpError(SMHTTPCode(rawValue: error.code) ?? .unknown), message: error.localizedDescription))
             }
             else {
-                self.liveConnect(code, response!.session)
+                self.liveConnect(code, response!.session, completion)
             }
         }
     }
     
     private func liveConnect(_ roomId: String,
-                             _ session: Session) {
+                             _ session: Session,
+                             _ completion: @escaping  HandshakeCompletion) {
         transport.restClient.connectServer(roomId, session.servers.live.endpoint) { response, error in
             if let error = error {
-                self.completion(nil, SMError(code: .httpError, message: error.localizedDescription))
+                completion(nil, SMError(code: .httpError(SMHTTPCode(rawValue: error.code) ?? .unknown), message: error.localizedDescription))
             }
             else {
-                self.performSocketHandshake(session)
+                self.performSocketHandshake(session, completion)
             }
         }
     }
     
-    private func performSocketHandshake(_ session: Session) {
-        transport.webSocketClient.setReconnectHandler(reconnectHandler)
+    private func performSocketHandshake(_ session: Session, _ completion: @escaping HandshakeCompletion) {
         transport.webSocketClient.setChannelMessageHandler(channelMessageHandler)
         
-        transport.webSocketClient.connect(session.servers.live.endpoint, session.id) {  error in
+        transport.webSocketClient.connect(session.servers.live.endpoint, session.id, reconnectWaitTimeout) {  error in
             if let error = error {
-                self.completion(nil, error)
+                completion(nil, error)
                 return
             }
             else {
                 self.transport.webSocketClient.childConnect(self.localUserName) { initialPayload, sharedData, error in
                     if let error = error {
-                        self.completion(nil, error)
+                        completion(nil, error)
                     }
                     else {
                         var authorizedSession = session
                         authorizedSession.hostAuthToken = initialPayload?.identity?.credential?.authToken
                         
                         SMChannelsManager.shared.buildInitialStates(sharedData!)
-                        self.completion(authorizedSession, nil)
+                        completion(authorizedSession, nil)
                     }
                 }
             }
         }
     }
     
-    private func getCaptcha(_ pin: String, _ message: String?) {
+    private func getCaptcha(_ pin: String, _ message: String?, _ completion: @escaping HandshakeCompletion) {
         self.transport.restClient.getChallenge { [self] challengeResponse, error in
             if let error = error {
-                self.completion(nil, SMError(code: .httpError, message: error.localizedDescription))
+                completion(nil, SMError(code: .httpError(SMHTTPCode(rawValue: error.code) ?? .unknown), message: error.localizedDescription))
             }
             else {
                 let challenge = SMChallenge(challengeResponse!.challengeDisplay) { captcha in
@@ -168,18 +165,18 @@ class SMHandshakeTransaction: SMTransaction {
                         
                         if let error = error {
                             if error.code == 400 {
-                                self.completion(nil, SMError(code: .httpError, message: "The capture you entered is incorrect"))
+                                completion(nil, SMError(code: .httpError(SMHTTPCode(rawValue: error.code) ?? .unknown), message: "The capture you entered is incorrect"))
                             }
                             else {
-                                self.completion(nil, SMError(code: .httpError, message: errorPayload?["description"] as? String ?? "Challenge could not be resolved"))
+                                completion(nil, SMError(code: .httpError(SMHTTPCode(rawValue: error.code) ?? .unknown), message: errorPayload?["description"] as? String ?? "Challenge could not be resolved"))
                             }
                         }
                         else {
-                            self.discovery(response!.id)
+                            self.discovery(response!.id, completion)
                         }
                     }
                 }
-                self.completion(nil, SMError(code: .httpError,
+                completion(nil, SMError(code: .tooManyCaptchaAttempmts,
                                               message: message ?? "Too many recent connect attempts",
                                               challenge: challenge))
             }

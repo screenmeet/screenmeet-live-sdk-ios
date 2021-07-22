@@ -48,8 +48,8 @@ class SMMediasoupChannel: NSObject, SMChannel  {
     private var mediasoupTransportOptions: SMTransportOptions!
     private var tracksManager = SMTracksManager()
     
-    private var shouldCreteVideoTrackAfterReconnect = false
-    private var shouldCreteAudioTrackAfterReconnect = false
+    private var shouldCreateVideoTrackAfterReconnect = false
+    private var shouldCreateAudioTrackAfterReconnect = false
     
     private var device: MSDevice!
     private var sendTransport: MSSendTransport!
@@ -94,8 +94,8 @@ class SMMediasoupChannel: NSObject, SMChannel  {
         
         /* If transports are initialized - we are probably reconnecting now*/
         if (sendTransport != nil && recvTransport != nil) {
-            shouldCreteVideoTrackAfterReconnect = getVideoEnabled()
-            shouldCreteAudioTrackAfterReconnect = getAudioEnabled()
+            shouldCreateVideoTrackAfterReconnect = getVideoEnabled()
+            shouldCreateAudioTrackAfterReconnect = getAudioEnabled()
             
             disconnect()
         }
@@ -560,15 +560,26 @@ class SMMediasoupChannel: NSObject, SMChannel  {
             transactionCompletion?(nil)
             
             /* check if the tracks should be restored (after reconnecting)*/
-            if (shouldCreteVideoTrackAfterReconnect) {
+            if (shouldCreateVideoTrackAfterReconnect) {
                 addVideoTrack() { [weak self] error, videoTrack in
-                    if (error == nil && self?.shouldCreteAudioTrackAfterReconnect == true) {
+                    if error == nil {
+                        self?.shouldCreateVideoTrackAfterReconnect = false
                         DispatchQueue.main.async {
                             ScreenMeet.session.delegate?.onLocalVideoCreated(videoTrack!)
                         }
-                        
-                        self?.addAudioTrack()
                     }
+                    if (self?.shouldCreateAudioTrackAfterReconnect == true) {
+                        self?.shouldCreateAudioTrackAfterReconnect = false
+                        self?.addAudioTrack { [weak self] error in
+                            ScreenMeet.session.delegate?.onLocalAudioCreated()
+                        }
+                    }
+                }
+            }
+            else if (shouldCreateAudioTrackAfterReconnect == true) {
+                addAudioTrack { [weak self] error in
+                    self?.shouldCreateAudioTrackAfterReconnect = false
+                    ScreenMeet.session.delegate?.onLocalAudioCreated()
                 }
             }
         }

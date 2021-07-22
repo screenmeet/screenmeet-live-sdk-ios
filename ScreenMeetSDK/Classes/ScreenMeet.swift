@@ -224,6 +224,9 @@ public enum SMConnectionState: Equatable, CustomStringConvertible {
     /// Client is disconnected or state before initial connection
     case disconnected(_ value: SMDisconnectionReason)
     
+    /// Client is waiting for entrance permission (knock feature)
+    case waitingEntrancePermission
+    
     public static func ==(l: SMConnectionState, r: SMConnectionState) -> Bool {
         switch (l, r) {
         case (.connecting, .connecting):
@@ -231,6 +234,8 @@ public enum SMConnectionState: Equatable, CustomStringConvertible {
         case (.connected, .connected):
             return true
         case (.reconnecting, .reconnecting):
+            return true
+        case (.waitingEntrancePermission, .waitingEntrancePermission):
             return true
         case let (.disconnected(v0), .disconnected(v1)):
             return v0 == v1
@@ -245,6 +250,7 @@ public enum SMConnectionState: Equatable, CustomStringConvertible {
           case .connected: return "connected"
           case .reconnecting: return "reconnecting"
           case .disconnected: return "disconnected"
+          case .waitingEntrancePermission: return "waitingEntrancePermission"
       }
     }
 }
@@ -252,7 +258,7 @@ public enum SMConnectionState: Equatable, CustomStringConvertible {
 /// Call disconnection reason
 public enum SMDisconnectionReason {
     /// Call is finished
-    case callEnded
+    case callEndedByServer
 
     /// Client left call
     case leftCall
@@ -262,6 +268,12 @@ public enum SMDisconnectionReason {
     
     /// Initial state before session is started
     case callNotStarted
+    
+    /// Wait time expired (knock feature)
+    case knockWaitTimeExpired
+    
+    /// Wait time expired (could not reconnect after network loss)
+    case reconnectWaitTimeExpired
 }
 
 enum SMIceConnectionState: String {

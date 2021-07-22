@@ -31,6 +31,10 @@ public protocol SMAppStreamServiceProtocol {
     /// Unset confidential view
     /// - Parameter view: Confidential view
     func unsetConfidential<T>(webView: T) where T : WKWebView
+    
+    func setConfidential(rect: CGRect)
+    
+    func unsetConfidential(rect: CGRect)
 }
 
 class SMAppStreamService {
@@ -97,5 +101,16 @@ extension SMAppStreamService: SMAppStreamServiceProtocol {
     
     func unsetConfidential<T>(webView: T) where T : WKWebView {
         frameProcessor.confidentialWebViews.removeAll(where: { $0 == webView || $0.isEmpty })
+    }
+    
+    func setConfidential(rect: CGRect) {
+        frameProcessor.confidentialRects.removeAll(where: { $0.isEmpty })
+        guard !frameProcessor.confidentialRects.contains(where: { $0 == rect }) else { return }
+        
+        frameProcessor.confidentialRects.append(SMConfidentialRect(rect))
+    }
+    
+    func unsetConfidential(rect: CGRect) {
+        frameProcessor.confidentialRects.removeAll(where: { $0 == rect || $0.isEmpty })
     }
 }

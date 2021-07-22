@@ -43,6 +43,8 @@ class MSPeerConnection: NSObject {
     init(_ options: Options?, _ callback: MSPeerConnectionIceConnectionStateChangedCallback? = nil) {
         super.init()
         
+        RTCInitializeSSL()
+        
         self.iceConnectionStateChangedCallback = callback
         var config = RTCConfiguration()
         

@@ -32,6 +32,14 @@ class SMUserInterface {
     var mainParticipantId: String?
     
     var localVideoTrack: RTCVideoTrack?
+    
+    var isSimulator: Bool {
+        #if targetEnvironment(simulator)
+        return true
+        #else
+        return false
+        #endif
+    }
 }
 
 extension SMUserInterface: ScreenMeetDelegate {

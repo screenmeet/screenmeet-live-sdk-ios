@@ -91,6 +91,7 @@ class SMMainViewController: UIViewController {
         layoutRemoteVideosView()
         layoutRotateCameraButton()
         layoutReconnectingView()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -207,7 +208,7 @@ class SMMainViewController: UIViewController {
             }
             
             let videoStatus: SMControlBar.ButtonStatus
-            if AVCaptureDevice.authorizationStatus(for: .video) == .denied || AVCaptureDevice.authorizationStatus(for: .video) == .restricted {
+            if SMUserInterface.manager.isSimulator || AVCaptureDevice.authorizationStatus(for: .video) == .denied || AVCaptureDevice.authorizationStatus(for: .video) == .restricted {
                 videoStatus = .unavailable
                 rotateCameraButton.isHidden = true
             } else if SMUserInterface.manager.isCameraEnabled {
@@ -218,9 +219,18 @@ class SMMainViewController: UIViewController {
                 rotateCameraButton.isHidden = true
             }
             
+            let screenShareStatus: SMControlBar.ButtonStatus
+            if SMUserInterface.manager.isSimulator {
+                screenShareStatus = .unavailable
+            } else if SMUserInterface.manager.isScreenShareEnabled {
+                screenShareStatus = .enabled
+            } else {
+                screenShareStatus = .disabled
+            }
+            
             controlButtonsStackView.micStatus(audioStatus)
             controlButtonsStackView.cameraStatus(videoStatus)
-            controlButtonsStackView.screenShareStatus(SMUserInterface.manager.isScreenShareEnabled ? .enabled : .disabled)
+            controlButtonsStackView.screenShareStatus(screenShareStatus)
             controlButtonsStackView.optionButtonBadgeCount(ScreenMeet.getParticipants().count + 1)
             
             reconnectingView.isHidden = !(ScreenMeet.getConnectionState() == .reconnecting)
@@ -291,6 +301,8 @@ extension SMMainViewController: SMControlBarDelegate {
     }
     
     func cameraButtonTapped() {
+        guard !SMUserInterface.manager.isSimulator else { return }
+        
         func toggleVideo() {
             if SMUserInterface.manager.isCameraEnabled {
                 ScreenMeet.stopVideoSharing()
@@ -322,6 +334,8 @@ extension SMMainViewController: SMControlBarDelegate {
     }
     
     func screenShareButtonTapped() {
+        guard !SMUserInterface.manager.isSimulator else { return }
+        
         if SMUserInterface.manager.isScreenShareEnabled {
             ScreenMeet.stopVideoSharing()
         } else {
@@ -398,11 +412,13 @@ extension SMMainViewController: ScreenMeetDelegate {
             print("joined the call")
         case .reconnecting:
             print("trying to restore connection to call ...")
+        case .waitingEntrancePermission:
+            print("waiting for the host to let me in (knock feature) ...")
         case .disconnected(.callNotStarted):
             print("Call disconnected. Call is not started")
             hangUpButtonTapped()
-        case .disconnected(.callEnded):
-            print("Call disconnected. Call is finished")
+        case .disconnected(.callEndedByServer):
+            print("Call disconnected. Call is ended by server")
             hangUpButtonTapped()
         case .disconnected(.leftCall):
             print("Call disconnected. Client left call")
@@ -410,12 +426,18 @@ extension SMMainViewController: ScreenMeetDelegate {
         case .disconnected(.networkError):
             print("Call disconnected. Network error")
             hangUpButtonTapped()
+        case .disconnected(.knockWaitTimeExpired):
+            print("Waited for the entrance for too long. Hanging up")
+            hangUpButtonTapped()
+        case .disconnected(.reconnectWaitTimeExpired):
+            print("Waited for reconnect for too long. Hanging up")
+            hangUpButtonTapped()
         }
         updateContent()
     }
     
     func onError(_ error: SMError) {
-        
+        NSLog("[SM] error", error.message)
     }
 }
 

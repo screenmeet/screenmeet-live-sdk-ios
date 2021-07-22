@@ -84,14 +84,11 @@ class SMSession: NSObject {
             SMHandshakeTransaction()
             .withCode(code)
             .withLocalUserName(localUserName)
-            .withReconnectHandler({ [weak self] in self?.reconnect() })
             .withChannelMessageHandler { [weak self] channelMessage in
                 self?.processIncomingChannelMessage(channelMessage)
             }.run { [weak self] session, error in
                 if let error = error {
-                    self?.connectCompletion?(SMError(code: .httpError,
-                                                     message: "Could not connect. " + error.message,
-                                                     challenge: error.challenge))
+                    self?.connectCompletion?(error)
                 }
                 else {
                     self?.session = session
@@ -246,6 +243,7 @@ extension SMSession {
                     }
                     else {
                         DispatchQueue.main.async {
+                            (SMChannelsManager.shared.channel(for: .laserPointer) as? SMLaserPointerChannel)?.stopLaserPointerSession()
                             self?.delegate?.onLocalVideoStopped()
                         }
                     }

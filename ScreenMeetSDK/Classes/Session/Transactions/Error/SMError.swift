@@ -8,25 +8,61 @@
 import UIKit
 
 /// Represents ScreenMeet error codes
-public enum SMErrorCode: Int {
+public enum SMErrorCode: Equatable {
+    public static func == (l: SMErrorCode, r: SMErrorCode) -> Bool {
+        switch (l, r) {
+        case (.socketError, .socketError):
+            return true
+        case (.notReachableError, .notReachableError):
+            return true
+        case (.transactionInternalError, .transactionInternalError):
+            return true
+        case (.capturerInternalError, .capturerInternalError):
+            return true
+        case (.mediaTrackError, .mediaTrackError):
+            return true
+        case (.knockEntryPermissionRequiredError, .knockEntryPermissionRequiredError):
+            return true
+        case (.knockWaitTimeForEntryExpiredError, .knockWaitTimeForEntryExpiredError):
+            return true
+        case let (.httpError(v0), .httpError(v1)):
+            return v0 == v1
+        default:
+            return false
+        }
+    }
     
     /// HTTP connection error
-    case httpError = 100001
+    case httpError(_ httpCode: SMHTTPCode)
 
     /// Socket connection error
-    case socketError = 100002
+    case socketError
 
     /// Unaccessible server
-    case notReachableError = 100003
+    case notReachableError
     
     /// Transaction error
-    case transactionInternalError = 100004
+    case transactionInternalError
     
     /// Video capturer error
-    case capturerInternalError = 100005
+    case capturerInternalError
     
     /// Media track error
-    case mediaTrackError = 100006
+    case mediaTrackError
+    
+    /// Knock feature is on and permission from host to let the user in is required
+    case knockEntryPermissionRequiredError
+    
+    /// Knock feature is on and waiting time for entrance expired
+    case knockWaitTimeForEntryExpiredError
+    
+    /// Too many faield acptchas have been entered
+    case tooManyCaptchaAttempmts
+}
+
+public enum SMHTTPCode: Int {
+    case notFound = 404
+    case unknown = -1
 }
 
 /// Represents ScreenMeet error

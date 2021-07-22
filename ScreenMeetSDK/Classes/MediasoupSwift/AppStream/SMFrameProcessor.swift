@@ -13,6 +13,8 @@ class SMFrameProcessor {
     
     var confidentialWebViews = [SMConfidentialWebView]()
     
+    var confidentialRects = [SMConfidentialRect]()
+    
     private lazy var calculateFramesQueue: OperationQueue = {
         var queue = OperationQueue()
         queue.name = "Calculate Frames Queue"
@@ -44,7 +46,7 @@ class SMFrameProcessor {
     func processFrame(pixelBuffer: CVPixelBuffer, completion: @escaping (CVPixelBuffer) -> Void) {
         var confidentialFrames = [CGRect]()
         var dependencyCount = 0
-        let calculateFramesOperations = [confidentialWebViews.operation, confidentialViews.operation]
+        let calculateFramesOperations = [confidentialWebViews.operation, confidentialViews.operation, confidentialRects.operation]
         
         calculateFramesOperations.forEach { [unowned self] calculateFramesOperation in
             calculateFramesOperation.completionBlock = {

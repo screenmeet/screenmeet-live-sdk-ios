@@ -9,6 +9,7 @@ import UIKit
 import SocketIO
 
 class SMWebSocketClient: NSObject {
+    
     typealias SocketReadyCompletion = (SMError?) -> Void
     typealias ChildConnectCompletion = (SMInitializationPayload?, _ sharedData: [String: Any]?, SMError?) -> Void
     
@@ -26,22 +27,28 @@ class SMWebSocketClient: NSObject {
     //Just need to keep one strong reference to SocketManager instance, used only when instantiating a socket
     private var manager: SocketManager!
     
-    private var reconnectHandler: ReconnectHandler?
     private var channelMessageHandler: ChannelMessageHandler?
+    private var childConnectCompletion: ChildConnectCompletion?
+    private var userName: String?
+    private let entranceWaitDuration = TimeInterval(600)
     
     func connect(_ url: String,
                _ nameSpace: String,
+               _ reconnectWaitTimeout: Int,
                _ completion: @escaping SocketReadyCompletion) {
         
         state = .connecting
         
         /* .connectParams is important! Without it server wont be able to register namespace... <- To investigate*/
         manager = SocketManager(socketURL: URL(string: url)!,
-                                config: [.log(false), .reconnects(true), .reconnectWait(1), .connectParams(["roomId": nameSpace])])
+                                config: [.log(true), .reconnects(true), .reconnectWait(1), .connectParams(["roomId": nameSpace])])
         
         socketIO = manager.socket(forNamespace: "/\(nameSpace)")
         
         socketIO.on("ready") { [unowned self] (data, ack) in
+            /* Remove pending disconnection handler. The one that is triggered if app wait for recconnect for too long (reconnectWaitTimeout) */
+            NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(disconnectOnWaitTimeout), object: nil)
+            
             completion(nil)
             self.pingPongEvent()
             
@@ -52,7 +59,8 @@ class SMWebSocketClient: NSObject {
         socketIO.on(clientEvent: .reconnect, callback: { [weak self] data, ack in
             NSLog("[SM Signalling] Reconnect")
             self?.state = .reconnecting
-            self?.reconnectHandler?()
+            
+            self?.perform(#selector(self?.disconnectOnWaitTimeout), with: nil, afterDelay: TimeInterval(reconnectWaitTimeout))
         })
         
         socketIO.on("pub", callback: { [weak self]  data, ack in
@@ -81,24 +89,26 @@ class SMWebSocketClient: NSObject {
             }
         })
         
-        socketIO.on("removed", callback: { data, ack in
-         
+        socketIO.on("renegotiate", callback: { [weak self] data, ack in
+            if let userName = self?.userName, let childConnectCompletion = self?.childConnectCompletion {
+                self?.childConnect(userName, childConnectCompletion)
+            }
         })
-        socketIO.on("terminate", callback: { [unowned self] data, ack in
-            state = .disconnected(.callEnded)
-            NSLog("[SM Signalling] Disconnected")
+        
+        socketIO.on("removed", callback: { data, ack in
+            NSLog("[SM Signalling]", "Removed")
         })
         
         socketIO.on(clientEvent: .disconnect) { [unowned self] data, ack in
             NSLog("[SM Signalling] Disconnect")
-            /* We do not update the state (to .disconnected) becasue a reconnecting may be happening soon*/
+            
+            /* Call suddenly terminated by server. Normally we set state to disconnected with a certain reason and then call socketIO.disconnect(). This way inside socketIO.on(clientEvent: .disconnect) {} handler the state is always .disconnected. In case the state inside this handler is any other it means that the socket was suddenly killed by server (someone force closed the room or ended the meeting)*/
+            if state == .connected || state == .reconnecting  || state == .waitingEntrancePermission{
+                state = .disconnected(.callEndedByServer)
+            }
         }
         
         socketIO.connect()
-    }
-    
-    func setReconnectHandler(_ handler: @escaping ReconnectHandler) {
-        self.reconnectHandler = handler
     }
     
     func setChannelMessageHandler(_ handler: @escaping ChannelMessageHandler) {
@@ -106,6 +116,13 @@ class SMWebSocketClient: NSObject {
     }
     
     func childConnect(_ userName: String, _ completion: @escaping ChildConnectCompletion) {
+        /* Save latest user name and completion in case we'll need to renegotiate*/
+        self.userName = userName
+        self.childConnectCompletion = completion
+        
+        /* Cancel entrance waiting timeout in case we are aiting for entracne (knock feature)*/
+        cancelEntranceWaitingTimout()
+        
         let identityInfo = SMIdentityInfo()
         identityInfo.user = SMIdentityInfoUser(name: userName)
         let handshakeOptions = SMHandshakeOptions(overrideDupe: nil, reconnect: true)
@@ -127,10 +144,18 @@ class SMWebSocketClient: NSObject {
                         completion(initPayload!, data!["sharedData"] as? [String : Any], nil)
                     }
                     else {
-                        completion(nil, nil, SMError(code: .socketError,
-                                                     message: "Child connect failed. InitialPayload contains error..." + (initPayload!.error?.description ?? "N/A") ))
-                        self?.diconnect()
-                        self?.state = .disconnected(.networkError)
+                        let error = self?.socketErrorToSMError(initPayload!.error)
+                        completion(nil, nil, error)
+                        
+                        /* If knock is on, we should not disconnect immediately but wait till user is let in*/
+                        if error?.code == .knockEntryPermissionRequiredError {
+                            self?.state = .waitingEntrancePermission
+                            self?.setupEntranceWaitingTimout()
+                        }
+                        else {
+                            self?.disconnect(.networkError)
+                        }
+                        
                     }
                 }
             }
@@ -138,7 +163,6 @@ class SMWebSocketClient: NSObject {
     }
     
     func requestSet(for channelName: SMChannelName, data: SocketData, completion: AckCallback? = nil) {
-        
         if let completion = completion {
             socketIO.emitWithAck("request-set", channelName.rawValue, data).timingOut(after: 10, callback: completion)
         }
@@ -155,8 +179,8 @@ class SMWebSocketClient: NSObject {
         socketIO.emitWithAck("command", channelName.rawValue, message, data).timingOut(after: 10, callback: callback)
     }
     
-    func diconnect() {
-        state = .disconnected(.leftCall)
+    func disconnect(_ reason: SMDisconnectionReason) {
+        state = .disconnected(reason)
         socketIO.disconnect()
     }
     
@@ -179,5 +203,39 @@ class SMWebSocketClient: NSObject {
         socketIO.on("_ping") { data, ack in
             ack.with("pong")
         }
+    }
+    
+    private func socketErrorToSMError(_ socketError: SMInitializationPayloadErrorDescription?) -> SMError {
+        if let socketError = socketError {
+            
+            if socketError.code == 40310 {
+                return SMError(code: .knockEntryPermissionRequiredError, message: "Entered the waiting room. Permission from the host is required to enter this call...")
+            }
+            else {
+                return SMError(code: .socketError, message: socketError.description)
+            }
+            
+        }
+        return SMError(code: .socketError, message: "Unknwon fatal error occurred while connecting to the session")
+    }
+    
+    private func cancelEntranceWaitingTimout() {
+        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(entranceWaitExpired), object: nil)
+    }
+    
+    private func setupEntranceWaitingTimout() {
+        perform(#selector(entranceWaitExpired), with: nil, afterDelay: entranceWaitDuration)
+    }
+    
+    @objc private func entranceWaitExpired() {
+        disconnect(.knockWaitTimeExpired)
+        
+        childConnectCompletion?(nil, nil, SMError(code: .knockWaitTimeForEntryExpiredError, message: "Waiting time to enter this room has expired. Hanging up"))
+    }
+    
+    @objc private func disconnectOnWaitTimeout() {
+        disconnect(.reconnectWaitTimeExpired)
+        
+        childConnectCompletion?(nil, nil, SMError(code: .knockWaitTimeForEntryExpiredError, message: "Waiting time to reconnect this room has expired. Hanging up"))
     }
 }
