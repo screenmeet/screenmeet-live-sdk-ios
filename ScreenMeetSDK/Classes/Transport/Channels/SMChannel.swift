@@ -27,11 +27,13 @@ enum SMChannelName: String {
     case permissionGrants   = "permission_grants"
     
     case capabilities       = "capabilities"
+    case entitlements       = "entitlements"
+    case requests           = "requests"
 }
 
 typealias SMChannelOperationCompletion = (_ error: SMError?) -> Void
 
-protocol SMChannel: class {
+protocol SMChannel: AnyObject {
     var name: SMChannelName { get }
     func processEvent(_ message: SMChannelMessage)
     

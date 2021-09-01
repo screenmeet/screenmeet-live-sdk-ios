@@ -49,6 +49,19 @@ class SMMainViewController: UIViewController {
         return button
     }()
     
+    private var enableFloatingViewButton: SMControlButton = {
+        let button = SMControlButton()
+        let color = UIColor(red: 212 / 255, green: 212 / 255, blue: 213 / 255, alpha: 1)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(UIImage(systemName: "rectangle.inset.topleft.fill"), for: .normal, color: color)
+        button.addTarget(self, action: #selector(enableFloatingViewButtonTapped), for: .touchUpInside)
+        button.backgroundColor = .clear
+        button.layer.borderWidth = 2
+        button.layer.borderColor = color.cgColor
+        button.layer.cornerRadius = 25
+        return button
+    }()
+    
     private var reconnectingView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -67,7 +80,7 @@ class SMMainViewController: UIViewController {
         
         activityIndicator.startAnimating()
         
-        view.backgroundColor = UIColor(red: 0.92, green: 0.92, blue: 0.92, alpha: 1.0)
+        view.backgroundColor = UIColor(red: 0.22, green: 0.22, blue: 0.22, alpha: 1.0)
         view.layer.cornerRadius = 25
         view.layer.masksToBounds = true
         return view
@@ -80,8 +93,6 @@ class SMMainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        SMUserInterface.manager.delegate = self
-        
         view = UIView()
         view.backgroundColor = .black
         
@@ -90,6 +101,7 @@ class SMMainViewController: UIViewController {
         layoutControlButtonsStackView()
         layoutRemoteVideosView()
         layoutRotateCameraButton()
+        layoutEnableFloatingViewButton()
         layoutReconnectingView()
         
     }
@@ -98,6 +110,8 @@ class SMMainViewController: UIViewController {
         super.viewWillAppear(animated)
         
         updateContent(with: ScreenMeet.getParticipants().first)
+        
+        SMUserInterface.manager.hideFloatingUI()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -161,9 +175,20 @@ class SMMainViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             rotateCameraButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
-            rotateCameraButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            rotateCameraButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 70),
             rotateCameraButton.widthAnchor.constraint(equalToConstant: 50),
             rotateCameraButton.heightAnchor.constraint(equalToConstant: 50)
+        ])
+    }
+    
+    private func layoutEnableFloatingViewButton() {
+        view.addSubview(enableFloatingViewButton)
+        
+        NSLayoutConstraint.activate([
+            enableFloatingViewButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
+            enableFloatingViewButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            enableFloatingViewButton.widthAnchor.constraint(equalToConstant: 50),
+            enableFloatingViewButton.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
     
@@ -181,63 +206,6 @@ class SMMainViewController: UIViewController {
         reconnectingView.isHidden = true
     }
     
-    private func updateContent(with participant: SMParticipant? = nil) {
-        DispatchQueue.main.async { [unowned self] in
-            optionVC?.reloadContent()
-            
-            if let participant = participant ?? ScreenMeet.getParticipants().first {
-                SMUserInterface.manager.mainParticipantId = participant.id
-                centerVideoView.update(with: participant)
-                localSmallVideoView.isHidden = false
-            } else {
-                centerVideoView.update(with: "Me", audioState: SMUserInterface.manager.isAudioEnabled, videoState: SMUserInterface.manager.isCameraEnabled, videoTrack: SMUserInterface.manager.localVideoTrack)
-                localSmallVideoView.isHidden = true
-            }
-            
-            localSmallVideoView.update(with: "Me", audioState: SMUserInterface.manager.isAudioEnabled, videoState: SMUserInterface.manager.isCameraEnabled, videoTrack: SMUserInterface.manager.localVideoTrack)
-            
-            remoteVideosView.reloadContent()
-            
-            let audioStatus: SMControlBar.ButtonStatus
-            if AVCaptureDevice.authorizationStatus(for: .audio) == .denied || AVCaptureDevice.authorizationStatus(for: .audio) == .restricted {
-                audioStatus = .unavailable
-            } else if SMUserInterface.manager.isAudioEnabled {
-                audioStatus = .enabled
-            } else {
-                audioStatus = .disabled
-            }
-            
-            let videoStatus: SMControlBar.ButtonStatus
-            if SMUserInterface.manager.isSimulator || AVCaptureDevice.authorizationStatus(for: .video) == .denied || AVCaptureDevice.authorizationStatus(for: .video) == .restricted {
-                videoStatus = .unavailable
-                rotateCameraButton.isHidden = true
-            } else if SMUserInterface.manager.isCameraEnabled {
-                videoStatus = .enabled
-                rotateCameraButton.isHidden = false
-            } else {
-                videoStatus = .disabled
-                rotateCameraButton.isHidden = true
-            }
-            
-            let screenShareStatus: SMControlBar.ButtonStatus
-            if SMUserInterface.manager.isSimulator {
-                screenShareStatus = .unavailable
-            } else if SMUserInterface.manager.isScreenShareEnabled {
-                screenShareStatus = .enabled
-            } else {
-                screenShareStatus = .disabled
-            }
-            
-            controlButtonsStackView.micStatus(audioStatus)
-            controlButtonsStackView.cameraStatus(videoStatus)
-            controlButtonsStackView.screenShareStatus(screenShareStatus)
-            controlButtonsStackView.optionButtonBadgeCount(ScreenMeet.getParticipants().count + 1)
-            
-            reconnectingView.isHidden = !(ScreenMeet.getConnectionState() == .reconnecting)
-            view.isUserInteractionEnabled = !(ScreenMeet.getConnectionState() == .reconnecting)
-        }
-    }
-    
     @objc private func rotateCameraButtonTapped() {
         cameraPosition = cameraPosition == .front ? .back : .front
         
@@ -246,7 +214,15 @@ class SMMainViewController: UIViewController {
                                                            position: cameraPosition).devices.first else { return }
         
         ScreenMeet.shareCamera(device)
-        updateContent()
+        updateContent(with: SMUserInterface.manager.mainParticipant)
+    }
+    
+    @objc private func enableFloatingViewButtonTapped() {
+        dismiss(animated: true, completion: {
+            if ScreenMeet.getConnectionState() == .connected {
+                SMUserInterface.manager.presentFloatingUI()
+            }
+        })
     }
     
     private func presentAccessAlert(title: String, message: String) {
@@ -289,7 +265,7 @@ extension SMMainViewController: SMControlBarDelegate {
                     if isGranted {
                         toggleAudio()
                     } else {
-                        self?.updateContent()
+                        self?.updateContent(with: SMUserInterface.manager.mainParticipant)
                     }
                 }
             })
@@ -322,7 +298,7 @@ extension SMMainViewController: SMControlBarDelegate {
                     if isGranted {
                         toggleVideo()
                     } else {
-                        self?.updateContent()
+                        self?.updateContent(with: SMUserInterface.manager.mainParticipant)
                     }
                 }
             })
@@ -340,7 +316,7 @@ extension SMMainViewController: SMControlBarDelegate {
             ScreenMeet.stopVideoSharing()
         } else {
             ScreenMeet.shareScreen()
-            updateContent()
+            updateContent(with: SMUserInterface.manager.mainParticipant)
         }
     }
     
@@ -351,118 +327,70 @@ extension SMMainViewController: SMControlBarDelegate {
     }
     
     func hangUpButtonTapped() {
-        dismiss(animated: true, completion: {
-            NotificationCenter.default.post(name: Notification.Name("ScreenMeetSessionEnd"), object: nil)
-        })
-        ScreenMeet.disconnect()
-    }
-}
-
-extension SMMainViewController: ScreenMeetDelegate {
-    
-    func onLocalAudioCreated() {
-        updateContent()
-    }
-    
-    func onLocalVideoCreated(_ videoTrack: RTCVideoTrack) {
-        updateContent()
-    }
-    
-    func onLocalVideoSourceChanged() {
-        updateContent()
-    }
-    
-    func onLocalVideoStopped() {
-        updateContent()
-    }
-    
-    func onLocalAudioStopped() {
-        updateContent()
-    }
-    
-    func onParticipantJoined(_ participant: SMParticipant) {
-        updateContent()
-    }
-    
-    func onParticipantVideoTrackCreated(_ participant: SMParticipant) {
-        updateContent(with: participant)
-    }
-    
-    func onParticipantAudioTrackCreated(_ participant: SMParticipant) {
-        updateContent(with: participant)
-    }
-    
-    func onParticipantMediaStateChanged(_ participant: SMParticipant) {
-        updateContent(with: participant)
-    }
-    
-    func onParticipantLeft(_ participant: SMParticipant) {
-        updateContent()
-    }
-    
-    func onActiveSpeakerChanged(_ participant: SMParticipant) {
-        updateContent(with: participant)
-    }
-    
-    func onConnectionStateChanged(_ newState: SMConnectionState) {
-        switch newState {
-        case .connecting:
-            print("waiting for connecting to call ...")
-        case .connected:
-            print("joined the call")
-        case .reconnecting:
-            print("trying to restore connection to call ...")
-        case .waitingEntrancePermission:
-            print("waiting for the host to let me in (knock feature) ...")
-        case .disconnected(.callNotStarted):
-            print("Call disconnected. Call is not started")
-            hangUpButtonTapped()
-        case .disconnected(.callEndedByServer):
-            print("Call disconnected. Call is ended by server")
-            hangUpButtonTapped()
-        case .disconnected(.leftCall):
-            print("Call disconnected. Client left call")
-            hangUpButtonTapped()
-        case .disconnected(.networkError):
-            print("Call disconnected. Network error")
-            hangUpButtonTapped()
-        case .disconnected(.knockWaitTimeExpired):
-            print("Waited for the entrance for too long. Hanging up")
-            hangUpButtonTapped()
-        case .disconnected(.reconnectWaitTimeExpired):
-            print("Waited for reconnect for too long. Hanging up")
-            hangUpButtonTapped()
-        }
-        updateContent()
-    }
-    
-    func onError(_ error: SMError) {
-        NSLog("[SM] error", error.message)
+        disconnect()
     }
 }
 
 extension SMMainViewController {
     
-    static func presentScreenMeetUI(completion: (() -> Void)? = nil) {
-        DispatchQueue.main.async {
-            guard let rootVC = self.rootController() else { return }
-            
-            let vc = SMMainViewController()
-            
-            rootVC.present(vc, animated: true, completion: completion)
-        }
-    }
-    
-    private static func rootController<T: UIViewController>() -> T? {
-        let presentedController = UIApplication.shared.windows.first?.rootViewController
-        if let root = presentedController as? T {
-            return root
-        } else if let topController = (presentedController as? UINavigationController)?.topViewController as? T {
-            return topController
-        } else if let tabController = (presentedController as? UITabBarController)?.selectedViewController as? T {
-            return tabController
+    func updateContent(with participant: SMParticipant?) {
+        optionVC?.reloadContent()
+        
+        if let participant = participant {
+            centerVideoView.update(with: participant)
+            localSmallVideoView.isHidden = false
+        } else {
+            centerVideoView.update(with: "Me", audioState: SMUserInterface.manager.isAudioEnabled, videoState: SMUserInterface.manager.isCameraEnabled, videoTrack: SMUserInterface.manager.localVideoTrack)
+            localSmallVideoView.isHidden = true
         }
         
-        return nil
+        localSmallVideoView.update(with: "Me", audioState: SMUserInterface.manager.isAudioEnabled, videoState: SMUserInterface.manager.isCameraEnabled, videoTrack: SMUserInterface.manager.localVideoTrack)
+        
+        remoteVideosView.reloadContent()
+        
+        let audioStatus: SMControlBar.ButtonStatus
+        if AVCaptureDevice.authorizationStatus(for: .audio) == .denied || AVCaptureDevice.authorizationStatus(for: .audio) == .restricted {
+            audioStatus = .unavailable
+        } else if SMUserInterface.manager.isAudioEnabled {
+            audioStatus = .enabled
+        } else {
+            audioStatus = .disabled
+        }
+        
+        let videoStatus: SMControlBar.ButtonStatus
+        if SMUserInterface.manager.isSimulator || AVCaptureDevice.authorizationStatus(for: .video) == .denied || AVCaptureDevice.authorizationStatus(for: .video) == .restricted {
+            videoStatus = .unavailable
+            rotateCameraButton.isHidden = true
+        } else if SMUserInterface.manager.isCameraEnabled {
+            videoStatus = .enabled
+            rotateCameraButton.isHidden = false
+        } else {
+            videoStatus = .disabled
+            rotateCameraButton.isHidden = true
+        }
+        
+        let screenShareStatus: SMControlBar.ButtonStatus
+        if SMUserInterface.manager.isSimulator {
+            screenShareStatus = .unavailable
+        } else if SMUserInterface.manager.isScreenShareEnabled {
+            screenShareStatus = .enabled
+        } else {
+            screenShareStatus = .disabled
+        }
+        
+        controlButtonsStackView.micStatus(audioStatus)
+        controlButtonsStackView.cameraStatus(videoStatus)
+        controlButtonsStackView.screenShareStatus(screenShareStatus)
+        controlButtonsStackView.optionButtonBadgeCount(ScreenMeet.getParticipants().count + 1)
+        
+        reconnectingView.isHidden = !(ScreenMeet.getConnectionState() == .reconnecting)
+        view.isUserInteractionEnabled = !(ScreenMeet.getConnectionState() == .reconnecting)
+    }
+    
+    func disconnect() {
+        dismiss(animated: true, completion: {
+            NotificationCenter.default.post(name: Notification.Name("ScreenMeetSessionEnd"), object: nil)
+        })
+        ScreenMeet.disconnect()
     }
 }

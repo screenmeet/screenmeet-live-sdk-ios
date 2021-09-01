@@ -16,7 +16,7 @@ class SMWebSocketClient: NSObject {
     private var state: SMConnectionState = .disconnected(.callNotStarted) {
         willSet {
             if (newValue != state) {
-                DispatchQueue.main.async { [weak self] in
+                DispatchQueue.main.async { 
                     ScreenMeet.session.delegate?.onConnectionStateChanged(newValue)
                 }
             }
@@ -177,6 +177,10 @@ class SMWebSocketClient: NSObject {
                  callback: @escaping AckCallback ) {
               
         socketIO.emitWithAck("command", channelName.rawValue, message, data).timingOut(after: 10, callback: callback)
+    }
+    
+    func logInfo(_ event: SocketData) {
+        socketIO.emit("logevent", event)
     }
     
     func disconnect(_ reason: SMDisconnectionReason) {

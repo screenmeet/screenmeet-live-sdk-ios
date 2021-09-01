@@ -53,7 +53,7 @@
                                     <action selector="connectButtonTapped:" destination="rWk-2o-Ryo" eventType="touchUpInside" id="lbO-Ni-4fv"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" placeholder="Code" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Rfn-Nh-Rdc" customClass="UnderLineTextField" customModule="ScreenMeet" customModuleProvider="target">
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="399507" borderStyle="bezel" placeholder="Code" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Rfn-Nh-Rdc" customClass="UnderLineTextField" customModule="ScreenMeet" customModuleProvider="target">
                                 <rect key="frame" x="122" y="378" width="170" height="30.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="170" id="Yz8-lA-an7"/>
@@ -131,7 +131,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="ScreenMeet" id="Lcy-0R-i29">
-                        <barButtonItem key="rightBarButtonItem" image="network" catalog="system" style="plain" id="hCb-u6-HKp">
+                        <barButtonItem key="rightBarButtonItem" image="network" catalog="system" id="hCb-u6-HKp">
                             <color key="tintColor" red="1" green="0.45490196078431372" blue="0.20392156862745098" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <segue destination="oKw-1b-LIO" kind="show" id="yt2-gA-2Mu"/>

@@ -12,11 +12,19 @@ import ScreenMeetSDK
 class SMSmallVideoView: UIView {
     private weak var currentVideoTrack: RTCVideoTrack?
     
-    var rtcVideoView: RTCMTLVideoView = {
-        let rtcVideoView = RTCMTLVideoView()
+    #if arch(arm64)
+        var rtcVideoView: RTCMTLVideoView = {
+            let rtcVideoView = RTCMTLVideoView()
+            rtcVideoView.translatesAutoresizingMaskIntoConstraints = false
+            return rtcVideoView
+        }()
+    #else
+        var rtcVideoView: RTCEAGLVideoView = {
+        let rtcVideoView = RTCEAGLVideoView()
         rtcVideoView.translatesAutoresizingMaskIntoConstraints = false
         return rtcVideoView
     }()
+    #endif
     
     var imageView: UIImageView = {
         let image = UIImage(named: "sm_logo.png")
@@ -30,6 +38,17 @@ class SMSmallVideoView: UIView {
     
     var micImageView: UIImageView = {
         let image = UIImage(systemName: "mic.slash.fill")
+        
+        let imageView = UIImageView(image: image)
+        imageView.contentMode = .scaleAspectFit
+        imageView.tintColor = UIColor(red: 219 / 255, green: 40 / 255, blue: 40 / 255, alpha: 1)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        return imageView
+    }()
+    
+    var cameraImageView: UIImageView = {
+        let image = UIImage(systemName: "video.slash.fill")
         
         let imageView = UIImageView(image: image)
         imageView.contentMode = .scaleAspectFit
@@ -57,14 +76,25 @@ class SMSmallVideoView: UIView {
     
     private var rtcVideoViewAspectRatioConstraint: NSLayoutConstraint!
     
+    private let gradientLayer = CAGradientLayer()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        rtcVideoView.delegate = self
+        
+        let stackView = UIStackView()
+        stackView.spacing = 3
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        
         addSubview(rtcVideoView)
         addSubview(imageView)
-        addSubview(micImageView)
+        addSubview(stackView)
         addSubview(bottomView)
+        bottomView.layer.insertSublayer(gradientLayer, at: 0)
         bottomView.addSubview(nameLabel)
+        stackView.addArrangedSubview(micImageView)
+        stackView.addArrangedSubview(cameraImageView)
         
         NSLayoutConstraint.activate([
             nameLabel.topAnchor.constraint(equalTo: bottomView.topAnchor),
@@ -87,10 +117,14 @@ class SMSmallVideoView: UIView {
             imageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             imageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
             
-            micImageView.topAnchor.constraint(equalTo: topAnchor, constant: 5),
-            micImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -3),
+            stackView.topAnchor.constraint(equalTo: topAnchor, constant: 5),
+            stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -3),
+            
             micImageView.widthAnchor.constraint(equalToConstant: 12),
             micImageView.heightAnchor.constraint(equalTo: micImageView.widthAnchor),
+            
+            cameraImageView.widthAnchor.constraint(equalToConstant: 12),
+            cameraImageView.heightAnchor.constraint(equalTo: cameraImageView.widthAnchor),
             
             bottomView.bottomAnchor.constraint(equalTo: bottomAnchor),
             bottomView.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -110,21 +144,18 @@ class SMSmallVideoView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        let gradientLayer = CAGradientLayer()
         gradientLayer.colors = [UIColor.black.withAlphaComponent(0.6).cgColor, UIColor.clear.cgColor]
         gradientLayer.startPoint = CGPoint(x: 0.5, y: 1.0)
         gradientLayer.endPoint = CGPoint(x: 0.5, y: 0.0)
         gradientLayer.locations = [0, 1]
         gradientLayer.frame = bottomView.bounds
-
-        bottomView.layer.insertSublayer(gradientLayer, at: 0)
     }
     
     func update(with participant: SMParticipant) {
-        update(with: participant.name, audioState: participant.avState.audioState == .MICROPHONE, videoState: participant.avState.videoState == .CAMERA, videoTrack: participant.videoTrack)
+        update(with: participant.name, audioState: participant.avState.audioState == .MICROPHONE, videoState: participant.avState.videoState != .NONE, videoTrack: participant.videoTrack)
     }
     
-    func update(with name: String?, audioState: Bool, videoState: Bool, videoTrack: RTCVideoTrack?) {
+    func update(with name: String?, audioState: Bool, videoState: Bool, videoTrack: RTCVideoTrack?, isFloating: Bool = false) {
         currentVideoTrack?.remove(rtcVideoView)
         currentVideoTrack = videoTrack
         
@@ -135,7 +166,33 @@ class SMSmallVideoView: UIView {
         micImageView.isHidden = audioState
         imageView.isHidden = videoState
         rtcVideoView.isHidden = !videoState
+        cameraImageView.isHidden = true
         layer.borderColor = audioState ? UIColor.white.cgColor : UIColor(red: 219 / 255, green: 40 / 255, blue: 40 / 255, alpha: 1).cgColor
+        
+        if isFloating {
+            let enabledColor = UIColor(red: 53 / 255, green: 169 / 255, blue: 235 / 255, alpha: 1)
+            let disabledColor = UIColor(red: 219 / 255, green: 40 / 255, blue: 40 / 255, alpha: 1)
+            let mainParticipantVideoState = (SMUserInterface.manager.mainParticipant?.avState.videoState ?? .NONE) != .NONE
+            imageView.isHidden = mainParticipantVideoState || videoState
+            rtcVideoView.isHidden = !(mainParticipantVideoState || videoState)
+            
+            micImageView.isHidden = false
+            micImageView.tintColor = audioState ? enabledColor : disabledColor
+            micImageView.image = audioState ? UIImage(systemName: "mic.fill") : UIImage(systemName: "mic.slash.fill")
+            
+            cameraImageView.isHidden = false
+            cameraImageView.tintColor = videoState ? enabledColor : disabledColor
+            cameraImageView.image = videoState ? UIImage(systemName: "video.fill") : UIImage(systemName: "video.slash.fill")
+            
+            layer.borderColor = UIColor(red: 255 / 255, green: 166 / 255, blue: 99 / 255, alpha: 1).cgColor
+        }
     }
+}
+
+extension SMSmallVideoView: RTCVideoViewDelegate {
+    func videoView(_ videoView: RTCVideoRenderer, didChangeVideoSize size: CGSize) {
+        
+    }
+    
 }
 

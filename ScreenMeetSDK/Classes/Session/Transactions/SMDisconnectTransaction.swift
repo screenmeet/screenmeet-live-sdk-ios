@@ -19,6 +19,6 @@ class SMDisconnectTransaction: SMTransaction {
         participantsChannel.removeAllParticipants()
         
         let laserPointerChannel = transport.channelsManager.channel(for: .laserPointer) as! SMLaserPointerChannel
-        laserPointerChannel.stopLaserPointerSession()
+        laserPointerChannel.stopAllLaserPointerSessions()
     }
 }

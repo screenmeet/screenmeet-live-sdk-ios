@@ -52,7 +52,7 @@ extension SMRemoteVideosView: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SMRemoteVideoTableViewCell", for: indexPath) as! SMRemoteVideoTableViewCell
-        let participants = ScreenMeet.getParticipants().filter { $0.id != SMUserInterface.manager.mainParticipantId }
+        let participants = ScreenMeet.getParticipants().filter { $0.id != SMUserInterface.manager.mainParticipant?.id }
         let participant = participants[indexPath.row]
         
         cell.setup(with: participant)

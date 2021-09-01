@@ -21,6 +21,9 @@ struct SMCallerState: SocketData {
     
     /// Is Screen enabled
     public var screenEnabled: Bool = false
+    
+    /// Is Screen Annotation enabled
+    public var screenAnnotationEnabled: Bool = false
 
     var sourceType: String = "cam"
     
@@ -43,6 +46,9 @@ struct SMCallerState: SocketData {
         
         if let screenEnabled = socketData["screenenabled"] as? Bool { self.screenEnabled = screenEnabled }
         else { self.screenEnabled = currentState?.screenEnabled ?? false}
+        
+        if let screenAnnotationEnabled = socketData["screenannotationenabled"] as? Bool { self.screenAnnotationEnabled = screenAnnotationEnabled }
+        else { self.screenAnnotationEnabled = currentState?.screenAnnotationEnabled ?? false}
         
         if let sourceType = socketData["sourceType"] as? String { self.sourceType = sourceType }
         else { self.sourceType = currentState?.sourceType ?? "cam"}

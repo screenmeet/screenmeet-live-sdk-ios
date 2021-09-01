@@ -60,6 +60,9 @@ public struct SMParticipantMediaState {
         if (callerState.screenEnabled) {
             return .SCREEN
         }
+        if (callerState.screenAnnotationEnabled) {
+            return .ANNOTATION
+        }
         if (callerState.videoEnabled) {
             return .CAMERA
         }
@@ -89,6 +92,9 @@ public struct SMParticipantMediaState {
 
         /// Screen content is shared
         case SCREEN
+        
+        /// Screen annotation content is shared
+        case ANNOTATION
         
         /// Video stream is not shared
         case NONE

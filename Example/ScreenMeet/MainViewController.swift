@@ -77,7 +77,7 @@ class MainViewController: UIViewController {
     @IBAction func connectButtonTapped(_ sender: UIButton) {
         switch ScreenMeet.getConnectionState() {
         case .connected:
-            SMMainViewController.presentScreenMeetUI()
+            SMUserInterface.manager.presentScreenMeetUI()
         case .connecting:
             print("Connecting...")
         case .reconnecting:
@@ -127,7 +127,7 @@ class MainViewController: UIViewController {
                     self?.connectButton.stopAnimation(animationStyle: .expand, revertAfterDelay: 1.0, completion: {
                         self?.waitingView.isHidden = true
                         
-                        SMMainViewController.presentScreenMeetUI { [weak self] in
+                        SMUserInterface.manager.presentScreenMeetUI { [weak self] in
                             self?.codeTextField.isHidden = true
                             self?.codeTextField.isEnabled = true
                             self?.connectButton.isEnabled = true

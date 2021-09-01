@@ -25,6 +25,7 @@
 		918655A4266FC86B008AC955 /* UnderLineTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 918655A3266FC86B008AC955 /* UnderLineTextField.swift */; };
 		918655A7266FCC36008AC955 /* mushrooms.gif in Resources */ = {isa = PBXBuildFile; fileRef = 918655A6266FCC36008AC955 /* mushrooms.gif */; };
 		A3AEC24E0588CAEFB800D9FF /* Pods_ScreenMeet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F57D6F3DE8F95A515928F9F0 /* Pods_ScreenMeet.framework */; };
+		A9357590267A540000680134 /* SMFloatingVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A935758F267A540000680134 /* SMFloatingVideoView.swift */; };
 		A946497325F7CE9500FDB22C /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A946497225F7CE9500FDB22C /* MainViewController.swift */; };
 		A946497A25F8C64100FDB22C /* SMUserInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = A946497925F8C64100FDB22C /* SMUserInterface.swift */; };
 		A946497C25F8E06D00FDB22C /* SMOptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A946497B25F8E06D00FDB22C /* SMOptionViewController.swift */; };
@@ -91,6 +92,7 @@
 		91865566266FBCC3008AC955 /* CGRectExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGRectExtension.swift; sourceTree = "<group>"; };
 		918655A3266FC86B008AC955 /* UnderLineTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderLineTextField.swift; sourceTree = "<group>"; };
 		918655A6266FCC36008AC955 /* mushrooms.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = mushrooms.gif; sourceTree = "<group>"; };
+		A935758F267A540000680134 /* SMFloatingVideoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SMFloatingVideoView.swift; sourceTree = "<group>"; };
 		A946497225F7CE9500FDB22C /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		A946497925F8C64100FDB22C /* SMUserInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMUserInterface.swift; sourceTree = "<group>"; };
 		A946497B25F8E06D00FDB22C /* SMOptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMOptionViewController.swift; sourceTree = "<group>"; };
@@ -241,6 +243,7 @@
 				A946497F25F919AC00FDB22C /* SMSmallVideoView.swift */,
 				A946498625FA3ACB00FDB22C /* SMMainVideoView.swift */,
 				A946498925FA529100FDB22C /* SMRemoteVideosView.swift */,
+				A935758F267A540000680134 /* SMFloatingVideoView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -473,6 +476,7 @@
 				918655A4266FC86B008AC955 /* UnderLineTextField.swift in Sources */,
 				A946498025F919AC00FDB22C /* SMSmallVideoView.swift in Sources */,
 				04CC0AE025AC6A6500B8C4E2 /* AppDelegate.swift in Sources */,
+				A9357590267A540000680134 /* SMFloatingVideoView.swift in Sources */,
 				A946497C25F8E06D00FDB22C /* SMOptionViewController.swift in Sources */,
 				0463B25625E3BD4800734DAD /* UIImage+Gif.swift in Sources */,
 				A95BFBF325F7C55000432305 /* SMControlBar.swift in Sources */,

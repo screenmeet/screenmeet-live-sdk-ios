@@ -30,6 +30,10 @@ class SMChannelsManager: NSObject {
             channel = SMCapabilitiesChannel()
         case .laserPointer:
             channel = SMLaserPointerChannel()
+        case .entitlements:
+            channel = SMEntitlementsChannel()
+        case .requests:
+            channel = SMRequestsChannel()
         default:
             channel = nil
         }

@@ -570,7 +570,7 @@ class SMMediasoupChannel: NSObject, SMChannel  {
                     }
                     if (self?.shouldCreateAudioTrackAfterReconnect == true) {
                         self?.shouldCreateAudioTrackAfterReconnect = false
-                        self?.addAudioTrack { [weak self] error in
+                        self?.addAudioTrack { error in
                             ScreenMeet.session.delegate?.onLocalAudioCreated()
                         }
                     }
@@ -685,6 +685,8 @@ class SMMediasoupChannel: NSObject, SMChannel  {
             if let changeCapturerOperation = currentProducerOperation as? ChangeCapturerOperation {
                 changeCapturerInternal(changeCapturerOperation.device) { [weak self] error in
                     self?.proceedWithNextProduceOperation()
+                    
+                    SMLogCapturerChangeTransaction().witDevice(changeCapturerOperation.device).run()
                     changeCapturerOperation.completion?(error)
                 }
             }

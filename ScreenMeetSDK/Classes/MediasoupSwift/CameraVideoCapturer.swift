@@ -19,7 +19,7 @@ class CameraVideoCapturer: RTCCameraVideoCapturer /*MSCameraVideoCapturer*/, SMV
     }
     
     func startCapture(_ completionHandler: SMCapturerOperationCompletion? = nil) {
-        self.startCapture(with: device!, format: device!.activeFormat, fps: 30) { [weak self] (error: Error?) in
+        self.startCapture(with: device!, format: device!.activeFormat, fps: 30) { (error: Error?) in
             RTCDispatcher.dispatchAsync(on: .typeCaptureSession, block: {
                 if error == nil {
                     completionHandler?(nil)

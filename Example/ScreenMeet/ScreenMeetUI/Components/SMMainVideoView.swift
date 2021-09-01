@@ -13,11 +13,19 @@ class SMMainVideoView: UIView {
     
     private weak var currentVideoVideTrack: RTCVideoTrack?
     
-    var rtcVideoView: RTCMTLVideoView = {
-        let rtcVideoView = RTCMTLVideoView()
+    #if arch(arm64)
+        var rtcVideoView: RTCMTLVideoView = {
+            let rtcVideoView = RTCMTLVideoView()
+            rtcVideoView.translatesAutoresizingMaskIntoConstraints = false
+            return rtcVideoView
+        }()
+    #else
+        var rtcVideoView: RTCEAGLVideoView = {
+        let rtcVideoView = RTCEAGLVideoView()
         rtcVideoView.translatesAutoresizingMaskIntoConstraints = false
         return rtcVideoView
     }()
+    #endif
     
     var imageView: UIImageView = {
         let image = UIImage(named: "sm_logo.png")
@@ -119,16 +127,10 @@ class SMMainVideoView: UIView {
     }
     
     func update(with participant: SMParticipant) {
-        update(with: participant.name, audioState: participant.avState.audioState == .MICROPHONE, videoState: participant.avState.videoState == .CAMERA, videoTrack: participant.videoTrack)
+        update(with: participant.name, audioState: participant.avState.audioState == .MICROPHONE, videoState: participant.avState.videoState != .NONE, videoTrack: participant.videoTrack)
     }
     
     func update(with name: String?, audioState: Bool, videoState: Bool, videoTrack: RTCVideoTrack?) {
-        
-        #if arch(arm64)
-            NSLog("ARM64")
-        #else
-            NSLog("Not ARM64")
-        #endif
         currentVideoVideTrack?.remove(rtcVideoView)
         currentVideoVideTrack = videoTrack
         
@@ -141,3 +143,4 @@ class SMMainVideoView: UIView {
         rtcVideoView.isHidden = !videoState
     }
 }
+

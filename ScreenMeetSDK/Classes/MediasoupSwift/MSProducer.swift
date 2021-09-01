@@ -8,14 +8,14 @@
 import UIKit
 import WebRTC
 
-protocol MSProducerPrivateDelegate: class {
+protocol MSProducerPrivateDelegate: AnyObject {
     func onClose(_ producer: MSProducer)
     func onReplaceTrack(_ producer: MSProducer, _ newTrack: RTCMediaStreamTrack)
     func onSetMaxSpatialLayer(_ producer: MSProducer, _ maxSpatialLayer: UInt8)
     func onGetStats(_ producer: MSProducer, _ completion: @escaping MSPeerConnectionGetStatsCompletion)
 }
 
-protocol MSProducerDelegate: class {
+protocol MSProducerDelegate: AnyObject {
     func onTransportClose(_ producer: MSProducer)
 }
 

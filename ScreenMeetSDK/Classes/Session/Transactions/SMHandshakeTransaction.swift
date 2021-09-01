@@ -30,6 +30,8 @@ public class SMChallenge {
 }
 
 class SMHandshakeTransaction: SMTransaction {
+    private var eventsToLog = [SMLogRoomCodeUsageTransaction]()
+    
     private let SESSION_PIN_LENGTH = 6
     private let TOO_MANY_INCORRECT_ATTEMPTS_REF_CODE = 169400
     
@@ -95,12 +97,15 @@ class SMHandshakeTransaction: SMTransaction {
                     }
                 }
                 else {
+                    eventsToLog.append(SMLogRoomCodeUsageTransaction().witUsedPin(true))
+                    
                     self.discovery(response!.id, completion)
                 }
             }
         }
         // room code
         else {
+            eventsToLog.append(SMLogRoomCodeUsageTransaction().withUsedSessionCode(true))
             discovery(code, completion)
         }
     }
@@ -146,9 +151,16 @@ class SMHandshakeTransaction: SMTransaction {
                         var authorizedSession = session
                         authorizedSession.hostAuthToken = initialPayload?.identity?.credential?.authToken
                         
+                        /* Flush all the events*/
+                        for event in self.eventsToLog {
+                            event.run()
+                        }
+                        
                         SMChannelsManager.shared.buildInitialStates(sharedData!)
                         completion(authorizedSession, nil)
                     }
+                    
+                    self.eventsToLog.removeAll()
                 }
             }
         }
@@ -162,6 +174,8 @@ class SMHandshakeTransaction: SMTransaction {
             else {
                 let challenge = SMChallenge(challengeResponse!.challengeDisplay) { captcha in
                     self.transport.restClient.resolveChallenge(pin, challengeResponse!.uuid, captcha) { response, error, errorPayload in
+                        
+                        eventsToLog.append( SMLogRoomCodeUsageTransaction().withUsedCapcha(true))
                         
                         if let error = error {
                             if error.code == 400 {

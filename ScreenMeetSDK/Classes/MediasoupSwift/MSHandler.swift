@@ -12,7 +12,7 @@ typealias MSGetNativeCapabilitiesCompletion = ([String: Any]?, MSError?) -> Void
 typealias MSSendCompletion = (MSSendData?, MSError?) -> Void
 typealias MSRecvCompletion = (MSRecvData?, MSError?) -> Void
 
-protocol MSConnectDelegate: class {
+protocol MSConnectDelegate: AnyObject {
     func onConnect(_ dtlsParameters: MSJson)
     func onConnectionStateChange(_ connectionState: RTCIceConnectionState)
 }
@@ -474,7 +474,7 @@ class MSSendHandler: MSHandler {
                 //NSLog("[MS] calling pc.setLocalDescription(): " + offer!)
                 pc.setLocalDescription(.offer, offer!) { error in
                     
-                    let localSdpObj = SDPTransform.parse(pc.getLocalDescription())
+                    _ = SDPTransform.parse(pc.getLocalDescription())
                     let answer = remoteSdp.getSdp()
                     
                     pc.setRemoteDescription(.answer, answer) { error in

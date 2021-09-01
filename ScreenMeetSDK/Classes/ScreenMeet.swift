@@ -112,6 +112,9 @@ public class ScreenMeetConfig {
     /// Additional parameters to configure framework
     open var parameters: [String: Any] = [:]
     
+    /// Allow collecting metrics
+    open var collectMetric: Bool = false
+    
     /// Represent the severity and importance of log messages ouput (`.info`, `.debug`, `.error`, see `LogLevel`)
     open var loggingLevel: LogLevel = .error {
         didSet {

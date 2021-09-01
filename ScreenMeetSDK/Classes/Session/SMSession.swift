@@ -12,7 +12,7 @@ import WebRTC
 public typealias SMConnectCompletion = (_ error: SMError?) -> Void
 
 /// Protocol to handle session events
-public protocol ScreenMeetDelegate: class {
+public protocol ScreenMeetDelegate: AnyObject {
     
     /// on Audio stream created
     func onLocalAudioCreated()
@@ -63,6 +63,21 @@ public protocol ScreenMeetDelegate: class {
     /// On error occurred
     /// - Parameter error `SMError`
     func onError(_ error: SMError)
+    
+    /// Occurs when request for entitlement
+    ///
+    /// - Parameters:
+    ///  - entitlement: Entitlement type associated with request
+    ///  - participant: A participant who requires access
+    ///  - decisionHandler: The callback called after request is accepted or denied
+    ///  - granted: The retrieved decision for request.
+    func onRequest(entitlement: SMEntitlementType, participant: SMParticipant, decisionHandler: @escaping (_ granted: Bool) -> Void)
+    
+    /// Occurs when previous request is rejected
+    ///
+    /// - Parameters:
+    ///  - entitlement: Entitlement type associated with request
+    func onRequestRejected(entitlement: SMEntitlementType)
 }
 
 class SMSession: NSObject {
@@ -74,7 +89,7 @@ class SMSession: NSObject {
     /// Connect to the room
     /// - Parameter code: The string code of the room
     /// - Parameter localUserName: The name of your local user. It will be visible to all attendees
-    /// - Parameter config: Initial session configuration. See `SMSessionConfig`
+    /// - Parameter completion: Completion of the connection attempt. See `SMConnectCompletion`
     func connect(_ code: String,
                  _ localUserName: String,
                  _ completion: @escaping SMConnectCompletion) {
@@ -243,7 +258,7 @@ extension SMSession {
                     }
                     else {
                         DispatchQueue.main.async {
-                            (SMChannelsManager.shared.channel(for: .laserPointer) as? SMLaserPointerChannel)?.stopLaserPointerSession()
+                            (SMChannelsManager.shared.channel(for: .laserPointer) as? SMLaserPointerChannel)?.stopAllLaserPointerSessions()
                             self?.delegate?.onLocalVideoStopped()
                         }
                     }

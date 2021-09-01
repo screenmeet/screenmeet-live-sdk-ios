@@ -2,104 +2,160 @@
 //  SMLaserPointerService.swift
 //  ScreenMeetSDK
 //
-//  Created by Vasyl Morarash on 31.03.2021.
+//  Created by Vasyl Morarash on 05.07.2021.
 //
 
 import Foundation
 
-final class SMLaserPointerService {
+enum SMLaserPointerServiceError: Error {
+    case laserPointerSessionAlreadyExists(requestorId: String)
+}
+
+final class SMLaserPointer {
     
-    private var laserPointerCoorX = UIScreen.main.bounds.width / 2
+    var id: String
     
-    private var laserPointerCoorY = UIScreen.main.bounds.height / 2
+    var color: UIColor {
+        didSet {
+            imageView.color = color
+            imageView.size = .regular
+        }
+    }
     
-    private static let laserPointerSize: CGFloat = 20
+    private var position = CGPoint(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2)
     
-    private static let laserPointerTapSize: CGFloat = 30
+    private var imageView: ImageView = {
+        let imageView = ImageView()
+        imageView.clipsToBounds = true
+        imageView.isHidden = true
+        
+        imageView.layer.borderWidth = 1
+        imageView.layer.borderColor = UIColor.black.cgColor
+        imageView.layer.masksToBounds = true
+        return imageView
+    }()
     
-    private var laserPointerImage = LaserPointerImageView(frame: CGRect(x: 0, y: 0, width: SMLaserPointerService.laserPointerSize, height: SMLaserPointerService.laserPointerSize))
-    
-    private var laserPointerTimer: Timer? = nil
-    
-    func startLaserPointerSession() {
-        if laserPointerTimer == nil {
-            self.laserPointerImage.setRounded()
-            laserPointerTimer = Timer.scheduledTimer(withTimeInterval: 0.03, repeats: true) { [unowned self] _ in
-                if let window = UIApplication.shared.keyWindow {
-                    window.backgroundColor = .black
-                    self.laserPointerImage.center = CGPoint(x: self.laserPointerCoorX, y: self.laserPointerCoorY)
-                    if !laserPointerImage.isDescendant(of: window) {
-                        window.addSubview(self.laserPointerImage)
-                    }
-                    window.bringSubviewToFront(self.laserPointerImage)
+    private class ImageView: UIImageView {
+        
+        var size: Size = .regular {
+            didSet {
+                let center = self.center
+                frame.size = CGSize(width: size.rawValue, height: size.rawValue)
+                self.center = center
+                layer.cornerRadius = (frame.width / 2)
+                
+                switch size {
+                case .regular:
+                    backgroundColor = color.withAlphaComponent(0.7)
+                case .tapped:
+                    backgroundColor = color
                 }
             }
-        } else {
-            print("Laser pointer session already started")
+        }
+        
+        var color: UIColor = .red
+        
+        enum Size: CGFloat {
+            case regular = 20
+            case tapped = 30
+        }
+        
+        override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+            return false
         }
     }
     
-    func updateLaserPointerCoors(_ point: CGPoint) {
-        if point.x < 0 {
-            self.laserPointerCoorX = 0
-        } else if point.x > UIScreen.main.bounds.width {
-            self.laserPointerCoorX = UIScreen.main.bounds.width
-        } else {
-            self.laserPointerCoorX = point.x
-        }
-        
-        if point.y < 0 {
-            self.laserPointerCoorY = 0
-        } else if point.y > UIScreen.main.bounds.height {
-            self.laserPointerCoorY = UIScreen.main.bounds.height
-        } else {
-            self.laserPointerCoorY = point.y
+    init(id: String, color: UIColor) {
+        self.id = id
+        self.color = color
+        imageView.color = color
+        imageView.size = .regular
+        if let window = UIApplication.shared.windows.first {
+            window.backgroundColor = .black
+            if !imageView.isDescendant(of: window) {
+                window.addSubview(imageView)
+            }
+            window.bringSubviewToFront(imageView)
         }
     }
-
-    func updateLaserPointerCoorsWithTap() {
-        UIView.animate(withDuration: 0.3, animations: {
-            self.laserPointerImage.frame.size.width = SMLaserPointerService.laserPointerTapSize
-            self.laserPointerImage.frame.size.height = SMLaserPointerService.laserPointerTapSize
-            self.laserPointerImage.frame.origin.x = self.laserPointerCoorX - SMLaserPointerService.laserPointerTapSize / 2
-            self.laserPointerImage.frame.origin.y = self.laserPointerCoorY - SMLaserPointerService.laserPointerTapSize / 2
-            self.laserPointerImage.layer.backgroundColor = UIColor.red.withAlphaComponent(1).cgColor
-            self.laserPointerImage.layoutIfNeeded()
-        }) {_ in
-            UIView.animate(withDuration: 0.3, animations: {
-                self.laserPointerImage.frame.size.width = SMLaserPointerService.laserPointerSize
-                self.laserPointerImage.frame.size.height = SMLaserPointerService.laserPointerSize
-                self.laserPointerImage.frame.origin.x = self.laserPointerCoorX - SMLaserPointerService.laserPointerSize / 2
-                self.laserPointerImage.frame.origin.y = self.laserPointerCoorY - SMLaserPointerService.laserPointerSize / 2
-                self.laserPointerImage.layer.backgroundColor = UIColor.red.withAlphaComponent(0.5).cgColor
-                self.laserPointerImage.layoutIfNeeded()
+    
+    func reload() {
+        UIApplication.shared.windows.first?.bringSubviewToFront(imageView)
+        UIView.animate(withDuration: 0.1, animations: { [unowned self] in
+            imageView.center = position
+        })
+    }
+    
+    func update(position: CGPoint) {
+        self.position.x = max(0, min(position.x, UIScreen.main.bounds.width))
+        self.position.y = max(0, min(position.y, UIScreen.main.bounds.height))
+        imageView.isHidden = false
+    }
+    
+    func updateTap() {
+        UIView.animate(withDuration: 0.2, animations: { [unowned self] in
+            imageView.size = .tapped
+        }) { _ in
+            UIView.animate(withDuration: 0.2, animations: { [unowned self] in
+                imageView.size = .regular
             })
         }
     }
-
-    func stopLaserPointerSession() {
-        if laserPointerTimer == nil {
-            print("Laser pointer session already stoped")
-        } else {
-            self.laserPointerImage.removeFromSuperview()
-            laserPointerTimer?.invalidate()
-            laserPointerTimer = nil
-        }
+    
+    deinit {
+        imageView.removeFromSuperview()
     }
 }
 
-fileprivate final class LaserPointerImageView: UIImageView {
-
-    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        return false
+final class SMLaserPointerService {
+    
+    private var timer: Timer? = nil
+    
+    private var laserPointers = [SMLaserPointer]()
+    
+    private var colors: Set<UIColor> = [.red, .blue, .green, .yellow, .purple, .brown, .cyan, .magenta, .orange]
+    
+    func startLaserPointerSession(for requestorId: String) throws {
+        if timer == nil {
+            timer = Timer.scheduledTimer(withTimeInterval: 0.03, repeats: true) { [unowned self] _ in
+                laserPointers.forEach { laserPointer in
+                    laserPointer.reload()
+                }
+            }
+        }
+        
+        if !laserPointers.contains(where: { $0.id == requestorId }) {
+            let color = colors.randomElement() ?? .red
+            colors.remove(color)
+            laserPointers.append(SMLaserPointer(id: requestorId, color: color))
+        } else {
+            throw SMLaserPointerServiceError.laserPointerSessionAlreadyExists(requestorId: requestorId)
+        }
     }
     
-    func setRounded() {
-        self.layer.borderWidth = 1
-        self.layer.borderColor = UIColor.black.cgColor
-        self.layer.backgroundColor = UIColor.red.withAlphaComponent(0.5).cgColor
-        self.clipsToBounds = true
-        self.layer.cornerRadius = (self.frame.width / 2)
-        self.layer.masksToBounds = true
+    func stopLaserPointerSession(for requestorId: String) {
+        guard let index = laserPointers.firstIndex(where: { $0.id == requestorId }) else { return }
+        let laserPointer = laserPointers.remove(at: index)
+        colors.insert(laserPointer.color)
+        
+        if laserPointers.count == 0 {
+            timer?.invalidate()
+            timer = nil
+        }
+    }
+    
+    func stopAllLaserPointerSessions() {
+        colors = [.red, .blue, .green, .yellow, .purple, .brown, .cyan, .magenta, .orange]
+        laserPointers.removeAll()
+        timer?.invalidate()
+        timer = nil
+    }
+    
+    func updateLaserPointer(position: CGPoint, for requestorId: String) {
+        laserPointers.first(where: { $0.id == requestorId })?.update(position: position)
+    }
+    
+    func updateLaserPointerTap(for requestorId: String) {
+        laserPointers.first(where: { $0.id == requestorId })?.updateTap()
     }
 }

@@ -15,7 +15,15 @@ class SMUserInterface {
     
     static let manager = SMUserInterface()
     
-    weak var delegate: ScreenMeetDelegate?
+    private var floatingView: SMFloatingVideoView = {
+        let view = SMFloatingVideoView(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
+        return view
+    }()
+    
+    private var smMainVC: SMMainViewController = {
+        let vc = SMMainViewController()
+        return vc
+    }()
     
     var isAudioEnabled: Bool {
         return ScreenMeet.getMediaState().isAudioActive
@@ -29,7 +37,9 @@ class SMUserInterface {
         return ScreenMeet.getMediaState().isVideoActive && ScreenMeet.getMediaState().videoState == .SCREEN
     }
     
-    var mainParticipantId: String?
+    var requestAlertController = UIAlertController()
+    
+    var mainParticipant: SMParticipant?
     
     var localVideoTrack: RTCVideoTrack?
     
@@ -40,73 +50,202 @@ class SMUserInterface {
         return false
         #endif
     }
+    
+    func updateContent() {
+        DispatchQueue.main.async { [unowned self] in
+            floatingView.update(with: nil,
+                                audioState: isAudioEnabled,
+                                videoState: isCameraEnabled,
+                                videoTrack: mainParticipant?.videoTrack ?? localVideoTrack)
+            
+            smMainVC.updateContent(with: mainParticipant)
+        }
+    }
 }
 
 extension SMUserInterface: ScreenMeetDelegate {
     
     func onLocalAudioCreated() {
         NSLog("[ScreenMeet] Local user started audio")
-        delegate?.onLocalAudioCreated()
+        updateContent()
     }
     
     func onLocalVideoCreated(_ videoTrack: RTCVideoTrack) {
         NSLog("[ScreenMeet] Local user started video")
         localVideoTrack = videoTrack
-        delegate?.onLocalVideoCreated(videoTrack)
+        updateContent()
     }
     
     func onLocalVideoSourceChanged() {
         NSLog("[ScreenMeet] Video source for local video has changed")
-        delegate?.onLocalVideoSourceChanged()
+        updateContent()
     }
     
     func onLocalVideoStopped() {
         NSLog("[ScreenMeet] Local user stopped video")
-        delegate?.onLocalVideoStopped()
+        updateContent()
     }
     
     func onLocalAudioStopped() {
         NSLog("[ScreenMeet] Local user stopped audio")
-        delegate?.onLocalAudioStopped()
+        updateContent()
     }
     
     func onParticipantJoined(_ participant: SMParticipant) {
         NSLog("[ScreenMeet] Participant joined: " + participant.name)
-        delegate?.onParticipantJoined(participant)
+        mainParticipant = participant
+        updateContent()
     }
     
     func onParticipantVideoTrackCreated(_ participant: SMParticipant) {
         NSLog("[ScreenMeet] Participant " + participant.name + " started video")
-        delegate?.onParticipantVideoTrackCreated(participant)
+        mainParticipant = participant
+        updateContent()
     }
     
     func onParticipantAudioTrackCreated(_ participant: SMParticipant) {
         NSLog("[ScreenMeet] Participant " + participant.name + " started audio")
-        delegate?.onParticipantAudioTrackCreated(participant)
+        mainParticipant = participant
+        updateContent()
     }
     
     func onParticipantLeft(_ participant: SMParticipant) {
         NSLog("[ScreenMeet] Participant left: " + participant.name)
-        delegate?.onParticipantLeft(participant)
+        mainParticipant = ScreenMeet.getParticipants().first
+        updateContent()
     }
     
     func onParticipantMediaStateChanged(_ participant: SMParticipant) {
         NSLog("[ScreenMeet] Participant " + participant.name + " has changed its media state (muted, resumed, etc) \(participant.avState)")
-        delegate?.onParticipantMediaStateChanged(participant)
+        mainParticipant = participant
+        updateContent()
     }
     
     func onActiveSpeakerChanged(_ participant: SMParticipant) {
         NSLog("[ScreenMeet] Participant became active speaker: " + participant.name)
-        delegate?.onActiveSpeakerChanged(participant)
+        mainParticipant = participant
+        updateContent()
     }
     
     func onConnectionStateChanged(_ newState: SMConnectionState) {
         NSLog("[ScreenMeet] Connection state: \(newState)")
-        delegate?.onConnectionStateChanged(newState)        
+        switch newState {
+        case .connecting:
+            print("waiting for connecting to call ...")
+        case .connected:
+            print("joined the call")
+        case .reconnecting:
+            print("trying to restore connection to call ...")
+        case .waitingEntrancePermission:
+            print("waiting for the host to let me in (knock feature) ...")
+        case .disconnected(.callNotStarted):
+            print("Call disconnected. Call is not started")
+            smMainVC.disconnect()
+        case .disconnected(.callEndedByServer):
+            print("Call disconnected. Call is ended by server")
+            smMainVC.disconnect()
+        case .disconnected(.leftCall):
+            print("Call disconnected. Client left call")
+            smMainVC.disconnect()
+        case .disconnected(.networkError):
+            print("Call disconnected. Network error")
+            smMainVC.disconnect()
+        case .disconnected(.knockWaitTimeExpired):
+            print("Waited for the entrance for too long. Hanging up")
+            smMainVC.disconnect()
+        case .disconnected(.reconnectWaitTimeExpired):
+            print("Waited for reconnect for too long. Hanging up")
+            smMainVC.disconnect()
+        }
+        updateContent()
     }
     
     func onError(_ error: SMError) {
         NSLog("[ScreenMeet] Error: \(error.message)")
-        delegate?.onError(error)
+        updateContent()
+    }
+    
+    func onRequest(entitlement: SMEntitlementType, participant: SMParticipant, decisionHandler: @escaping (_ granted: Bool) -> Void) {
+        NSLog("[ScreenMeet] Request entitlement: \(entitlement.rawValue), from participant: \(participant.name)")
+        presentRequestAlert(for: entitlement, participant: participant, completion: decisionHandler)
+        updateContent()
+    }
+    
+    func onRequestRejected(entitlement: SMEntitlementType) {
+        requestAlertController.dismiss(animated: true, completion: nil)
+        updateContent()
+    }
+}
+
+extension SMUserInterface {
+    
+    private func rootController<T: UIViewController>() -> T? {
+        let presentedController = UIApplication.shared.windows.first?.rootViewController
+        if let root = presentedController as? T {
+            return root
+        } else if let topController = (presentedController as? UINavigationController)?.topViewController as? T {
+            return topController
+        } else if let tabController = (presentedController as? UITabBarController)?.selectedViewController as? T {
+            return tabController
+        }
+        
+        return nil
+    }
+    
+    func presentScreenMeetUI(completion: (() -> Void)? = nil) {
+        DispatchQueue.main.async { [unowned self] in
+            guard let rootVC = self.rootController() else { return }
+            
+            
+            if rootVC.presentedViewController == self.smMainVC {
+                NSLog("[ScreenMeet] MainViewController is already presented")
+            }
+            else {
+                rootVC.present(self.smMainVC, animated: true, completion: completion)
+            }
+            
+        }
+    }
+    
+    func presentFloatingUI() {
+        DispatchQueue.main.async { [unowned self] in
+            guard let window = UIApplication.shared.windows.first else { return }
+            window.addSubview(floatingView)
+        }
+    }
+    
+    func hideFloatingUI() {
+        DispatchQueue.main.async { [unowned self] in
+            floatingView.removeFromSuperview()
+        }
+    }
+    
+    func presentRequestAlert(for entitlement: SMEntitlementType, participant: SMParticipant, completion: @escaping (Bool) -> Void) {
+        let title: String
+        let message: String
+        
+        switch entitlement {
+        case .laserpointer:
+            title = "\"\(participant.name)\" Would Like to Start Laser Pointer"
+            message = "It is needed to help you to navigate"
+        }
+        
+        requestAlertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        let denyAction = UIAlertAction(title: "Don't Allow", style: .default) { (_) -> Void in
+            completion(false)
+        }
+        let grantAction = UIAlertAction(title: "OK", style: .default) { (_) -> Void in
+            completion(true)
+        }
+        
+        requestAlertController.addAction(denyAction)
+        requestAlertController.addAction(grantAction)
+        
+        if let presentedViewController = rootController()?.presentedViewController {
+            presentedViewController.present(requestAlertController, animated: true, completion: nil)
+        } else {
+            rootController()?.present(requestAlertController, animated: true, completion: nil)
+        }
     }
 }

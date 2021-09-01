@@ -7,22 +7,6 @@
 
 import Foundation
 
-fileprivate struct LPData: Decodable {
-    
-    var coords: Coords?
-    
-    var click: Bool?
-    
-    var enabled: Bool?
-    
-    struct Coords: Decodable {
-        
-        var x: CGFloat?
-        
-        var y: CGFloat?
-    }
-}
-
 class SMLaserPointerChannel: SMChannel {
     
     var name: SMChannelName = .laserPointer
@@ -30,35 +14,35 @@ class SMLaserPointerChannel: SMChannel {
     private var lpService = SMLaserPointerService()
     
     func processEvent(_ message: SMChannelMessage) {
-        if let jsonData = try? JSONSerialization.data(withJSONObject: message.data[1], options: .prettyPrinted) {
-            do {
-                let data = try JSONDecoder().decode(LPData.self, from: jsonData)
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: message.data[1], options: .prettyPrinted)
+            let laserPointerModel = try JSONDecoder().decode(SMLaserPointerModel.self, from: jsonData)
+            
+            if let coords = laserPointerModel.data.coords {
+                let position = CGPoint(x: coords.x, y: coords.y)
                 
-                if data.enabled == true {
-                    lpService.startLaserPointerSession()
-                } else if data.enabled == false {
-                    lpService.stopLaserPointerSession()
-                }
-                
-                if let coords = data.coords, let x = coords.x, let y = coords.y {
-                    let point = CGPoint(x: x, y: y)
-                    lpService.updateLaserPointerCoors(point)
-                    
-                    print("[LP] New point", point)
-                }
-                
-                if data.click == true {
-                    lpService.updateLaserPointerCoorsWithTap()
-                }
-            } catch {
-                print("[LP] Error", error.localizedDescription)
+                lpService.updateLaserPointer(position: position, for: laserPointerModel.from)
+            } else if laserPointerModel.data.click == true {
+                lpService.updateLaserPointerTap(for: laserPointerModel.from)
             }
+        } catch {
+            NSLog("[SM] LaserPointer Channel Error", error.localizedDescription)
         }
     }
     
-    func buildState(from initialPayload: [String : Any]) { }
+    func buildState(from initialPayload: [String : Any]) {
+        NSLog("[SM] LaserPointerChannel \(#function) is not supported")
+    }
     
-    func stopLaserPointerSession() {
-        lpService.stopLaserPointerSession()
+    func startLaserPointerSession(for id: String) throws {
+        try lpService.startLaserPointerSession(for: id)
+    }
+    
+    func stopLaserPointerSession(for id: String) {
+        lpService.stopLaserPointerSession(for: id)
+    }
+    
+    func stopAllLaserPointerSessions() {
+        lpService.stopAllLaserPointerSessions()
     }
 }
