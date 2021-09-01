@@ -3,12 +3,12 @@ use_frameworks!
 platform :ios, '13.0'
 
 target 'ScreenMeet' do
-  pod 'ScreenMeetSDK', :path => '../'
+  pod 'ScreenMeetSDK'
 end
 
   target 'ScreenMeetTests' do
     inherit! :search_paths
-    pod 'ScreenMeetSDK', :path => '../'
+    pod 'ScreenMeetSDK'
   end
 
 post_install do |installer|
