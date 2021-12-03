@@ -11,20 +11,12 @@ import ScreenMeetSDK
 
 class SMMainVideoView: UIView {
     
-    private weak var currentVideoVideTrack: RTCVideoTrack?
+    private weak var currentVideoTrack: RTCVideoTrack?
     
     #if arch(arm64)
-        var rtcVideoView: RTCMTLVideoView = {
-            let rtcVideoView = RTCMTLVideoView()
-            rtcVideoView.translatesAutoresizingMaskIntoConstraints = false
-            return rtcVideoView
-        }()
+        var rtcVideoView: RTCMTLVideoView = RTCMTLVideoView()
     #else
-        var rtcVideoView: RTCEAGLVideoView = {
-        let rtcVideoView = RTCEAGLVideoView()
-        rtcVideoView.translatesAutoresizingMaskIntoConstraints = false
-        return rtcVideoView
-    }()
+        var rtcVideoView: RTCEAGLVideoView = RTCEAGLVideoView()
     #endif
     
     var imageView: UIImageView = {
@@ -63,14 +55,14 @@ class SMMainVideoView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
-    private var rtcVideoViewAspectRatioConstraint: NSLayoutConstraint!
-    
+        
     private let gradientLayer = CAGradientLayer()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        rtcVideoView.translatesAutoresizingMaskIntoConstraints = false
+
         topView.layer.insertSublayer(gradientLayer, at: 0)
         topView.addSubview(micImageView)
         topView.addSubview(nameLabel)
@@ -90,14 +82,12 @@ class SMMainVideoView: UIView {
         addSubview(rtcVideoView)
         addSubview(imageView)
         addSubview(topView)
-        
-        rtcVideoViewAspectRatioConstraint = rtcVideoView.heightAnchor.constraint(equalTo: rtcVideoView.widthAnchor)
-        
+                
         NSLayoutConstraint.activate([
             rtcVideoView.centerXAnchor.constraint(equalTo: centerXAnchor),
             rtcVideoView.centerYAnchor.constraint(equalTo: centerYAnchor),
             rtcVideoView.widthAnchor.constraint(equalTo: widthAnchor),
-            rtcVideoViewAspectRatioConstraint,
+            rtcVideoView.heightAnchor.constraint(equalTo: heightAnchor),
             
             imageView.topAnchor.constraint(equalTo: topAnchor, constant: 50),
             imageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -50),
@@ -131,16 +121,44 @@ class SMMainVideoView: UIView {
     }
     
     func update(with name: String?, audioState: Bool, videoState: Bool, videoTrack: RTCVideoTrack?) {
-        currentVideoVideTrack?.remove(rtcVideoView)
-        currentVideoVideTrack = videoTrack
-        
-        rtcVideoView.contentMode = .scaleAspectFit
-        videoTrack?.add(rtcVideoView)
+        if videoTrack != nil {
+            currentVideoTrack?.remove(rtcVideoView)
+            currentVideoTrack = videoTrack
+            videoTrack?.add(rtcVideoView)
+        }
+        else {
+            rtcVideoView.removeFromSuperview()
+            currentVideoTrack?.remove(rtcVideoView)
+            currentVideoTrack = nil
+            
+            createRenderingView()
+        }
         
         nameLabel.text = name
         micImageView.isHidden = audioState
         imageView.isHidden = videoState
         rtcVideoView.isHidden = !videoState
+    }
+    
+    private func createRenderingView() {
+        /* Recreate RTCVideoView as the previous one might contain some previous track frame*/
+        rtcVideoView.removeFromSuperview()
+        #if arch(arm64)
+            rtcVideoView = RTCMTLVideoView()
+        #else
+            rtcVideoView = RTCEAGLVideoView()
+        #endif
+        rtcVideoView.translatesAutoresizingMaskIntoConstraints = false
+        
+        addSubview(rtcVideoView)
+        
+        NSLayoutConstraint.activate([
+            rtcVideoView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            rtcVideoView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            rtcVideoView.widthAnchor.constraint(equalTo: widthAnchor),
+            rtcVideoView.heightAnchor.constraint(equalTo: heightAnchor)])
+        
+        rtcVideoView.videoContentMode = .scaleAspectFit
     }
 }
 

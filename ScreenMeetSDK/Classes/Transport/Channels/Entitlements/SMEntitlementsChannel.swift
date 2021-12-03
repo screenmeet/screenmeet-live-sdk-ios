@@ -31,6 +31,9 @@ class SMEntitlementsChannel: SMChannel {
                     case .laserpointer:
                         let laserPointerChannel = SMChannelsManager.shared.channel(for: .laserPointer) as? SMLaserPointerChannel
                         try laserPointerChannel?.startLaserPointerSession(for: entitlement.requestorId)
+                    case .remotecontrol:
+                           let remoteControlChannel = SMChannelsManager.shared.channel(for: .remoteControl) as? SMRemoteControlChannel
+                           try remoteControlChannel?.startRemoteControlSession(for: entitlement.requestorId)
                     }
                 }
             } catch {
@@ -46,6 +49,10 @@ class SMEntitlementsChannel: SMChannel {
                 case .laserpointer:
                     let laserPointerChannel = SMChannelsManager.shared.channel(for: .laserPointer) as? SMLaserPointerChannel
                     laserPointerChannel?.stopLaserPointerSession(for: entitlement.requestorId)
+                
+                case .remotecontrol:
+                    let remoteControlChannel = SMChannelsManager.shared.channel(for: .remoteControl) as? SMRemoteControlChannel
+                    remoteControlChannel?.stopRemoteControlSession(for: entitlement.requestorId)
                 }
             }
             

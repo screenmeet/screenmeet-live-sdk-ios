@@ -38,10 +38,10 @@ class SMWebSocketClient: NSObject {
                _ completion: @escaping SocketReadyCompletion) {
         
         state = .connecting
-        
+                
         /* .connectParams is important! Without it server wont be able to register namespace... <- To investigate*/
         manager = SocketManager(socketURL: URL(string: url)!,
-                                config: [.log(true), .reconnects(true), .reconnectWait(1), .connectParams(["roomId": nameSpace])])
+                                config: [.log(false), .reconnects(true), .reconnectWait(1), .connectParams(["roomId": nameSpace])])
         
         socketIO = manager.socket(forNamespace: "/\(nameSpace)")
         
@@ -97,6 +97,13 @@ class SMWebSocketClient: NSObject {
         
         socketIO.on("removed", callback: { data, ack in
             NSLog("[SM Signalling]", "Removed")
+        })
+        
+        socketIO.on("dropping", callback: { [weak self] data, ack in
+            self?.disconnect(.hostRefuedToLetIn)
+            
+            self?.childConnectCompletion?(nil, nil, SMError(code: .droppedByServer, message: "Host refused to let you in"))
+           
         })
         
         socketIO.on(clientEvent: .disconnect) { [unowned self] data, ack in

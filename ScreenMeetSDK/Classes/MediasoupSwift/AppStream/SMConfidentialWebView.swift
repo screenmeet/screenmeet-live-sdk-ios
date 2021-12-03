@@ -37,7 +37,16 @@ class SMConfidentialWebView {
             let x = minX
             let y = minY
             
-            return CGRect(x: x, y: y, width: width, height: height)
+            var confRect = CGRect(x: x, y: y, width: width, height: height)
+            
+            if !areRectsEqual(lhs: confRect, rhs: lastFramePossitions.last ?? .zero) {
+                confRect.origin.x -= 5
+                confRect.origin.y -= 5
+                confRect.size.width += 10
+                confRect.size.height += 10
+            }
+            
+            return confRect
         }
         
         init(id: UUID) {
@@ -49,7 +58,18 @@ class SMConfidentialWebView {
                 lastFramePossitions.removeFirst()
             }
             
-            lastFramePossitions.append(framePossition)
+            if !lastFramePossitions.contains(framePossition) {
+                lastFramePossitions.append(framePossition)
+            }
+        }
+        
+        private func areRectsEqual(lhs: CGRect, rhs: CGRect) -> Bool {
+            guard abs(lhs.origin.x - rhs.origin.x) <= 1 else { return false }
+            guard abs(lhs.origin.y - rhs.origin.y) <= 1 else { return false }
+            guard abs(lhs.size.width - rhs.size.width) <= 1 else { return false }
+            guard abs(lhs.size.height - rhs.size.height) <= 1 else { return false }
+            
+            return true
         }
     }
     

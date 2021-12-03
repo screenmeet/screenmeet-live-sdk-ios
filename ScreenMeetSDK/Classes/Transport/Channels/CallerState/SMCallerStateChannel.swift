@@ -8,66 +8,6 @@
 import UIKit
 import SocketIO
 
-/// Represents participant state
-struct SMCallerState: SocketData {
-    
-    /// Is Audio enabled
-    public var audioEnabled: Bool = false
-    
-    var outputEnabled: Bool = false
-    
-    /// Is Video enabled
-    public var videoEnabled: Bool = false
-    
-    /// Is Screen enabled
-    public var screenEnabled: Bool = false
-    
-    /// Is Screen Annotation enabled
-    public var screenAnnotationEnabled: Bool = false
-
-    var sourceType: String = "cam"
-    
-    /// Is talking
-    public var talking: Bool = false
-    
-    init() {
-        
-    }
-    
-    init(_ socketData: [String: Any], _ currentState: SMCallerState?) {
-        if let audioEnabled = socketData["audioenabled"] as? Bool { self.audioEnabled = audioEnabled }
-        else { self.audioEnabled = currentState?.audioEnabled ?? false}
-        
-        if let outputEnabled = socketData["outputenabled"] as? Bool { self.outputEnabled = outputEnabled }
-        else { self.outputEnabled = currentState?.outputEnabled ?? false}
-        
-        if let videoEnabled = socketData["videoenabled"] as? Bool { self.videoEnabled = videoEnabled }
-        else { self.videoEnabled = currentState?.videoEnabled ?? false}
-        
-        if let screenEnabled = socketData["screenenabled"] as? Bool { self.screenEnabled = screenEnabled }
-        else { self.screenEnabled = currentState?.screenEnabled ?? false}
-        
-        if let screenAnnotationEnabled = socketData["screenannotationenabled"] as? Bool { self.screenAnnotationEnabled = screenAnnotationEnabled }
-        else { self.screenAnnotationEnabled = currentState?.screenAnnotationEnabled ?? false}
-        
-        if let sourceType = socketData["sourceType"] as? String { self.sourceType = sourceType }
-        else { self.sourceType = currentState?.sourceType ?? "cam"}
-        
-        if let talking = socketData["talking"] as? Bool { self.talking = talking }
-        else { self.talking = currentState?.talking ?? false}
-    }
-    
-    public func socketRepresentation() -> SocketData {
-        var data = [String: Any]()
-        data["audioenabled"]  = audioEnabled
-        data["outputenabled"] = outputEnabled
-        data["videoenabled"] = videoEnabled
-        data["screenenabled"] = screenEnabled
-        data["sourceType"] = sourceType
-        data["talking"] = talking
-        return data
-    }
-}
 class SMCallerStateChannel: SMChannel {
     /* Store callbacks here as they should be called as we get confirmation through pub*/
     private var audioStateChangeCompletion: SMChannelOperationCompletion? = nil
@@ -88,29 +28,33 @@ class SMCallerStateChannel: SMChannel {
         
         if message.actionType == .added {
             guard let callerStates = data[1] as? [String: Any] else { return }
-            for (participantId, callerState) in callerStates {
-                /* some one else's callerstate*/
-                if participantId != transport.webSocketClient.sid {
-                    let callerState = SMCallerState(callerState as! [String: Any], participantsCallerStates[participantId])
-                    participantsCallerStates[participantId] = callerState
-                    
-                    let channel = transport.channelsManager.channel(for: .mediasoup) as! SMMediasoupChannel
-                    channel.notifyParticipantsMediaStateChanged(participantId, callerState)
-                }
-                else {
-                    /* Our callerstate*/
-                    myCallerState = SMCallerState(callerState as! [String: Any], participantsCallerStates[participantId])
-                    
-                    /* call the previously stored callbacks if any*/
-                    DispatchQueue.main.async { [self] in
-                        audioStateChangeCompletion?(nil)
-                        videoStateChangeCompletion?(nil)
+            for (participantId, callerStateDict) in callerStates {
+                
+                if isValidCallerState(callerStateDict as! [String: Any]) {
+                    /* some one else's callerstate*/
+                    if participantId != transport.webSocketClient.sid {
+                        let callerState = SMCallerState(callerStateDict as! [String: Any], participantsCallerStates[participantId])
+                        participantsCallerStates[participantId] = callerState
                         
-                        /* nil the callbacks just to be on the safe side to make sure they are called once*/
-                        audioStateChangeCompletion = nil
-                        videoStateChangeCompletion = nil
+                        let channel = transport.channelsManager.channel(for: .mediasoup) as! SMMediasoupChannel
+                        channel.notifyParticipantsMediaStateChanged(participantId, callerState)
+                    }
+                    else {
+                        /* Our callerstate*/
+                        myCallerState = SMCallerState(callerStateDict as! [String: Any], participantsCallerStates[participantId])
+                        
+                        /* call the previously stored callbacks if any*/
+                        DispatchQueue.main.async { [self] in
+                            audioStateChangeCompletion?(nil)
+                            videoStateChangeCompletion?(nil)
+                            
+                            /* nil the callbacks just to be on the safe side to make sure they are called once*/
+                            audioStateChangeCompletion = nil
+                            videoStateChangeCompletion = nil
+                        }
                     }
                 }
+                
             }
         }
         else if message.actionType == .removed {
@@ -120,8 +64,6 @@ class SMCallerStateChannel: SMChannel {
                 participantsCallerStates[id] = nil
             }
         }
-        
-        
     }
     
     func buildState(from initialPayload: [String: Any]) {
@@ -179,5 +121,13 @@ class SMCallerStateChannel: SMChannel {
     
     func getCallerState(_ participantId: String) -> SMCallerState? {
         return participantsCallerStates[participantId]
+    }
+    
+    private func isValidCallerState(_ dict:[String: Any]) -> Bool {
+        if dict["videoenabled"] as? Int != nil && dict["audioenabled"] as? Int != nil {
+            return true
+        }
+        
+        return false
     }
 }

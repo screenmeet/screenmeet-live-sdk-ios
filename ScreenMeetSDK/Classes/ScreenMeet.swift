@@ -26,6 +26,13 @@ public class ScreenMeet: NSObject {
         }
     }
     
+    /// Chat delegate. Should be set in case you want to receive chat messages
+    public static weak var chatDelegate: ScreenMeetChatDelegate? {
+        didSet {
+            session.chatDelegate = chatDelegate
+        }
+    }
+    
     /// Starts ScreenMeet session. No code specified, user will be asked to enter code value
     /// - Parameter code: Identify session created by agent
     /// - Parameter localUserName: The name of your local user. It will be visible to all attendees
@@ -95,6 +102,16 @@ public class ScreenMeet: NSObject {
     /// Returns SMAppStreamServiceProtocol. See `SMAppStreamServiceProtocol`
     public static func getAppStreamService() -> SMAppStreamServiceProtocol {
         session.getAppStreamService()
+    }
+    
+    /// Returns all the messages from the chat of the ongoing session.
+    public static func getChatMessages() -> [SMTextMessage] {
+        return session.getChatMessages()
+    }
+    
+    /// Send the message into the chat of ongoing session.
+    public static func sendTextMessage(_ text: String) {
+        return session.sendTextMessage(text)
     }
     
 }
@@ -277,6 +294,9 @@ public enum SMDisconnectionReason {
     
     /// Wait time expired (could not reconnect after network loss)
     case reconnectWaitTimeExpired
+    
+    /// Host refused to let in (knock feature)
+    case hostRefuedToLetIn
 }
 
 enum SMIceConnectionState: String {

@@ -56,6 +56,9 @@ public enum SMErrorCode: Equatable {
     /// Knock feature is on and waiting time for entrance expired
     case knockWaitTimeForEntryExpiredError
     
+    /// Connection dropped by server
+    case droppedByServer
+    
     /// Too many faield acptchas have been entered
     case tooManyCaptchaAttempmts
 }

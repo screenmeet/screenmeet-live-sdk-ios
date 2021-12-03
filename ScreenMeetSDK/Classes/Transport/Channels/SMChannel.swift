@@ -23,6 +23,7 @@ enum SMChannelName: String {
     case system             = "system"
     case viewers            = "viewers"
     case laserPointer       = "lp"
+    case remoteControl      = "rc"
     case permissionRequests = "permission_requests"
     case permissionGrants   = "permission_grants"
     

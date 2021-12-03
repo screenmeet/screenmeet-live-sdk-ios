@@ -11,19 +11,12 @@ import ScreenMeetSDK
 
 class SMSmallVideoView: UIView {
     private weak var currentVideoTrack: RTCVideoTrack?
+    private var stackView: UIStackView!
     
     #if arch(arm64)
-        var rtcVideoView: RTCMTLVideoView = {
-            let rtcVideoView = RTCMTLVideoView()
-            rtcVideoView.translatesAutoresizingMaskIntoConstraints = false
-            return rtcVideoView
-        }()
+        var rtcVideoView: RTCMTLVideoView = RTCMTLVideoView()
     #else
-        var rtcVideoView: RTCEAGLVideoView = {
-        let rtcVideoView = RTCEAGLVideoView()
-        rtcVideoView.translatesAutoresizingMaskIntoConstraints = false
-        return rtcVideoView
-    }()
+        var rtcVideoView: RTCEAGLVideoView = RTCEAGLVideoView()
     #endif
     
     var imageView: UIImageView = {
@@ -81,9 +74,10 @@ class SMSmallVideoView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        rtcVideoView.translatesAutoresizingMaskIntoConstraints = false
         rtcVideoView.delegate = self
         
-        let stackView = UIStackView()
+        stackView = UIStackView()
         stackView.spacing = 3
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -156,12 +150,19 @@ class SMSmallVideoView: UIView {
     }
     
     func update(with name: String?, audioState: Bool, videoState: Bool, videoTrack: RTCVideoTrack?, isFloating: Bool = false) {
-        currentVideoTrack?.remove(rtcVideoView)
-        currentVideoTrack = videoTrack
+        if videoTrack != nil {
+            currentVideoTrack?.remove(rtcVideoView)
+            currentVideoTrack = videoTrack
+            videoTrack?.add(rtcVideoView)
+        }
+        else {
+            rtcVideoView.removeFromSuperview()
+            currentVideoTrack?.remove(rtcVideoView)
+            currentVideoTrack = nil
+            
+            createRenderingView()
+        }
         
-        rtcVideoView.contentMode = .scaleAspectFit
-        
-        videoTrack?.add(rtcVideoView)
         nameLabel.text = name
         micImageView.isHidden = audioState
         imageView.isHidden = videoState
@@ -186,6 +187,34 @@ class SMSmallVideoView: UIView {
             
             layer.borderColor = UIColor(red: 255 / 255, green: 166 / 255, blue: 99 / 255, alpha: 1).cgColor
         }
+    }
+    
+    private func createRenderingView() {
+        /* Recreate RTCVideoView as the previous one might contain some previous track frame*/
+        rtcVideoView.removeFromSuperview()
+        #if arch(arm64)
+            rtcVideoView = RTCMTLVideoView()
+        #else
+            rtcVideoView = RTCEAGLVideoView()
+        #endif
+        rtcVideoView.translatesAutoresizingMaskIntoConstraints = false
+        
+        addSubview(rtcVideoView)
+        
+        rtcVideoViewAspectRatioConstraint = rtcVideoView.heightAnchor.constraint(equalTo: rtcVideoView.widthAnchor)
+        
+        NSLayoutConstraint.activate([
+            rtcVideoView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            rtcVideoView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            rtcVideoView.heightAnchor.constraint(greaterThanOrEqualTo: heightAnchor),
+            rtcVideoView.widthAnchor.constraint(greaterThanOrEqualTo: widthAnchor),
+            rtcVideoViewAspectRatioConstraint
+        ])
+        
+        bringSubviewToFront(bottomView)
+        bringSubviewToFront(stackView)
+        
+        rtcVideoView.videoContentMode = .scaleAspectFill
     }
 }
 

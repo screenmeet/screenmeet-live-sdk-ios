@@ -12,6 +12,30 @@ import AVFoundation
 
 class SMMainViewController: UIViewController {
     
+    private var chatVisible = false
+    private var chatWidth: CGFloat = 240.0
+    private var chatTrailingConstraint: NSLayoutConstraint!
+    
+    private var chatMessagesView: SMChatMessagesView = {
+        let chatMessagesView = SMChatMessagesView()
+        chatMessagesView.translatesAutoresizingMaskIntoConstraints = false
+        return chatMessagesView
+    }()
+    
+    private var chatBubbleView: SMChatBubbleView = {
+        let chatBubbleView = SMChatBubbleView()
+        chatBubbleView.translatesAutoresizingMaskIntoConstraints = false
+        return chatBubbleView
+    }()
+    
+    private var testFormViewButton: UIButton = {
+        let testFormViewButton = UIButton()
+        testFormViewButton.setBackgroundImage(UIImage(named: "icon-remote-control"), for: .normal)
+        testFormViewButton.addTarget(self, action:  #selector(demoRemoteControlButtonTapped), for: .touchUpInside)
+        testFormViewButton.translatesAutoresizingMaskIntoConstraints = false
+        return testFormViewButton
+    }()
+    
     private var controlButtonsStackView: SMControlBar = {
         let stackView = SMControlBar()
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -104,14 +128,17 @@ class SMMainViewController: UIViewController {
         layoutEnableFloatingViewButton()
         layoutReconnectingView()
         
+        layoutChatBubble()
+        layoutTestFormViewButton()
+        layoutChatMessages()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         updateContent(with: ScreenMeet.getParticipants().first)
-        
         SMUserInterface.manager.hideFloatingUI()
+        navigationController?.navigationBar.isHidden = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -170,6 +197,45 @@ class SMMainViewController: UIViewController {
         ])
     }
     
+    private func layoutTestFormViewButton() {
+        view.addSubview(testFormViewButton)
+                
+        NSLayoutConstraint.activate([
+            testFormViewButton.bottomAnchor.constraint(equalTo: chatBubbleView.topAnchor, constant: -18),
+            testFormViewButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -14),
+            testFormViewButton.heightAnchor.constraint(equalToConstant: 44),
+            testFormViewButton.widthAnchor.constraint(equalToConstant: 44)
+        ])
+    }
+    
+    private func layoutChatBubble() {
+        chatBubbleView.delegate = self
+        view.addSubview(chatBubbleView)
+        
+        NSLayoutConstraint.activate([
+            chatBubbleView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -160),
+            chatBubbleView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            chatBubbleView.heightAnchor.constraint(equalToConstant: 50),
+            chatBubbleView.widthAnchor.constraint(equalToConstant: 50)
+        ])
+    }
+    
+    private func layoutChatMessages() {
+        chatMessagesView.delegate = self
+        view.addSubview(chatMessagesView)
+        
+        chatTrailingConstraint = chatMessagesView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: chatWidth)
+        
+        let guide = view.safeAreaLayoutGuide
+        
+        NSLayoutConstraint.activate([
+            chatMessagesView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
+            chatTrailingConstraint,
+            guide.bottomAnchor.constraint(equalToSystemSpacingBelow: chatMessagesView.bottomAnchor, multiplier: 1.0),
+            chatMessagesView.widthAnchor.constraint(equalToConstant: chatWidth)
+        ])
+    }
+    
     private func layoutRotateCameraButton() {
         view.addSubview(rotateCameraButton)
         
@@ -217,6 +283,13 @@ class SMMainViewController: UIViewController {
         updateContent(with: SMUserInterface.manager.mainParticipant)
     }
     
+    @objc private func demoRemoteControlButtonTapped() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+
+        let viewController = storyboard.instantiateViewController(withIdentifier: "SMDemoRemoteControlViewController") as! SMDemoRemoteControlViewController
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    
     @objc private func enableFloatingViewButtonTapped() {
         dismiss(animated: true, completion: {
             if ScreenMeet.getConnectionState() == .connected {
@@ -243,6 +316,41 @@ class SMMainViewController: UIViewController {
         alertController.addAction(cancelAction)
 
         present(alertController, animated: true, completion: nil)
+    }
+    
+    private func toggleChatView() {
+        if chatVisible {
+            hideChat()
+        }
+        else {
+            showChat()
+        }
+    }
+    
+    private func hideChat() {
+        UIView.animate(withDuration: 0.3) { [weak self] in
+            self?.chatTrailingConstraint.constant = (self?.chatWidth ?? 0.0)
+            self?.view.layoutIfNeeded()
+        } completion: { [weak self] completed in
+            self?.chatMessagesView.dismissKeyboard()
+        }
+
+        
+        chatVisible = false
+    }
+    
+    private func showChat() {
+        UIView.animate(withDuration: 0.3) { [weak self] in
+            self?.chatTrailingConstraint.constant = 0.0
+            self?.view.layoutIfNeeded()
+        }
+        
+        chatVisible = true
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) { [weak self] in
+            self?.chatMessagesView.scrollToBottom()
+            self?.chatMessagesView.adjustScroll()
+        }
     }
 }
 
@@ -332,6 +440,9 @@ extension SMMainViewController: SMControlBarDelegate {
 }
 
 extension SMMainViewController {
+    func updateMessages() {
+        chatMessagesView.updateMessages()
+    }
     
     func updateContent(with participant: SMParticipant?) {
         optionVC?.reloadContent()
@@ -393,4 +504,31 @@ extension SMMainViewController {
         })
         ScreenMeet.disconnect()
     }
+}
+
+extension SMMainViewController: SMChatBubbleProtocol {
+    func onClicked() {
+        toggleChatView()
+    }
+}
+
+extension SMMainViewController: SMChatMessagesProtocol {
+    func shouldRevealOrClose(_ translation: CGFloat) {
+        if translation > chatWidth / 3.0 {
+            hideChat()
+        }
+        else {
+            showChat()
+        }
+    }
+    
+    func shouldMove(_ translation: CGFloat) {
+        let newTrailing = 0.0 + translation
+        
+        if newTrailing > 0 {
+            chatTrailingConstraint.constant = newTrailing
+        }
+        
+    }
+    
 }

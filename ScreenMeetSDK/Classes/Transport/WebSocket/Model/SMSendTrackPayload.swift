@@ -120,7 +120,7 @@ struct SMSendTrackRtpEncoding: Codable, SocketData {
     var ssrc: Int?
     var active: Bool?
     var dtx: Bool?
-    var maxBitrate: Int?
+    var maxBitrate: Double?
     var networkPriority: Int?
     var rid: String?
     

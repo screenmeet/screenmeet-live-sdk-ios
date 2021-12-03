@@ -101,7 +101,7 @@ class MSConsumer: NSObject {
     
     func pause() -> Void {
         if (self.closed){
-            print("Consumer closed")
+            print("Consumer paused")
             return
         }
         self.track.isEnabled = false
@@ -109,7 +109,7 @@ class MSConsumer: NSObject {
     
     func resume() -> Void {
         if (self.closed){
-            print("Consumer closed")
+            print("Consumer resumed")
             return
         }
         self.track.isEnabled = true
@@ -117,8 +117,9 @@ class MSConsumer: NSObject {
     
     func transportClosed() -> Void {
         if (self.closed) {
-                return
+            return
         }
+        print("Consumer transportClosed")
         self.closed = true
         self.delegate.onTransportClose(consumer: self)
     }

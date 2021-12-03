@@ -11,6 +11,18 @@ import WebRTC
 /// ScreenMeet initial connection callback
 public typealias SMConnectCompletion = (_ error: SMError?) -> Void
 
+/// Protocol to handle chat events during the session
+public protocol ScreenMeetChatDelegate: AnyObject {
+    
+    /// Received new  text  message in the chat.
+    /// - Parameter message: Text message. See `SMTextMessage`
+    func onTextMessageReceived(_ message: SMTextMessage)
+    
+    /// Error ocured when trying to sen the outbound message into chat.
+    /// - Parameter message: Text message. See `SMTextMessage`
+    func onMessageSendFailed(_ error: SMError)
+}
+
 /// Protocol to handle session events
 public protocol ScreenMeetDelegate: AnyObject {
     
@@ -78,10 +90,24 @@ public protocol ScreenMeetDelegate: AnyObject {
     /// - Parameters:
     ///  - entitlement: Entitlement type associated with request
     func onRequestRejected(entitlement: SMEntitlementType)
+    
+    /// Occures during remote control session. Can be a mouse or a keybaord event
+    ///
+    /// - Parameters:
+    ///  - event: Remote control event
+    func onRemoteControlEvent(_ event: SMRemoteControlEvent)
+    
+    /// Root view controller. It is used for remote control (Remote peer being able to perform touches on your view controller). It should be the root(bottom most superview) view of the entire window
+    var rootViewController: UIViewController? { get }
+    
 }
 
 class SMSession: NSObject {
+    /// Seession delegate. Used for the events related to video/audio session
     weak var delegate: ScreenMeetDelegate?
+    
+    /// Chat seession delegate. Used forl the events related to chat
+    weak var chatDelegate: ScreenMeetChatDelegate?
     
     private var connectCompletion: SMConnectCompletion? = nil
     private var session: Session!
@@ -162,6 +188,24 @@ class SMSession: NSObject {
     
     private func reconnect() {
         
+    }
+    
+    /// Chat
+    
+    /// Returns all the messages from the chat of the ongoing session.
+    public func getChatMessages() -> [SMTextMessage] {
+        if let chatChannel = SMChannelsManager.shared.channel(for: .chat) as? SMChatChannel {
+            return chatChannel.getMessages()
+        }
+        
+        return [SMTextMessage]()
+    }
+    
+    /// Send the message into the chat of ongoing session.
+    public func sendTextMessage(_ text: String) {
+        if let chatChannel = SMChannelsManager.shared.channel(for: .chat) as? SMChatChannel {
+            return chatChannel.sendTextMessage(text)
+        }
     }
     
     /// Channels messaging

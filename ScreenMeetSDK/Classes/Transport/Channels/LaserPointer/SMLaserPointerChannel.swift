@@ -13,6 +13,8 @@ class SMLaserPointerChannel: SMChannel {
     
     private var lpService = SMLaserPointerService()
     
+    private var requestorIds = [String]()
+    
     func processEvent(_ message: SMChannelMessage) {
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: message.data[1], options: .prettyPrinted)
@@ -36,13 +38,21 @@ class SMLaserPointerChannel: SMChannel {
     
     func startLaserPointerSession(for id: String) throws {
         try lpService.startLaserPointerSession(for: id)
+        requestorIds.append(id)
     }
     
     func stopLaserPointerSession(for id: String) {
         lpService.stopLaserPointerSession(for: id)
+        requestorIds.removeAll(where: { $0 == id })
     }
     
     func stopAllLaserPointerSessions() {
         lpService.stopAllLaserPointerSessions()
+        
+        for requestorId in requestorIds {
+            (SMChannelsManager.shared.channel(for: .entitlements) as? SMEntitlementsChannel)?.revokeAccess(for: .laserpointer, requestorId: requestorId)
+        }
+        
+        requestorIds.removeAll()
     }
 }

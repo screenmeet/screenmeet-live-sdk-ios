@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="ia9-lG-H0g">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="ia9-lG-H0g">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -53,12 +54,11 @@
                                     <action selector="connectButtonTapped:" destination="rWk-2o-Ryo" eventType="touchUpInside" id="lbO-Ni-4fv"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="399507" borderStyle="bezel" placeholder="Code" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Rfn-Nh-Rdc" customClass="UnderLineTextField" customModule="ScreenMeet" customModuleProvider="target">
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" placeholder="Code" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Rfn-Nh-Rdc" customClass="UnderLineTextField" customModule="ScreenMeet" customModuleProvider="target">
                                 <rect key="frame" x="122" y="378" width="170" height="30.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="170" id="Yz8-lA-an7"/>
                                 </constraints>
-                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="done"/>
                             </textField>
@@ -114,7 +114,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" name="main-bg"/>
                         <constraints>
                             <constraint firstItem="iSe-1X-IBs" firstAttribute="centerX" secondItem="VgL-f1-Qa0" secondAttribute="centerX" id="0cj-eg-1Ti"/>
                             <constraint firstItem="iSe-1X-IBs" firstAttribute="top" secondItem="Rfn-Nh-Rdc" secondAttribute="bottom" constant="50" id="7bz-LI-k0j"/>
@@ -256,6 +256,163 @@
             </objects>
             <point key="canvasLocation" x="1230" y="-338"/>
         </scene>
+        <!--Demo Remote Control View Controller-->
+        <scene sceneID="Hfp-g7-5vp">
+            <objects>
+                <viewController storyboardIdentifier="SMDemoRemoteControlViewController" id="AHS-H8-dUW" customClass="SMDemoRemoteControlViewController" customModule="ScreenMeet" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="ZGh-6E-U3G"/>
+                        <viewControllerLayoutGuide type="bottom" id="4kV-r9-Odx"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="nPw-Z0-HFd">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="QN7-b7-crx">
+                                <rect key="frame" x="0.0" y="64" width="414" height="205"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SMDemoRemoteControlTextFieldCell" id="ta3-7I-ewT" customClass="SMDemoRemoteControlTextFieldCell" customModule="ScreenMeet" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="44.5" width="414" height="50"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ta3-7I-ewT" id="MoK-z2-7Tr">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="50"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Textfield" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="SRV-ch-rfU">
+                                                    <rect key="frame" x="20" y="5" width="374" height="40"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="40" id="MXy-Yn-JJK"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                </textField>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="SRV-ch-rfU" firstAttribute="leading" secondItem="MoK-z2-7Tr" secondAttribute="leading" constant="20" id="OjT-g5-n0J"/>
+                                                <constraint firstItem="SRV-ch-rfU" firstAttribute="top" secondItem="MoK-z2-7Tr" secondAttribute="top" constant="5" id="hhe-AQ-88t"/>
+                                                <constraint firstAttribute="trailing" secondItem="SRV-ch-rfU" secondAttribute="trailing" constant="20" id="pVP-Yk-TbW"/>
+                                                <constraint firstAttribute="bottom" secondItem="SRV-ch-rfU" secondAttribute="bottom" constant="5" id="tVu-kU-rSE"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SMDemoRemoteControlTextViewCell" id="78k-cl-sgB" customClass="SMDemoRemoteControlTextViewCell" customModule="ScreenMeet" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="94.5" width="414" height="46"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="78k-cl-sgB" id="nxc-B7-hSx">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="46"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="tqn-Tt-wlQ">
+                                                    <rect key="frame" x="20" y="4" width="374" height="38"/>
+                                                    <color key="backgroundColor" red="0.87450980392156863" green="0.87450980392156863" blue="0.87450980392156863" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="38" id="Z5i-7m-Wgh"/>
+                                                    </constraints>
+                                                    <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                                </textView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="tqn-Tt-wlQ" firstAttribute="leading" secondItem="nxc-B7-hSx" secondAttribute="leading" constant="20" id="7XE-0z-ai0"/>
+                                                <constraint firstItem="tqn-Tt-wlQ" firstAttribute="top" secondItem="nxc-B7-hSx" secondAttribute="top" constant="4" id="9sk-X2-cex"/>
+                                                <constraint firstAttribute="trailing" secondItem="tqn-Tt-wlQ" secondAttribute="trailing" constant="20" id="A6A-af-Z08"/>
+                                                <constraint firstAttribute="bottom" secondItem="tqn-Tt-wlQ" secondAttribute="bottom" constant="4" id="u7f-uN-hmD"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SMDemoRemoteControlButtonCell" id="bec-Pt-Y1V" customClass="SMDemoRemoteControlButtonCell" customModule="ScreenMeet" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="140.5" width="414" height="48"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="bec-Pt-Y1V" id="Hcx-HV-ogp">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="48"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VxF-Pc-xrT">
+                                                    <rect key="frame" x="20" y="4" width="374" height="40"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="40" id="hsX-HN-eJ0"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                                    <state key="normal" title="Button"/>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="VxF-Pc-xrT" secondAttribute="trailing" constant="20" id="1sx-La-TFK"/>
+                                                <constraint firstItem="VxF-Pc-xrT" firstAttribute="top" secondItem="Hcx-HV-ogp" secondAttribute="top" constant="4" id="L0i-h8-7x5"/>
+                                                <constraint firstItem="VxF-Pc-xrT" firstAttribute="leading" secondItem="Hcx-HV-ogp" secondAttribute="leading" constant="20" id="tMH-Fb-Kaw"/>
+                                                <constraint firstAttribute="bottom" secondItem="VxF-Pc-xrT" secondAttribute="bottom" constant="4" id="yM8-5x-wEw"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="button" destination="VxF-Pc-xrT" id="7hP-TQ-ujG"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SMDemoRemoteControlSwitchCell" id="P33-xC-3DN" customClass="SMDemoRemoteControlSwitchCell" customModule="ScreenMeet" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="188.5" width="414" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="P33-xC-3DN" id="EUN-xy-Bvh">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WjW-QO-Dsz">
+                                                    <rect key="frame" x="325" y="6.5" width="51" height="31"/>
+                                                </switch>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="WjW-QO-Dsz" firstAttribute="centerY" secondItem="EUN-xy-Bvh" secondAttribute="centerY" id="hTD-1F-OUv"/>
+                                                <constraint firstAttribute="trailing" secondItem="WjW-QO-Dsz" secondAttribute="trailing" constant="40" id="m62-wW-jXd"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="switchControl" destination="WjW-QO-Dsz" id="rHm-Ii-bMF"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SMDemoRemoteControlFillerCell" id="hTn-Qr-mjM" customClass="SMDemoRemoteControlFillerCell" customModule="ScreenMeet" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="232.5" width="414" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="hTn-Qr-mjM" id="ats-A4-ZSp">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="AHS-H8-dUW" id="qwz-HL-zTM"/>
+                                    <outlet property="delegate" destination="AHS-H8-dUW" id="xU2-Q8-wQz"/>
+                                </connections>
+                            </tableView>
+                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xy5-jd-ezV">
+                                <rect key="frame" x="0.0" y="269" width="414" height="627"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="xy5-jd-ezV" secondAttribute="trailing" id="Goj-OF-cuj"/>
+                            <constraint firstItem="QN7-b7-crx" firstAttribute="leading" secondItem="nPw-Z0-HFd" secondAttribute="leading" id="KXi-Pu-tsQ"/>
+                            <constraint firstItem="QN7-b7-crx" firstAttribute="top" secondItem="ZGh-6E-U3G" secondAttribute="bottom" constant="20" id="MRZ-YP-zGv"/>
+                            <constraint firstItem="xy5-jd-ezV" firstAttribute="top" secondItem="QN7-b7-crx" secondAttribute="bottom" id="btm-Kk-l6Z"/>
+                            <constraint firstAttribute="bottom" secondItem="xy5-jd-ezV" secondAttribute="bottom" id="dun-WY-0FJ"/>
+                            <constraint firstItem="xy5-jd-ezV" firstAttribute="leading" secondItem="nPw-Z0-HFd" secondAttribute="leading" id="f20-9k-veV"/>
+                            <constraint firstAttribute="trailing" secondItem="QN7-b7-crx" secondAttribute="trailing" id="pug-sT-pN0"/>
+                            <constraint firstItem="xy5-jd-ezV" firstAttribute="height" secondItem="nPw-Z0-HFd" secondAttribute="height" multiplier="0.7" id="zZ7-xt-VxJ"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="tableView" destination="QN7-b7-crx" id="HsV-kS-Z2a"/>
+                        <outlet property="webView" destination="xy5-jd-ezV" id="g2N-j7-iMn"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="KDP-na-NWg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1228.985507246377" y="371.65178571428572"/>
+        </scene>
         <!--Captcha View Controller-->
         <scene sceneID="vfl-5x-NVm">
             <objects>
@@ -339,6 +496,9 @@
         <image name="arrow.right" catalog="system" width="128" height="98"/>
         <image name="icon-lock" width="24" height="24"/>
         <image name="network" catalog="system" width="128" height="121"/>
+        <namedColor name="main-bg">
+            <color red="0.94117647058823528" green="0.94117647058823528" blue="0.94117647058823528" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

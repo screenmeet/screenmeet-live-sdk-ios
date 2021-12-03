@@ -8,7 +8,7 @@
 import UIKit
 import WebRTC
 
-protocol MSTransportConnectDelegate: class {
+protocol MSTransportConnectDelegate: AnyObject {
     func onConnect(_ transport: MSTransport, _ dtlsParameters: MSJson)
     func onConnectionStateChange(_ transport: MSTransport, _ connectionState: RTCIceConnectionState)
 }

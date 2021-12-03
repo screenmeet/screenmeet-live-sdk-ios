@@ -52,18 +52,20 @@ class SMUserInterface {
     }
     
     func updateContent() {
-        DispatchQueue.main.async { [unowned self] in
-            floatingView.update(with: nil,
-                                audioState: isAudioEnabled,
-                                videoState: isCameraEnabled,
-                                videoTrack: mainParticipant?.videoTrack ?? localVideoTrack)
-            
-            smMainVC.updateContent(with: mainParticipant)
-        }
+        floatingView.update(with: nil,
+                            audioState: isAudioEnabled,
+                            videoState: isCameraEnabled,
+                            videoTrack: mainParticipant?.videoTrack ?? localVideoTrack)
+        
+        smMainVC.updateContent(with: mainParticipant)
     }
 }
 
 extension SMUserInterface: ScreenMeetDelegate {
+    
+    var rootViewController: UIViewController? {
+        return smMainVC.navigationController?.topViewController
+    }
     
     func onLocalAudioCreated() {
         NSLog("[ScreenMeet] Local user started audio")
@@ -83,6 +85,7 @@ extension SMUserInterface: ScreenMeetDelegate {
     
     func onLocalVideoStopped() {
         NSLog("[ScreenMeet] Local user stopped video")
+        
         updateContent()
     }
     
@@ -94,6 +97,7 @@ extension SMUserInterface: ScreenMeetDelegate {
     func onParticipantJoined(_ participant: SMParticipant) {
         NSLog("[ScreenMeet] Participant joined: " + participant.name)
         mainParticipant = participant
+        
         updateContent()
     }
     
@@ -116,7 +120,7 @@ extension SMUserInterface: ScreenMeetDelegate {
     }
     
     func onParticipantMediaStateChanged(_ participant: SMParticipant) {
-        NSLog("[ScreenMeet] Participant " + participant.name + " has changed its media state (muted, resumed, etc) \(participant.avState)")
+        NSLog("[ScreenMeet] Participant " + participant.name + " has changed its media state (muted, resumed, etc) \(participant.avState). VideoTrack==\(participant.videoTrack == nil ? "nil": participant.videoTrack?.trackId ?? "Track Id 0001")")
         mainParticipant = participant
         updateContent()
     }
@@ -124,6 +128,7 @@ extension SMUserInterface: ScreenMeetDelegate {
     func onActiveSpeakerChanged(_ participant: SMParticipant) {
         NSLog("[ScreenMeet] Participant became active speaker: " + participant.name)
         mainParticipant = participant
+        
         updateContent()
     }
     
@@ -133,6 +138,7 @@ extension SMUserInterface: ScreenMeetDelegate {
         case .connecting:
             print("waiting for connecting to call ...")
         case .connected:
+            smMainVC.updateMessages()
             print("joined the call")
         case .reconnecting:
             print("trying to restore connection to call ...")
@@ -156,12 +162,17 @@ extension SMUserInterface: ScreenMeetDelegate {
         case .disconnected(.reconnectWaitTimeExpired):
             print("Waited for reconnect for too long. Hanging up")
             smMainVC.disconnect()
+        case .disconnected(.hostRefuedToLetIn):
+            print("Host refused to let in the room")
+            smMainVC.disconnect()
         }
+        
         updateContent()
     }
     
     func onError(_ error: SMError) {
         NSLog("[ScreenMeet] Error: \(error.message)")
+        
         updateContent()
     }
     
@@ -175,6 +186,16 @@ extension SMUserInterface: ScreenMeetDelegate {
         requestAlertController.dismiss(animated: true, completion: nil)
         updateContent()
     }
+    
+    func onRemoteControlEvent(_ event: SMRemoteControlEvent) {
+        if let keyboardEvent = event as? SMRemoteControlKeyboardEvent {
+            //NSLog("Keyboard event: \(keyboardEvent.acii); \(keyboardEvent.key))")
+        }
+        else if let mouseEvent = event as? SMRemoteControlMouseEvent {
+            //NSLog("Mouse event: (\(mouseEvent.x); \(mouseEvent.y))")
+        }
+    }
+    
 }
 
 extension SMUserInterface {
@@ -196,12 +217,10 @@ extension SMUserInterface {
         DispatchQueue.main.async { [unowned self] in
             guard let rootVC = self.rootController() else { return }
             
-            
-            if rootVC.presentedViewController == self.smMainVC {
-                NSLog("[ScreenMeet] MainViewController is already presented")
-            }
-            else {
-                rootVC.present(self.smMainVC, animated: true, completion: completion)
+            if rootVC.presentedViewController != self.smMainVC {
+                rootVC.definesPresentationContext = true
+                let navigationViewController = UINavigationController(rootViewController: self.smMainVC)
+                rootVC.present(navigationViewController, animated: true, completion: completion)
             }
             
         }
@@ -221,13 +240,17 @@ extension SMUserInterface {
     }
     
     func presentRequestAlert(for entitlement: SMEntitlementType, participant: SMParticipant, completion: @escaping (Bool) -> Void) {
-        let title: String
-        let message: String
+        var title: String
+        var message: String
         
         switch entitlement {
-        case .laserpointer:
-            title = "\"\(participant.name)\" Would Like to Start Laser Pointer"
-            message = "It is needed to help you to navigate"
+            case .laserpointer:
+                title = "\"\(participant.name)\" Would you like to start laser pointer?"
+                message = "It's needed to help you navigate"
+            
+            case .remotecontrol:
+                title = "\"\(participant.name)\" Would you like to be remote controlled?"
+                message = "It he will allow making touches and keyboard event by remote participant on your device"
         }
         
         requestAlertController = UIAlertController(title: title, message: message, preferredStyle: .alert)

@@ -30,10 +30,14 @@ class SMChannelsManager: NSObject {
             channel = SMCapabilitiesChannel()
         case .laserPointer:
             channel = SMLaserPointerChannel()
+        case .remoteControl:
+            channel = SMRemoteControlChannel()
         case .entitlements:
             channel = SMEntitlementsChannel()
         case .requests:
             channel = SMRequestsChannel()
+        case .chat:
+            channel = SMChatChannel()
         default:
             channel = nil
         }
@@ -51,11 +55,8 @@ class SMChannelsManager: NSObject {
         for (channelNameString, channelInitialState) in sharedData {
             let initialState = channelInitialState as! [String:Any]
             
-            if channelNameString == "callerstate" {
-                NSLog("callerstate")
-            }
             let data = initialState["data"]  as! [String : Any]
-            if let channelName =  SMChannelName(rawValue: channelNameString) {
+            if let channelName = SMChannelName(rawValue: channelNameString) {
                 let theChannel = channel(for: channelName)
                 theChannel?.buildState(from: data)
             }

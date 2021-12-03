@@ -9,4 +9,5 @@ import Foundation
 
 public enum SMEntitlementType: String, CaseIterable {
     case laserpointer
+    case remotecontrol
 }

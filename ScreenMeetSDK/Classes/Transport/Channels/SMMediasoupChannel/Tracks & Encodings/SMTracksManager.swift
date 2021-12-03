@@ -55,7 +55,7 @@ class SMTracksManager: NSObject {
         
         if videoSourceDevice == nil {
             /* screen capture video source*/
-            videoSource.adaptOutputFormat(toWidth: Int32(Int(UIScreen.main.bounds.size.width)), height: Int32(UIScreen.main.bounds.size.height), fps: 30)
+            videoSource.adaptOutputFormat(toWidth: Int32(Int(UIScreen.main.bounds.size.width*UIScreen.main.scale)), height: Int32(UIScreen.main.bounds.size.height*UIScreen.main.scale), fps: 30)
         }
         else {
             let trackDimensions = CMVideoFormatDescriptionGetPresentationDimensions(videoSourceDevice!.activeFormat.formatDescription, usePixelAspectRatio: true, useCleanAperture: true)
@@ -180,7 +180,9 @@ class SMTracksManager: NSObject {
 
 extension SMTracksManager: RTCVideoCapturerDelegate {
     func capturer(_ capturer: RTCVideoCapturer, didCapture frame: RTCVideoFrame) {
-        UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
+        DispatchQueue.main.async {
+            UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
+        }
         self.videoSource?.capturer(capturer, didCapture: frame)
     }
 }

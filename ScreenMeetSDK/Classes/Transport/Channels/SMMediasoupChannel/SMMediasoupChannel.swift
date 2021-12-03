@@ -303,15 +303,17 @@ class SMMediasoupChannel: NSObject, SMChannel  {
     }
     
     func notifyParticipantsMediaStateChanged(_ participantId: String, _ newCallerState: SMCallerState) {
-        
-        if (newCallerState.videoEnabled == false) {
-            removeVideoConsumer(participantId)
+        if (newCallerState.videoEnabled == false && newCallerState.screenEnabled == false && newCallerState.screenAnnotationEnabled == false) {
+           removeVideoConsumer(participantId)
         }
+        
         let participantsChannel = transport.channelsManager.channel(for: .participants) as! SMParticipantsChannel
         let identity = participantsChannel.getIdentity(participantId)
         
         var participant = SMParticipant(id: participantId, identity: identity ?? SMIdentityInfo(), callerState: newCallerState)
         participant = extendParticipantWithTracks(participant)
+        
+        
         ScreenMeet.session.delegate?.onParticipantMediaStateChanged(participant)
     }
     
@@ -720,23 +722,36 @@ class SMMediasoupChannel: NSObject, SMChannel  {
                     NSLog("Could not handle remote track: " + error.message)
                 }
                 else {
-                    NSLog(consumer!.getKind() +  " consumer id: " + consumer!.getId())
-                    
                     if (self.consumers[consumer!.getId()] == nil) {
                         self.consumers[consumer!.getId()] = [MSConsumer]()
                     }
-                    self.consumers[consumer!.getId()]?.append(consumer!)
+                    
                     if consumer!.getKind() == "video" {
-                        notifyParticipantVideoCreated(currentConsumerOperation.id)
+                        /* remove previous video consumer*/
+                        self.consumers[consumer!.getId()]?.removeAll(where: { consumer in
+                            consumer.getKind() == "video"
+                        })
                     }
                     if consumer!.getKind() == "audio" {
-                        notifyParticipantAudioCreated(currentConsumerOperation.id)
+                        /* remove previous video consumer*/
+                        self.consumers[consumer!.getId()]?.removeAll(where: { consumer in
+                            consumer.getKind() == "audio"
+                        })
                     }
+                    
+                    self.consumers[consumer!.getId()]?.append(consumer!)
                     
                     let payload = SMResumeTrackPayload(_target_cid: currentConsumerOperation.id,
                                                               kind: currentConsumerOperation.kind)
                     transport.webSocketClient.command(for: .mediasoup, message: "resume-track", data: payload.socketRepresentation()) { data in
+                       
                         NSLog("Resume track sent")
+                        if consumer!.getKind() == "video" {
+                            notifyParticipantVideoCreated(currentConsumerOperation.id)
+                        }
+                        if consumer!.getKind() == "audio" {
+                            notifyParticipantAudioCreated(currentConsumerOperation.id)
+                        }
                         
                         consumersGroup.leave()
                     }

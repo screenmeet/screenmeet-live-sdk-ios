@@ -16,6 +16,7 @@ class SMCapabilitiesChannel: SMChannel {
     func buildState(from initialPayload: [String : Any]) {
         let width = Int(UIScreen.main.bounds.width)
         let height = Int(UIScreen.main.bounds.height)
-        transport.webSocketClient.requestSet(for: name, data: [transport.webSocketClient.sid: ["laserpointer": true, "sourceresolution": "{\(width)}x{\(height)}"]])
+        transport.webSocketClient.requestSet(for: name, data: [transport.webSocketClient.sid: ["remotecontrol": true, "laserpointer": true, "sourceresolution": "{\(width)}x{\(height)}"]])
+        
     }
 }
