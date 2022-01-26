@@ -27,8 +27,8 @@ class SMRemoteControlChannel: SMChannel {
        /* Do nothing. The service handles touch events if any, and does nothing if no events. No need to explicitly "start" it*/
     }
     
-    func stopRemoteControlSession(for id: String) {
-        /* Do nothing. The service handles touch events if any, and does nothing if no events. No need to explicitly "stop" it*/
+    func stopAllRemoteControlSessions() {
+        
     }
     
     private func parseEvent(_ data: [String: Any]) -> SMRemoteControlEvent? {

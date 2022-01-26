@@ -189,7 +189,45 @@ func onParticipantMediaStateChanged(_ participant: SMParticipant)
 /// When active speaker changed. 
 /// - Parameter participant: Participant details. See `SMParticipant`
 func onActiveSpeakerChanged(_ participant: SMParticipant, _ remoteVideoTrack: RTCVideoTrack)
+```
+    
+## Entitlements
 
+```swift
+/// When requested for entitlement
+/// - Parameters:
+///  - entitlement: Entitlement type associated with request
+///  - participant: A participant who requires access
+///  - decisionHandler: The callback called after request is accepted or denied
+///  - granted: The retrieved decision for request.
+func onRequest(entitlement: SMEntitlementType, participant: SMParticipant, decisionHandler: @escaping (_ granted: Bool) -> Void)
+    
+/// When entitlement request was rejected
+///
+/// - Parameters:
+///  - entitlement: Entitlement type associated with request
+func onRequestRejected(entitlement: SMEntitlementType)
+```
+
+## Remote Control
+
+```swift
+/// Occures during remote control session when an agent triggers and event. Can be a mouse or a keybaord event
+///
+/// - Parameters:
+///  - event: Remote control event. See `SMRemoteControlEvent`
+func onRemoteControlEvent(_ event: SMRemoteControlEvent)
+    
+/// Root view controller to be remote controlled (Allowing viewer to perform touches on your view controller(s)). It should be the root(bottom most superview) view of the entire window
+var rootViewController: UIViewController? { get }
+```
+
+## Important error events
+
+```swift
+/// When error occurred
+/// - Parameter error `SMError`
+func onError(_ error: SMError)
 ```
 
 ## Connection state changing

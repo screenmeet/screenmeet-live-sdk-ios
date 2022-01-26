@@ -7,6 +7,7 @@
 
 import UIKit
 
+/// Mouse remote control event  type
 public enum SMMouseActionType: String {
     case unknown = "unknown"
     case leftdown = "leftmousedown"
@@ -16,11 +17,27 @@ public enum SMMouseActionType: String {
     case rightup = "rightmouseup"
 }
 
+/// Mouse remote control event (triggered by controlling participant)
 public class SMRemoteControlMouseEvent: SMRemoteControlEvent {
     
+    /**
+        Timestamp of `SMRemoteControlMouseEvent` instance
+    */
     public private(set) var ts: Int64
+    
+    /**
+        x coordinate of `SMRemoteControlMouseEvent`
+    */
     public private(set) var x: Double
+    
+    /**
+        y coordinate of `SMRemoteControlMouseEvent`
+    */
     public private(set) var y: Double
+    
+    /**
+        Type coordinate of `SMRemoteControlMouseEvent`. See  `SMMouseActionType`
+    */
     public private(set) var type: SMMouseActionType = .unknown
     
     override init?(_ socketData: [String: Any]) {

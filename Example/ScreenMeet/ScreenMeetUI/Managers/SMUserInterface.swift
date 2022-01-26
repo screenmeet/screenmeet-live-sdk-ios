@@ -64,7 +64,7 @@ class SMUserInterface {
 extension SMUserInterface: ScreenMeetDelegate {
     
     var rootViewController: UIViewController? {
-        return smMainVC.navigationController?.topViewController
+        return smMainVC.navigationController
     }
     
     func onLocalAudioCreated() {
@@ -176,17 +176,6 @@ extension SMUserInterface: ScreenMeetDelegate {
         updateContent()
     }
     
-    func onRequest(entitlement: SMEntitlementType, participant: SMParticipant, decisionHandler: @escaping (_ granted: Bool) -> Void) {
-        NSLog("[ScreenMeet] Request entitlement: \(entitlement.rawValue), from participant: \(participant.name)")
-        presentRequestAlert(for: entitlement, participant: participant, completion: decisionHandler)
-        updateContent()
-    }
-    
-    func onRequestRejected(entitlement: SMEntitlementType) {
-        requestAlertController.dismiss(animated: true, completion: nil)
-        updateContent()
-    }
-    
     func onRemoteControlEvent(_ event: SMRemoteControlEvent) {
         if let keyboardEvent = event as? SMRemoteControlKeyboardEvent {
             //NSLog("Keyboard event: \(keyboardEvent.acii); \(keyboardEvent.key))")
@@ -194,6 +183,36 @@ extension SMUserInterface: ScreenMeetDelegate {
         else if let mouseEvent = event as? SMRemoteControlMouseEvent {
             //NSLog("Mouse event: (\(mouseEvent.x); \(mouseEvent.y))")
         }
+    }
+    
+    /// Features
+
+    func onFeatureRequest(_ feature: SMFeature, _ decisionHandler: @escaping (Bool) -> Void) {
+        NSLog("[ScreenMeet] Request entitlement: \(feature.type.rawValue), from participant: \(feature.requestorParticipant.name)")
+        presentRequestAlert(for: feature.type, participant: feature.requestorParticipant, completion: decisionHandler)
+        updateContent()
+    }
+    
+    func onFeatureRequestRejected(feature: SMFeature) {
+        NSLog("[ScreenMeet] Feature rejected: \(feature.type.rawValue), from participant: \(feature.requestorParticipant.name)")
+        requestAlertController.dismiss(animated: true, completion: nil)
+        updateContent()
+    }
+    
+    func onFeatureStopped(feature: SMFeature) {
+        if feature.type == .remotecontrol {
+            smMainVC.updateRemoteControlState(false)
+        }
+        
+        NSLog("[ScreenMeet] Feature stopped: \(feature.type.rawValue), participant: \(feature.requestorParticipant.name)")
+    }
+    
+    func onFeatureStarted(feature: SMFeature) {
+        if feature.type == .remotecontrol {
+            smMainVC.updateRemoteControlState(true)
+        }
+        
+        NSLog("[ScreenMeet] Feature started: \(feature.type.rawValue), participant: \(feature.requestorParticipant.name)")
     }
     
 }
@@ -253,6 +272,12 @@ extension SMUserInterface {
                 message = "It he will allow making touches and keyboard event by remote participant on your device"
         }
         
+        if let mainVC = rootController()?.presentedViewController {
+            if mainVC.presentedViewController == requestAlertController {
+                requestAlertController.dismiss(animated: false, completion: nil)
+            }
+        }
+    
         requestAlertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
         let denyAction = UIAlertAction(title: "Don't Allow", style: .default) { (_) -> Void in
@@ -265,8 +290,8 @@ extension SMUserInterface {
         requestAlertController.addAction(denyAction)
         requestAlertController.addAction(grantAction)
         
-        if let presentedViewController = rootController()?.presentedViewController {
-            presentedViewController.present(requestAlertController, animated: true, completion: nil)
+        if let mainVC = rootController()?.presentedViewController {
+            mainVC.present(requestAlertController, animated: true, completion: nil)
         } else {
             rootController()?.present(requestAlertController, animated: true, completion: nil)
         }

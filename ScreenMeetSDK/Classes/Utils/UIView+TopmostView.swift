@@ -7,15 +7,20 @@
 
 import UIKit
 
+struct TopMostData {
+    var view: UIView!
+    var point: CGPoint!
+}
+
 extension UIView {
-    func findTopMostViewForPoint(_ point: CGPoint, _ targetUITypes: [AnyClass]) -> UIView {
+    func findTopMostViewForPoint(_ point: CGPoint, _ targetUITypes: [AnyClass]) -> TopMostData {
         for i in stride(from: self.subviews.count, to: 0, by: -1) {
             let subview = self.subviews[i-1]
-            
+                        
             if !subview.isHidden && subview.frame.contains(point) {
                 for type in targetUITypes {
-                    if subview.isKind(of: type){
-                       return subview
+                    if subview.isKind(of: type) {
+                       return TopMostData(view: subview, point: point)
                     }
                 }
                 
@@ -24,7 +29,7 @@ extension UIView {
             }
         }
         
-        return self
+        return TopMostData(view: self, point: point)
     }
     
     func findTopMostScrollViewForPoint(_ point: CGPoint) -> UIView {
@@ -58,4 +63,9 @@ extension UIView {
     }
 }
 
+extension NSObject {
+    var theClassName: String {
+        return NSStringFromClass(type(of: self))
+    }
+}
 

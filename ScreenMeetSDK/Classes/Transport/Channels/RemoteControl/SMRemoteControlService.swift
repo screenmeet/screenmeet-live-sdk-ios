@@ -20,7 +20,9 @@ class SMRemoteControlService: NSObject {
     private var currentTextView: UITextView? = nil
     
     private var startPoint: CGPoint = .zero
+    private var stratPointConvertedToTopmostView: CGPoint  = .zero
     private var endPoint: CGPoint = .zero
+    private var endPointConvertedToTopmostView: CGPoint  = .zero
     private var movePoint: CGPoint = .zero
     
     /* The view the touch down is being performed upon*/
@@ -32,7 +34,7 @@ class SMRemoteControlService: NSObject {
     /* The view the touch up is being performed upon*/
     private var endView: UIView? = nil
     
-    private var targetUITypes: [AnyClass] = [UITextView.self, UITextField.self, UIButton.self, UISwitch.self, WKWebView.self]
+    private var targetUITypes: [AnyClass] = [UITextView.self, UITextField.self, UIButton.self, UISwitch.self, UISegmentedControl.self, WKWebView.self, UIVisualEffectView.self]
 
     func processEvent(_ event: SMRemoteControlEvent) {
         if let mouseEvent = event as? SMRemoteControlMouseEvent {
@@ -62,7 +64,11 @@ class SMRemoteControlService: NSObject {
             isDown = true
             
             let point = convertPointFromPossiblePresentingViewController(event, rootViewController)
-            startView = rootViewController.view.findTopMostViewForPoint(point, targetUITypes)
+            
+            let result = rootViewController.view.findTopMostViewForPoint(point, targetUITypes)
+            startView = result.view
+            stratPointConvertedToTopmostView = result.point
+            
             startPoint = point
         }
     }
@@ -71,9 +77,14 @@ class SMRemoteControlService: NSObject {
         if let rootViewController = ScreenMeet.session.delegate?.rootViewController {
             isDown = false
             
-            let point = convertPointFromPossiblePresentingViewController(event, rootViewController)
+            var point: CGPoint!
+            
+            point = convertPointFromPossiblePresentingViewController(event, rootViewController)
         
-            endView = rootViewController.view.findTopMostViewForPoint(point, targetUITypes)
+            let result = rootViewController.view.findTopMostViewForPoint(point, targetUITypes)
+            endView = result.view
+            endPointConvertedToTopmostView  = result.point
+            
             endPoint = point
                     
             if let startView = startView, let endView = endView {
@@ -94,7 +105,8 @@ class SMRemoteControlService: NSObject {
         if let rootViewController = ScreenMeet.session.delegate?.rootViewController {
             let point = convertPointFromPossiblePresentingViewController(event, rootViewController)
         
-            moveView = rootViewController.view.findTopMostViewForPoint(point, targetUITypes)
+            let result = rootViewController.view.findTopMostViewForPoint(point, targetUITypes)
+            moveView = result.view
             movePoint = point
             
             if isDown {
@@ -190,10 +202,28 @@ class SMRemoteControlService: NSObject {
         }
         else if view.isKind(of: UIButton.self) {
             (view as! UIButton).sendActions(for: .touchUpInside)
+            (view as! UIButton).sendActions(for: .primaryActionTriggered)
+            if #available(iOS 14.0, *) {
+                (view as! UIButton).sendActions(for: .menuActionTriggered)
+            } else {
+                // Fallback on earlier versions
+            }
+            
+            (view.superview as? UIControl)?.sendActions(for: .touchUpInside)
+            //(view as! UIButton).actions(forTarget: , forControlEvent: <#T##UIControl.Event#>)
         }
         
         else if view.isKind(of: UISwitch.self) {
             (view as! UISwitch).sendActions(for: .touchUpInside)
+        }
+        else if view.isKind(of: UISegmentedControl.self) {
+            let segment = view as! UISegmentedControl
+            let widthOfOneSegment = segment.bounds.size.width /  CGFloat(segment.numberOfSegments)
+            let clickedSegmentIndex = Int(floor(endPointConvertedToTopmostView.x / widthOfOneSegment))
+            segment.selectedSegmentIndex = clickedSegmentIndex
+        }
+        else if let control = view as? UIControl {
+            control.sendActions(for: .touchUpInside)
         }
         else if view.isKind(of: WKWebView.self) {
             let webView = (view as! WKWebView)
@@ -216,6 +246,10 @@ class SMRemoteControlService: NSObject {
                 }
                 
             }
+        }
+        else {
+            (view as? UIControl)?.sendActions(for: .touchUpInside)
+            (view.superview as? UIControl)?.sendActions(for: .touchUpInside)
         }
     }
     

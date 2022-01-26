@@ -7,6 +7,7 @@
 
 import UIKit
 
+/// Generic class represnting remote control event (triggered by controlling participant)
 public class SMRemoteControlEvent {
     var from: String
     var to: String

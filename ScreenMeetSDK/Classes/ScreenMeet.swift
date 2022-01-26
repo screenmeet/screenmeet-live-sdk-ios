@@ -114,6 +114,21 @@ public class ScreenMeet: NSObject {
         return session.sendTextMessage(text)
     }
     
+    /// Gets the list of ongoign features
+    ///
+    /// - Parameters:
+    ///  - Returns list of ongoing features that you have given approve for (remote control, laser pointer, etc) and that are currently being used. See `SMFeature`
+    public static func activeFeatures() -> [SMFeature] {
+        return session.activeFeatures()
+    }
+    
+    /// Stop (revoke access)
+    ///
+    /// - Parameter featureType: The feature type to stop. See `SMFeature`
+    public static func stopFeature(_ feature: SMFeature) {
+        return session.stopFeature(feature)
+    }
+    
 }
 
 

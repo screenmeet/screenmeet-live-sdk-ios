@@ -17,6 +17,9 @@
 		04CC0AE925AC6A6900B8C4E2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 04CC0AE825AC6A6900B8C4E2 /* Assets.xcassets */; };
 		04CC0AEC25AC6A6900B8C4E2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 04CC0AEA25AC6A6900B8C4E2 /* LaunchScreen.storyboard */; };
 		20763F264906CF27021B177C /* Pods_ScreenMeetTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C98A68467DC54BAECFEB76 /* Pods_ScreenMeetTests.framework */; };
+		911A32C82768F52200C89F0B /* SMDemoRemoteControlWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 911A32C72768F52200C89F0B /* SMDemoRemoteControlWebViewController.swift */; };
+		912E4AAC276A870300A46A8D /* SMDemoRemoteControlSegmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912E4AAB276A870300A46A8D /* SMDemoRemoteControlSegmentCell.swift */; };
+		912E4AAE27721EB800A46A8D /* SMDemoRemoteControlTabbarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912E4AAD27721EB800A46A8D /* SMDemoRemoteControlTabbarViewController.swift */; };
 		91865567266FBCC3008AC955 /* SpinerLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91865562266FBCC3008AC955 /* SpinerLayer.swift */; };
 		91865568266FBCC3008AC955 /* FadeTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91865563266FBCC3008AC955 /* FadeTransition.swift */; };
 		91865569266FBCC3008AC955 /* TransitionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91865564266FBCC3008AC955 /* TransitionButton.swift */; };
@@ -75,7 +78,7 @@
 		9197CE3426D00CA40037B7BA /* TextMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9197CE3326D00CA40037B7BA /* TextMessageCell.swift */; };
 		9197CE3626D00FAF0037B7BA /* TextMessageCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9197CE3526D00FAF0037B7BA /* TextMessageCell.xib */; };
 		91DBE98726F4DCB50086338C /* SMTestFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91DBE98626F4DCB50086338C /* SMTestFormView.swift */; };
-		91DBE98C26F8B83C0086338C /* SMDemoRemoteControlViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91DBE98B26F8B83C0086338C /* SMDemoRemoteControlViewController.swift */; };
+		91DBE98C26F8B83C0086338C /* SMDemoRemoteControlNativeFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91DBE98B26F8B83C0086338C /* SMDemoRemoteControlNativeFormViewController.swift */; };
 		91DBE98F26F8C7540086338C /* SMDemoRemoteControlTextFieldCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91DBE98E26F8C7540086338C /* SMDemoRemoteControlTextFieldCell.swift */; };
 		91DBE99126F8C7630086338C /* SMDemoRemoteControlTextViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91DBE99026F8C7630086338C /* SMDemoRemoteControlTextViewCell.swift */; };
 		91DBE99326F8C7790086338C /* SMDemoRemoteControlButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91DBE99226F8C7790086338C /* SMDemoRemoteControlButtonCell.swift */; };
@@ -142,6 +145,9 @@
 		608E0CA996BC6302C9735526 /* Pods-ScreenMeet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScreenMeet.debug.xcconfig"; path = "Target Support Files/Pods-ScreenMeet/Pods-ScreenMeet.debug.xcconfig"; sourceTree = "<group>"; };
 		77709DFECD64545BD377F7B2 /* Pods-ScreenMeetTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScreenMeetTests.release.xcconfig"; path = "Target Support Files/Pods-ScreenMeetTests/Pods-ScreenMeetTests.release.xcconfig"; sourceTree = "<group>"; };
 		86C98A68467DC54BAECFEB76 /* Pods_ScreenMeetTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ScreenMeetTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		911A32C72768F52200C89F0B /* SMDemoRemoteControlWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMDemoRemoteControlWebViewController.swift; sourceTree = "<group>"; };
+		912E4AAB276A870300A46A8D /* SMDemoRemoteControlSegmentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMDemoRemoteControlSegmentCell.swift; sourceTree = "<group>"; };
+		912E4AAD27721EB800A46A8D /* SMDemoRemoteControlTabbarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMDemoRemoteControlTabbarViewController.swift; sourceTree = "<group>"; };
 		91865562266FBCC3008AC955 /* SpinerLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpinerLayer.swift; sourceTree = "<group>"; };
 		91865563266FBCC3008AC955 /* FadeTransition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FadeTransition.swift; sourceTree = "<group>"; };
 		91865564266FBCC3008AC955 /* TransitionButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionButton.swift; sourceTree = "<group>"; };
@@ -200,7 +206,7 @@
 		9197CE3326D00CA40037B7BA /* TextMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextMessageCell.swift; sourceTree = "<group>"; };
 		9197CE3526D00FAF0037B7BA /* TextMessageCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextMessageCell.xib; sourceTree = "<group>"; };
 		91DBE98626F4DCB50086338C /* SMTestFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMTestFormView.swift; sourceTree = "<group>"; };
-		91DBE98B26F8B83C0086338C /* SMDemoRemoteControlViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMDemoRemoteControlViewController.swift; sourceTree = "<group>"; };
+		91DBE98B26F8B83C0086338C /* SMDemoRemoteControlNativeFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMDemoRemoteControlNativeFormViewController.swift; sourceTree = "<group>"; };
 		91DBE98E26F8C7540086338C /* SMDemoRemoteControlTextFieldCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMDemoRemoteControlTextFieldCell.swift; sourceTree = "<group>"; };
 		91DBE99026F8C7630086338C /* SMDemoRemoteControlTextViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMDemoRemoteControlTextViewCell.swift; sourceTree = "<group>"; };
 		91DBE99226F8C7790086338C /* SMDemoRemoteControlButtonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMDemoRemoteControlButtonCell.swift; sourceTree = "<group>"; };
@@ -545,7 +551,9 @@
 			isa = PBXGroup;
 			children = (
 				91DBE98D26F8C7290086338C /* Cells */,
-				91DBE98B26F8B83C0086338C /* SMDemoRemoteControlViewController.swift */,
+				91DBE98B26F8B83C0086338C /* SMDemoRemoteControlNativeFormViewController.swift */,
+				911A32C72768F52200C89F0B /* SMDemoRemoteControlWebViewController.swift */,
+				912E4AAD27721EB800A46A8D /* SMDemoRemoteControlTabbarViewController.swift */,
 			);
 			path = RemoteControlDemo;
 			sourceTree = "<group>";
@@ -558,6 +566,7 @@
 				91DBE99226F8C7790086338C /* SMDemoRemoteControlButtonCell.swift */,
 				91DBE99426FB524C0086338C /* SMDemoRemoteControlFillerCell.swift */,
 				91DBE99626FB756C0086338C /* SMDemoRemoteControlSwitchCell.swift */,
+				912E4AAB276A870300A46A8D /* SMDemoRemoteControlSegmentCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -870,15 +879,18 @@
 				9197CE0B26CFBA590037B7BA /* InputBarViewController.swift in Sources */,
 				9197CDA826CFB8DD0037B7BA /* SMChatMessagesView.swift in Sources */,
 				9197CDF426CFBA590037B7BA /* AttachmentsView.swift in Sources */,
+				912E4AAC276A870300A46A8D /* SMDemoRemoteControlSegmentCell.swift in Sources */,
 				A95BFBF325F7C55000432305 /* SMControlBar.swift in Sources */,
 				9197CE0726CFBA590037B7BA /* UIView+AutoLayout.swift in Sources */,
 				91865568266FBCC3008AC955 /* FadeTransition.swift in Sources */,
+				911A32C82768F52200C89F0B /* SMDemoRemoteControlWebViewController.swift in Sources */,
 				049C222C26236C9500C999CB /* CaptchaViewController.swift in Sources */,
 				9197CE2626CFBC3C0037B7BA /* iMessageInputBar.swift in Sources */,
 				91DBE99326F8C7790086338C /* SMDemoRemoteControlButtonCell.swift in Sources */,
 				9197CE2F26CFF72B0037B7BA /* UIColor+Branding.swift in Sources */,
 				9197CE0D26CFBA590037B7BA /* InputStackView.swift in Sources */,
 				A946498A25FA529100FDB22C /* SMRemoteVideosView.swift in Sources */,
+				912E4AAE27721EB800A46A8D /* SMDemoRemoteControlTabbarViewController.swift in Sources */,
 				A946497E25F8EFD700FDB22C /* SMParticipantsTableViewCell.swift in Sources */,
 				9197CE0C26CFBA590037B7BA /* InputBarAccessoryView+Availability.swift in Sources */,
 				91DBE99126F8C7630086338C /* SMDemoRemoteControlTextViewCell.swift in Sources */,
@@ -887,7 +899,7 @@
 				91DBE98F26F8C7540086338C /* SMDemoRemoteControlTextFieldCell.swift in Sources */,
 				A946498C25FA547F00FDB22C /* SMRemoteVideoTableViewCell.swift in Sources */,
 				91DBE99526FB524C0086338C /* SMDemoRemoteControlFillerCell.swift in Sources */,
-				91DBE98C26F8B83C0086338C /* SMDemoRemoteControlViewController.swift in Sources */,
+				91DBE98C26F8B83C0086338C /* SMDemoRemoteControlNativeFormViewController.swift in Sources */,
 				9197CDFB26CFBA590037B7BA /* AutocompleteCell.swift in Sources */,
 				04CC0AE225AC6A6500B8C4E2 /* SceneDelegate.swift in Sources */,
 				9197CE0526CFBA590037B7BA /* UITextView+Extensions.swift in Sources */,

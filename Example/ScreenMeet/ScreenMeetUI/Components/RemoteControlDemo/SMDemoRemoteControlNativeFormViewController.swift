@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import WebKit
 
 enum DemoRows: Int {
     case TextField1 = 0
@@ -16,21 +15,25 @@ enum DemoRows: Int {
     case TextView2
     case Button1
     case Button2
-    case Switch1
+    case Segment1
+    case Segment2
     case Filler1
     case Filler2
+    case Filler3
+    case Filler4
+    case Filler5
+    case Switch1
+    
     case Count
 }
-class SMDemoRemoteControlViewController: UIViewController {
+class SMDemoRemoteControlNativeFormViewController: UIViewController {
 
-    @IBOutlet weak var webView: WKWebView!
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        webView.load(NSURLRequest(url: NSURL(string: "https://forms.gle/fzGxbKXMwrNkysSy8")! as URL) as URLRequest)
-        self.navigationController?.navigationBar.isHidden = true
+        //self.navigationController?.navigationBar.isHidden = true
         tableView.tableFooterView = UIView()
     }
     
@@ -43,9 +46,17 @@ class SMDemoRemoteControlViewController: UIViewController {
     @objc private func switchClicked(_ sender: UISwitch) {
         sender.isOn = !sender.isOn
     }
+    
+    @objc private func segmentClicked(_ segment: UISegmentedControl) {
+        let alert = UIAlertController(title: "", message: "Segment clicked...", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    
 }
 
-extension SMDemoRemoteControlViewController: UITableViewDataSource {
+extension SMDemoRemoteControlNativeFormViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -78,7 +89,13 @@ extension SMDemoRemoteControlViewController: UITableViewDataSource {
             cell = switchCell
         }
         
-        if indexPath.row == DemoRows.Filler1.rawValue || indexPath.row == DemoRows.Filler2.rawValue {
+        if indexPath.row == DemoRows.Segment1.rawValue || indexPath.row == DemoRows.Segment2.rawValue {
+            let segmenthCell = tableView.dequeueReusableCell(withIdentifier: "SMDemoRemoteControlSegmentCell", for: indexPath) as! SMDemoRemoteControlSegmentCell
+            segmenthCell.segmentControl.addTarget(self, action: #selector(segmentClicked), for: .valueChanged)
+            cell = segmenthCell
+        }
+        
+        if indexPath.row == DemoRows.Filler1.rawValue || indexPath.row == DemoRows.Filler2.rawValue || indexPath.row == DemoRows.Filler3.rawValue || indexPath.row == DemoRows.Filler4.rawValue || indexPath.row == DemoRows.Filler5.rawValue {
             cell = tableView.dequeueReusableCell(withIdentifier: "SMDemoRemoteControlFillerCell", for: indexPath) as! SMDemoRemoteControlFillerCell
         }
         

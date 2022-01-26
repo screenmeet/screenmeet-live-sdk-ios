@@ -35,7 +35,7 @@ class SMRequestsChannel: SMChannel {
             let entitlementTypes = (message.data[1] as? [String])?.compactMap { SMEntitlementType(rawValue: $0) } ?? []
             
             for entitlementType in entitlementTypes {
-                ScreenMeet.session.delegate?.onRequestRejected(entitlement: entitlementType)
+                NSLog("[SM] RequestsChannel. Request: \(entitlementType.rawValue) removed")
             }
         }
     }
@@ -49,7 +49,8 @@ class SMRequestsChannel: SMChannel {
             throw SMRequestsChannelError.participantNotExists
         }
         
-        ScreenMeet.session.delegate?.onRequest(entitlement: request.entitlementType, participant: participant, decisionHandler: { granted in
+        let feature = SMFeature(type: request.entitlementType, requestorParticipant: participant)
+        ScreenMeet.session.delegate?.onFeatureRequest(feature, { granted in
             let entitlementsChannel = SMChannelsManager.shared.channel(for: .entitlements) as? SMEntitlementsChannel
             if granted {
                 entitlementsChannel?.grantAccess(for: request.entitlementType, requestorId: request.requestorId)

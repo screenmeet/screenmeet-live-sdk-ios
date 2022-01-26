@@ -28,12 +28,22 @@ class SMMainViewController: UIViewController {
         return chatBubbleView
     }()
     
-    private var testFormViewButton: UIButton = {
-        let testFormViewButton = UIButton()
-        testFormViewButton.setBackgroundImage(UIImage(named: "icon-remote-control"), for: .normal)
-        testFormViewButton.addTarget(self, action:  #selector(demoRemoteControlButtonTapped), for: .touchUpInside)
-        testFormViewButton.translatesAutoresizingMaskIntoConstraints = false
-        return testFormViewButton
+    private var testRemoteControlButton: UIButton = {
+        let testRemoteControlButton = UIButton()
+        testRemoteControlButton.isEnabled = false
+        testRemoteControlButton.setBackgroundImage(UIImage(named: "icon-remote-control"), for: .normal)
+        testRemoteControlButton.addTarget(self, action:  #selector(demoRemoteControlButtonTapped), for: .touchUpInside)
+        testRemoteControlButton.translatesAutoresizingMaskIntoConstraints = false
+        return testRemoteControlButton
+    }()
+    
+    private var remoteControlStatusView: UIView = {
+        let remoteControlStatusView = UIView()
+        remoteControlStatusView.backgroundColor = .red
+        remoteControlStatusView.layer.cornerRadius = 5
+        remoteControlStatusView.layer.masksToBounds = true
+        remoteControlStatusView.translatesAutoresizingMaskIntoConstraints = false
+        return remoteControlStatusView
     }()
     
     private var controlButtonsStackView: SMControlBar = {
@@ -129,7 +139,7 @@ class SMMainViewController: UIViewController {
         layoutReconnectingView()
         
         layoutChatBubble()
-        layoutTestFormViewButton()
+        layoutRemoteControlButton()
         layoutChatMessages()
     }
     
@@ -138,7 +148,7 @@ class SMMainViewController: UIViewController {
         
         updateContent(with: ScreenMeet.getParticipants().first)
         SMUserInterface.manager.hideFloatingUI()
-        navigationController?.navigationBar.isHidden = true
+        //navigationController?.navigationBar.isHidden = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -197,14 +207,20 @@ class SMMainViewController: UIViewController {
         ])
     }
     
-    private func layoutTestFormViewButton() {
-        view.addSubview(testFormViewButton)
+    private func layoutRemoteControlButton() {
+        view.addSubview(testRemoteControlButton)
+        view.addSubview(remoteControlStatusView)
                 
         NSLayoutConstraint.activate([
-            testFormViewButton.bottomAnchor.constraint(equalTo: chatBubbleView.topAnchor, constant: -18),
-            testFormViewButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -14),
-            testFormViewButton.heightAnchor.constraint(equalToConstant: 44),
-            testFormViewButton.widthAnchor.constraint(equalToConstant: 44)
+            testRemoteControlButton.bottomAnchor.constraint(equalTo: chatBubbleView.topAnchor, constant: -18),
+            testRemoteControlButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12),
+            testRemoteControlButton.heightAnchor.constraint(equalToConstant: 44),
+            testRemoteControlButton.widthAnchor.constraint(equalToConstant: 44),
+            
+            remoteControlStatusView.topAnchor.constraint(equalTo: testRemoteControlButton.bottomAnchor, constant: -10),
+            remoteControlStatusView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -22),
+            remoteControlStatusView.heightAnchor.constraint(equalToConstant: 10),
+            remoteControlStatusView.widthAnchor.constraint(equalToConstant: 10)
         ])
     }
     
@@ -286,7 +302,7 @@ class SMMainViewController: UIViewController {
     @objc private func demoRemoteControlButtonTapped() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
 
-        let viewController = storyboard.instantiateViewController(withIdentifier: "SMDemoRemoteControlViewController") as! SMDemoRemoteControlViewController
+        let viewController = storyboard.instantiateViewController(withIdentifier: "SMDemoRemoteControlTabbarViewController")
         navigationController?.pushViewController(viewController, animated: true)
     }
     
@@ -442,6 +458,11 @@ extension SMMainViewController: SMControlBarDelegate {
 extension SMMainViewController {
     func updateMessages() {
         chatMessagesView.updateMessages()
+    }
+    
+    func updateRemoteControlState(_ isEnabled: Bool) {
+        testRemoteControlButton.isEnabled = isEnabled
+        remoteControlStatusView.backgroundColor = isEnabled ? .green : .red
     }
     
     func updateContent(with participant: SMParticipant?) {

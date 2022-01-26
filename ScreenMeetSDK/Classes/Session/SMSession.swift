@@ -79,17 +79,28 @@ public protocol ScreenMeetDelegate: AnyObject {
     /// Occurs when request for entitlement
     ///
     /// - Parameters:
-    ///  - entitlement: Entitlement type associated with request
-    ///  - participant: A participant who requires access
+    ///  - feature: Feature being requested. Containes details about type of the feature and participant who requested it
     ///  - decisionHandler: The callback called after request is accepted or denied
     ///  - granted: The retrieved decision for request.
-    func onRequest(entitlement: SMEntitlementType, participant: SMParticipant, decisionHandler: @escaping (_ granted: Bool) -> Void)
+    func onFeatureRequest(_ feature: SMFeature, _ decisionHandler: @escaping (_ granted: Bool) -> Void)
     
     /// Occurs when previous request is rejected
     ///
     /// - Parameters:
-    ///  - entitlement: Entitlement type associated with request
-    func onRequestRejected(entitlement: SMEntitlementType)
+    ///  - feature: Feature request that has been rejested. Containes details about type of the feature and participant who requested it
+    func onFeatureRequestRejected(feature: SMFeature)
+    
+    /// Occurs when request for entitlement
+    ///
+    /// - Parameters:
+    ///  - feture: Feature that has been stopped
+    func onFeatureStopped(feature: SMFeature)
+    
+    /// Occurs when certain feature (you approved) starts its activity (remtoe control,  laser pointer)
+    ///
+    /// - Parameters:
+    ///  - feature: Feature that has stated
+    func onFeatureStarted(feature: SMFeature)
     
     /// Occures during remote control session. Can be a mouse or a keybaord event
     ///
@@ -193,7 +204,7 @@ class SMSession: NSObject {
     /// Chat
     
     /// Returns all the messages from the chat of the ongoing session.
-    public func getChatMessages() -> [SMTextMessage] {
+    func getChatMessages() -> [SMTextMessage] {
         if let chatChannel = SMChannelsManager.shared.channel(for: .chat) as? SMChatChannel {
             return chatChannel.getMessages()
         }
@@ -202,16 +213,28 @@ class SMSession: NSObject {
     }
     
     /// Send the message into the chat of ongoing session.
-    public func sendTextMessage(_ text: String) {
+    func sendTextMessage(_ text: String) {
         if let chatChannel = SMChannelsManager.shared.channel(for: .chat) as? SMChatChannel {
-            return chatChannel.sendTextMessage(text)
+            chatChannel.sendTextMessage(text)
         }
     }
     
     /// Channels messaging
-    
+
     private func processIncomingChannelMessage(_ message: SMChannelMessage) {
         SMChannelsManager.shared.process(message)
+    }
+    
+    ///Features
+    
+    func activeFeatures() -> [SMFeature] {
+        let channel = SMChannelsManager.shared.channel(for: .entitlements) as! SMEntitlementsChannel
+        return channel.activeFeatures()
+    }
+    
+    public func stopFeature(_ feature: SMFeature) {
+        let channel = SMChannelsManager.shared.channel(for: .entitlements) as! SMEntitlementsChannel
+        return channel.revokeAccess(for: feature.type, requestorId: feature.requestorParticipant.id)
     }
     
 }
@@ -303,6 +326,7 @@ extension SMSession {
                     else {
                         DispatchQueue.main.async {
                             (SMChannelsManager.shared.channel(for: .laserPointer) as? SMLaserPointerChannel)?.stopAllLaserPointerSessions()
+                            (SMChannelsManager.shared.channel(for: .remoteControl) as? SMRemoteControlChannel)?.stopAllRemoteControlSessions()
                             self?.delegate?.onLocalVideoStopped()
                         }
                     }

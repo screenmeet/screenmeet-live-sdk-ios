@@ -20,5 +20,8 @@ class SMDisconnectTransaction: SMTransaction {
         
         let laserPointerChannel = transport.channelsManager.channel(for: .laserPointer) as! SMLaserPointerChannel
         laserPointerChannel.stopAllLaserPointerSessions()
+        
+        let remoteControlChannel = transport.channelsManager.channel(for: .remoteControl) as! SMRemoteControlChannel
+        remoteControlChannel.stopAllRemoteControlSessions()
     }
 }

@@ -50,7 +50,8 @@ class SMLaserPointerChannel: SMChannel {
         lpService.stopAllLaserPointerSessions()
         
         for requestorId in requestorIds {
-            (SMChannelsManager.shared.channel(for: .entitlements) as? SMEntitlementsChannel)?.revokeAccess(for: .laserpointer, requestorId: requestorId)
+            let entitlementsChannel = SMChannelsManager.shared.channel(for: .entitlements) as? SMEntitlementsChannel
+            entitlementsChannel?.revokeAccess(for: .laserpointer, requestorId: requestorId)
         }
         
         requestorIds.removeAll()

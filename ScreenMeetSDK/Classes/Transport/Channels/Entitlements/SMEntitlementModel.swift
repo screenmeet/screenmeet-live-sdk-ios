@@ -7,20 +7,22 @@
 
 import Foundation
 
-struct SMEntitlementModel {
-    
+public struct SMFeature {
+    public let type: SMEntitlementType
+    public let requestorParticipant: SMParticipant
+}
+
+struct SMEntitlement {
     var type: SMEntitlementType
-    
     var requestorId: String
-    
     var grantorId: String
 }
 
-struct SMEntitlementModelWrapper {
-    var entitlements: [SMEntitlementModel]
+struct SMEntitlementsWrapper {
+    var entitlements: [SMEntitlement]
 }
 
-extension SMEntitlementModelWrapper: Decodable {
+extension SMEntitlementsWrapper: Decodable {
     
     private struct CodingKeys: CodingKey {
         
@@ -44,7 +46,7 @@ extension SMEntitlementModelWrapper: Decodable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        var entitlements = [SMEntitlementModel]()
+        var entitlements = [SMEntitlement]()
         
         for requestorKey in container.allKeys {
             let requestorContainer = try container.nestedContainer(keyedBy: CodingKeys.self, forKey: requestorKey)
@@ -56,7 +58,7 @@ extension SMEntitlementModelWrapper: Decodable {
                     let enabled: Bool = try grantorContainer.decode(Bool.self, forKey: entitlementKey)
                     
                     if enabled, let entitlementType = SMEntitlementType(rawValue: entitlementKey.stringValue) {
-                        let entitlement = SMEntitlementModel(type: entitlementType, requestorId: requestorKey.stringValue, grantorId: grantorKey.stringValue)
+                        let entitlement = SMEntitlement(type: entitlementType, requestorId: requestorKey.stringValue, grantorId: grantorKey.stringValue)
                         entitlements.append(entitlement)
                     }
                 }

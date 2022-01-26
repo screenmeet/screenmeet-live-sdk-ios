@@ -12,28 +12,33 @@ class SMEntitlementsChannel: SMChannel {
     
     var name: SMChannelName = .entitlements
     
-    private var entitlements = [SMEntitlementModel]()
+    private var entitlements = [SMEntitlement]()
     
     func processEvent(_ message: SMChannelMessage) {
         switch message.actionType {
         case .added:
             do {
                 let jsonData = try JSONSerialization.data(withJSONObject: message.data[1], options: .prettyPrinted)
-                let entitlementsWrapper = try JSONDecoder().decode(SMEntitlementModelWrapper.self, from: jsonData)
+                let entitlementsObject = try JSONDecoder().decode(SMEntitlementsWrapper.self, from: jsonData)
                 
                 // Track only our entitlements
-                let entitlements = entitlementsWrapper.entitlements.filter { $0.grantorId == transport.webSocketClient.sid }
+                let entitlements = entitlementsObject.entitlements.filter { $0.grantorId == transport.webSocketClient.sid }
                 
                 self.entitlements.append(contentsOf: entitlements)
                 
                 for entitlement in entitlements {
                     switch entitlement.type {
                     case .laserpointer:
-                        let laserPointerChannel = SMChannelsManager.shared.channel(for: .laserPointer) as? SMLaserPointerChannel
+                        let laserPointerChannel = transport.channelsManager.channel(for: .laserPointer) as? SMLaserPointerChannel
                         try laserPointerChannel?.startLaserPointerSession(for: entitlement.requestorId)
                     case .remotecontrol:
-                           let remoteControlChannel = SMChannelsManager.shared.channel(for: .remoteControl) as? SMRemoteControlChannel
-                           try remoteControlChannel?.startRemoteControlSession(for: entitlement.requestorId)
+                        let remoteControlChannel = transport.channelsManager.channel(for: .remoteControl) as? SMRemoteControlChannel
+                        try remoteControlChannel?.startRemoteControlSession(for: entitlement.requestorId)
+                    }
+                    
+                    if let participant = ScreenMeet.getParticipants().first(where: { $0.id == entitlement.requestorId }) {
+                        let feature = SMFeature(type: entitlement.type, requestorParticipant: participant)
+                        ScreenMeet.delegate?.onFeatureStarted(feature: feature)
                     }
                 }
             } catch {
@@ -47,12 +52,17 @@ class SMEntitlementsChannel: SMChannel {
             for entitlement in entitlements {
                 switch entitlement.type {
                 case .laserpointer:
-                    let laserPointerChannel = SMChannelsManager.shared.channel(for: .laserPointer) as? SMLaserPointerChannel
+                    let laserPointerChannel = transport.channelsManager.channel(for: .laserPointer) as? SMLaserPointerChannel
                     laserPointerChannel?.stopLaserPointerSession(for: entitlement.requestorId)
                 
                 case .remotecontrol:
-                    let remoteControlChannel = SMChannelsManager.shared.channel(for: .remoteControl) as? SMRemoteControlChannel
-                    remoteControlChannel?.stopRemoteControlSession(for: entitlement.requestorId)
+                    let remoteControlChannel = transport.channelsManager.channel(for: .remoteControl) as? SMRemoteControlChannel
+                    remoteControlChannel?.stopAllRemoteControlSessions()
+                }
+                
+                if let participant = ScreenMeet.getParticipants().first(where: { $0.id == entitlement.requestorId }) {
+                    let feature = SMFeature(type: entitlement.type, requestorParticipant: participant)
+                    ScreenMeet.delegate?.onFeatureStopped(feature: feature)
                 }
             }
             
@@ -62,6 +72,17 @@ class SMEntitlementsChannel: SMChannel {
     
     func buildState(from initialPayload: [String : Any]) {
         NSLog("[SM] EntitlementsChannel \(#function) is not supported")
+    }
+    
+    func activeFeatures() -> [SMFeature] {
+        var features = [SMFeature]()
+        for entitlement in entitlements {
+            if let participant = ScreenMeet.getParticipants().first(where: { $0.id == entitlement.requestorId }) {
+                features.append(SMFeature(type: entitlement.type, requestorParticipant: participant))
+            }
+        }
+        
+        return features
     }
     
     func grantAccess(for entitlementType: SMEntitlementType, requestorId: String) {
