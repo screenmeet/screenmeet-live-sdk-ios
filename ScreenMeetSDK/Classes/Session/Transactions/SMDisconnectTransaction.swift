@@ -10,10 +10,11 @@ import UIKit
 class SMDisconnectTransaction: SMTransaction {
     
     func run() {
-        transport.webSocketClient.disconnect(.leftCall)
         
         let mediasoupChannel = transport.channelsManager.channel(for: .mediasoup) as! SMMediasoupChannel
-        mediasoupChannel.disconnect()
+        mediasoupChannel.disconnect {
+            self.transport.webSocketClient.disconnect(.leftCall)
+        }
         
         let participantsChannel = transport.channelsManager.channel(for: .participants) as! SMParticipantsChannel
         participantsChannel.removeAllParticipants()
@@ -23,5 +24,6 @@ class SMDisconnectTransaction: SMTransaction {
         
         let remoteControlChannel = transport.channelsManager.channel(for: .remoteControl) as! SMRemoteControlChannel
         remoteControlChannel.stopAllRemoteControlSessions()
+        
     }
 }

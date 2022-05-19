@@ -13,6 +13,7 @@ class SMRemoteControlChannel: SMChannel {
     var name: SMChannelName = .remoteControl
     
     func buildState(from initialPayload: [String : Any]) {
+        NSLog("SMRemoteControlChannel buildState")
     }
     
     func processEvent(_ message: SMChannelMessage) {

@@ -245,8 +245,7 @@ class SMWebSocketClient: NSObject {
     }
     
     @objc private func disconnectOnWaitTimeout() {
-        disconnect(.reconnectWaitTimeExpired)
-        
+        //disconnect(.reconnectWaitTimeExpired)
         childConnectCompletion?(nil, nil, SMError(code: .knockWaitTimeForEntryExpiredError, message: "Waiting time to reconnect this room has expired. Hanging up"))
     }
 }

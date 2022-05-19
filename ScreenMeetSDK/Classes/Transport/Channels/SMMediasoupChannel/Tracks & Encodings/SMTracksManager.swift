@@ -9,7 +9,7 @@ import UIKit
 import WebRTC
 
 class SMTracksManager: NSObject {
-    var videoSourceDevice: AVCaptureDevice?    
+    var videoSourceDevice: AVCaptureDevice?
     private var mediaStream: RTCMediaStream!
     private var videoSource: RTCVideoSource!
     private var videoTrack: RTCVideoTrack!
@@ -27,7 +27,7 @@ class SMTracksManager: NSObject {
         videoSource = factory.videoSource()
         
         videoTrack = factory.videoTrack(with: videoSource, trackId: "ARDAMSv0")
-        self.mediaStream.addVideoTrack(videoTrack)        
+        self.mediaStream.addVideoTrack(videoTrack)
         return videoTrack
     }
     
@@ -51,17 +51,6 @@ class SMTracksManager: NSObject {
             print("Video capturer already started")
             completionHandler?(nil)
             return
-        }
-        
-        if videoSourceDevice == nil {
-            /* screen capture video source*/
-            videoSource.adaptOutputFormat(toWidth: Int32(Int(UIScreen.main.bounds.size.width*UIScreen.main.scale)), height: Int32(UIScreen.main.bounds.size.height*UIScreen.main.scale), fps: 30)
-        }
-        else {
-            let trackDimensions = CMVideoFormatDescriptionGetPresentationDimensions(videoSourceDevice!.activeFormat.formatDescription, usePixelAspectRatio: true, useCleanAperture: true)
-            videoSource.adaptOutputFormat(toWidth: Int32(trackDimensions.width),
-                                          height: Int32(trackDimensions.height),
-                                          fps: 30)
         }
         
         videoCapturer = VideoCapturerFactory.videoCapturer(videoSourceDevice, delegate: self)
@@ -89,14 +78,12 @@ class SMTracksManager: NSObject {
 
     func stopCapturer(completionHandler: SMCapturerOperationCompletion? = nil) {
         if (videoCapturer == nil) {
-            //TODO
-            print("Video capturer already stoped")
+            // Video capturer already stopped
             completionHandler?(nil)
             return
         }
         
         videoCapturer.stopCapture(completionHandler)
-        videoCapturer = nil
     }
     
     func cleanupVideo() {
@@ -107,6 +94,11 @@ class SMTracksManager: NSObject {
         }
        
         self.videoCapturer = nil
+        if (self.videoTrack != nil) {
+            if (self.mediaStream != nil)  {
+                self.mediaStream.removeVideoTrack(videoTrack)
+            }
+        }
         self.mediaStream = nil
         self.videoTrack = nil
         self.videoSource = nil
@@ -114,6 +106,10 @@ class SMTracksManager: NSObject {
     
     func cleanupAudio() {
         if (self.audioTrack != nil) {
+            if (self.mediaStream != nil)  {
+                self.mediaStream.removeAudioTrack(audioTrack)
+            }
+            
             self.audioTrack.isEnabled = false
             self.audioTrack = nil
         }
@@ -122,24 +118,13 @@ class SMTracksManager: NSObject {
     func changeCapturer(_ videoSourceDevice: AVCaptureDevice!, _ completionHandler: SMCapturerOperationCompletion? = nil) {
         if (videoCapturer != nil) {
             videoCapturer.delegate = nil
-            videoCapturer.stopCapture({ [self] error in
+            videoCapturer.stopCapture({ [weak self] error in
                 guard error == nil else {
                     completionHandler?(error)
                     return
                 }
                 
-                if videoSourceDevice == nil {
-                    /* screen capture video source*/
-                    videoSource.adaptOutputFormat(toWidth: Int32(Int(UIScreen.main.bounds.size.width)), height: Int32(UIScreen.main.bounds.size.height), fps: 30)
-                }
-                else {
-                    let trackDimensions = CMVideoFormatDescriptionGetPresentationDimensions(videoSourceDevice!.activeFormat.formatDescription, usePixelAspectRatio: true, useCleanAperture: true)
-                    self.videoSource.adaptOutputFormat(toWidth: Int32(trackDimensions.height),
-                                                       height: Int32(trackDimensions.width),
-                                                       fps: 30)
-                }
-                
-                let newCapturer = VideoCapturerFactory.videoCapturer(videoSourceDevice, delegate: self)
+                let newCapturer = VideoCapturerFactory.videoCapturer(videoSourceDevice, delegate: self!)
                 newCapturer.delegate = nil
                 newCapturer.startCapture({error in
                     guard error == nil else {
@@ -152,10 +137,9 @@ class SMTracksManager: NSObject {
                     }
                     
                     newCapturer.delegate = self
-                    
                     completionHandler?(error)
-                    self.videoCapturer = newCapturer
                 })
+                self?.videoCapturer = newCapturer
             })
         } else {
             let newCapturer = VideoCapturerFactory.videoCapturer(videoSourceDevice, delegate: self)
@@ -176,6 +160,53 @@ class SMTracksManager: NSObject {
         }
         return nil
     }
+    
+    func createImageTransferHandler() -> SMImageHandler {
+        
+        videoSourceDevice = nil
+        videoCapturer = VideoCapturerFactory.fakeCapturer()
+                                      
+        let handler = SMImageHandler()
+        handler.imageHandler = { [unowned self] image in
+            let rotation = RTCVideoRotation._0
+            let timeStampNs: Int64 = Int64(Date().timeIntervalSince1970 * 1000000000)
+            
+            if let pixelBuffer =  buffer(from:(image)) {
+                let rtcpixelBuffer = RTCCVPixelBuffer(pixelBuffer: pixelBuffer)
+                let frame = RTCVideoFrame(buffer:rtcpixelBuffer, rotation: rotation, timeStampNs: timeStampNs)
+                if videoCapturer != nil {
+                    self.capturer(videoCapturer, didCapture: frame)
+                }
+            }
+            
+        }
+        return handler
+    }
+    
+    private func buffer(from image: UIImage) -> CVPixelBuffer? {
+        let attrs = [kCVPixelBufferCGImageCompatibilityKey: kCFBooleanTrue, kCVPixelBufferCGBitmapContextCompatibilityKey: kCFBooleanTrue] as CFDictionary
+        var pixelBuffer : CVPixelBuffer?
+        let status = CVPixelBufferCreate(kCFAllocatorDefault, Int(image.size.width), Int(image.size.height), kCVPixelFormatType_32ARGB, attrs, &pixelBuffer)
+        guard (status == kCVReturnSuccess) else {
+          return nil
+        }
+
+        CVPixelBufferLockBaseAddress(pixelBuffer!, CVPixelBufferLockFlags(rawValue: 0))
+        let pixelData = CVPixelBufferGetBaseAddress(pixelBuffer!)
+
+        let rgbColorSpace = CGColorSpaceCreateDeviceRGB()
+        let context = CGContext(data: pixelData, width: Int(image.size.width), height: Int(image.size.height), bitsPerComponent: 8, bytesPerRow: CVPixelBufferGetBytesPerRow(pixelBuffer!), space: rgbColorSpace, bitmapInfo: CGImageAlphaInfo.noneSkipFirst.rawValue)
+
+        context?.translateBy(x: 0, y: image.size.height)
+        context?.scaleBy(x: 1.0, y: -1.0)
+
+        UIGraphicsPushContext(context!)
+        image.draw(in: CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height))
+        UIGraphicsPopContext()
+        CVPixelBufferUnlockBaseAddress(pixelBuffer!, CVPixelBufferLockFlags(rawValue: 0))
+
+        return pixelBuffer
+      }
 }
 
 extension SMTracksManager: RTCVideoCapturerDelegate {

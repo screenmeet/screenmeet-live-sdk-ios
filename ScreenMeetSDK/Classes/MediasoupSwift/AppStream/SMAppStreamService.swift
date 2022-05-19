@@ -8,6 +8,7 @@
 import Foundation
 import WebKit
 import ReplayKit
+import WebRTC
 
 enum SMAppStreamServiceError: Error {
     case startCaptureFailed(error: Error)
@@ -37,14 +38,25 @@ public protocol SMAppStreamServiceProtocol {
     func unsetConfidential(rect: CGRect)
 }
 
-class SMAppStreamService {
+class SMAppStreamService: NSObject {
     
     private var frameProcessor = SMFrameProcessor()
     
-    private let screenRecorder = RPScreenRecorder.shared()
+    let screenRecorder = RPScreenRecorder.shared()
     
     func startStream(_ startHandler: SMCapturerOperationCompletion?, completion: @escaping (Result<CVPixelBuffer, SMAppStreamServiceError>) -> Void) {
         guard !screenRecorder.isRecording else { return }
+        screenRecorder.delegate = self
+        screenRecorder.isMicrophoneEnabled = false
+        
+        RTCAudioSession.sharedInstance().lockForConfiguration()
+            do {
+                try RTCAudioSession.sharedInstance().setCategory(AVAudioSession.Category.record.rawValue)
+                try AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)
+            } catch let error {
+                debugPrint("Error changeing AVAudioSession category: \(error)")
+            }
+        RTCAudioSession.sharedInstance().unlockForConfiguration()
         
         screenRecorder.startCapture(handler: { [weak self] (sampleBuffer, sampleBufferType, error) in
             guard sampleBufferType == .video else { return }
@@ -57,6 +69,15 @@ class SMAppStreamService {
                 completion(.success(pixelBuffer))
             }
         }, completionHandler: { (error) in
+            
+            RTCAudioSession.sharedInstance().lockForConfiguration()
+                do {
+                    try RTCAudioSession.sharedInstance().setCategory(AVAudioSession.Category.multiRoute.rawValue)
+                } catch let error {
+                    debugPrint("Error changeing AVAudioSession category: \(error)")
+                }
+            RTCAudioSession.sharedInstance().unlockForConfiguration()
+            
             if error != nil {
                 completion(.failure(.startCaptureFailed(error: error!)))
             }
@@ -113,4 +134,14 @@ extension SMAppStreamService: SMAppStreamServiceProtocol {
     func unsetConfidential(rect: CGRect) {
         frameProcessor.confidentialRects.removeAll(where: { $0 == rect || $0.isEmpty })
     }
+}
+
+extension SMAppStreamService: RPScreenRecorderDelegate {
+    func screenRecorder(_ screenRecorder: RPScreenRecorder, didStopRecordingWith previewViewController: RPPreviewViewController?, error: Error?) {
+        NSLog("Error: " + error!.localizedDescription)
+    }
+    
+    func screenRecorderDidChangeAvailability(_ screenRecorder: RPScreenRecorder) {
+    }
+    
 }

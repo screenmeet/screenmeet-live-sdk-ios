@@ -43,59 +43,31 @@ class ScreenVideoCapturer: RTCVideoCapturer, SMVideoCapturer, AVCaptureVideoData
                         case .stopCaptureFailed:
                             NSLog("Stop capture error ocurreced when starting capturing")
                     }
-                    
                 }
             }
         })
     }
     
-    public func sendPixelBufferToWebRTC(pixelBuffer: CVImageBuffer) {
-        let rotation = RTCVideoRotation._0 // Default rotation
-        let rtcPixelBuffer = RTCCVPixelBuffer(pixelBuffer: pixelBuffer)
-        let timeStampNs: Int64 = Int64(Date().timeIntervalSince1970 * 1000000000)
-        let videoFrame = RTCVideoFrame(buffer: rtcPixelBuffer, rotation: rotation, timeStampNs: timeStampNs)
-        delegate?.capturer(self, didCapture: videoFrame)
-    }
-    
-    public func sendImageToWebRTC(image: CGImage) {
-        if (self.delegate != nil) {
-            let _rotation = RTCVideoRotation._0 // No rotation on Mac.
-            let _pixelBuffer = image.newPixelBufferFromCGImage()
-            let _rtcPixelBuffer = RTCCVPixelBuffer(pixelBuffer: _pixelBuffer)
-            let timeStampNs: Int64 = Int64(Date().timeIntervalSince1970 * 1000000000)
-                let _videoFrame = RTCVideoFrame(buffer:_rtcPixelBuffer, rotation:_rotation, timeStampNs:timeStampNs)
-                self.delegate!.capturer(self, didCapture:_videoFrame)
-        }
-    }
-    
     public func setupCaptureSession(captureSession: AVCaptureSession) {
         let videoDataOutput = self.setupVideoDataOutput();
-      // Add the output.
         if (!captureSession.canAddOutput(videoDataOutput)) {
-            //TODO add logs
             print("WARNING: Video data output unsupported.");
             //return false
         }
         captureSession.addOutput(videoDataOutput)
-
-      //return true
     }
     
     public func setupVideoDataOutput() -> AVCaptureVideoDataOutput {
         let videoDataOutput = AVCaptureVideoDataOutput()
 
-        //let supportedPixelFormats = RTCCVPixelBuffer.supportedPixelFormats()
-        //var availablePixelFormats = videoDataOutput.availableVideoPixelFormatTypes
-        //availablePixelFormats. intersectSet:supportedPixelFormats
-        //let pixelFormat = availablePixelFormats.first;
-        
         videoDataOutput.alwaysDiscardsLateVideoFrames = true
         videoDataOutput.setSampleBufferDelegate(self, queue: self.frameQueue)
-        return videoDataOutput //_videoDataOutput = videoDataOutput;
+        return videoDataOutput
     }
     
     public func reconfigureCaptureSessionInput() {
         self.captureSession.beginConfiguration()
+        captureSession.usesApplicationAudioSession = false
         self.captureSession.commitConfiguration()
     }
     

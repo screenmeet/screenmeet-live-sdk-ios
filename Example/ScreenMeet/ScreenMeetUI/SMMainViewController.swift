@@ -148,7 +148,7 @@ class SMMainViewController: UIViewController {
         
         updateContent(with: ScreenMeet.getParticipants().first)
         SMUserInterface.manager.hideFloatingUI()
-        //navigationController?.navigationBar.isHidden = true
+        navigationController?.navigationBar.isHidden = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -275,7 +275,7 @@ class SMMainViewController: UIViewController {
     }
     
     private func layoutReconnectingView() {
-        centerVideoView.addSubview(reconnectingView)
+        view.addSubview(reconnectingView)
         
         NSLayoutConstraint.activate([
             reconnectingView.centerXAnchor.constraint(equalTo: centerVideoView.centerXAnchor, constant: 0),

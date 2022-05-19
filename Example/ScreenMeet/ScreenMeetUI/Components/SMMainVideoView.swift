@@ -158,7 +158,9 @@ class SMMainVideoView: UIView {
             rtcVideoView.widthAnchor.constraint(equalTo: widthAnchor),
             rtcVideoView.heightAnchor.constraint(equalTo: heightAnchor)])
         
-        rtcVideoView.videoContentMode = .scaleAspectFit
+        #if arch(arm64)
+            rtcVideoView.videoContentMode = .scaleAspectFit
+        #endif
     }
 }
 

@@ -25,4 +25,10 @@ class VideoCapturerFactory {
         cameraCapturer.device = videoSourceDevice
         return cameraCapturer
     }
+    
+    static func fakeCapturer() -> SMVideoCapturer {
+        let capturer = FakeCapturer()
+        return capturer
+    }
+    
 }

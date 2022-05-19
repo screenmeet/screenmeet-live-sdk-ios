@@ -26,6 +26,6 @@ extension SMGetChallengeRequest: HTTPGetRequest {
     }
     
     var relativePath: String {
-        return "/api/v3/support"
+        return "/api/v3/support/challenge"
     }
 }

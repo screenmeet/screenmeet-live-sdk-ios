@@ -21,11 +21,11 @@ class SMLogCapturerChangeTransaction: SMTransaction {
     func run() {
         if let device = device {
             let event = SMLogEvent(type: "change-capturer", message: "Capturer changed to " + device.localizedName)
-            transport.webSocketClient.logInfo(event)
+            //transport.webSocketClient.logInfo(event)
         }
         else {
             let event = SMLogEvent(type: "change-capturer", message: "Capturer changed to default one")
-            transport.webSocketClient.logInfo(event)
+            //transport.webSocketClient.logInfo(event)
         }
     }
     

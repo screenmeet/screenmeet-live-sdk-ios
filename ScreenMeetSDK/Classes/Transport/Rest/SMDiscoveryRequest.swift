@@ -14,10 +14,7 @@ struct SMDiscoveryRequest: SMRequest {
 
 extension SMDiscoveryRequest: HTTPPostRequest {
     var dataForHttpBody: Data? {
-        var json: [String: Any] = ["code": code, /*"instance_id": "tk-win-1"*/ "server_tag": "beta"]
-        if let oKey = ScreenMeet.config.organizationKey {
-            json["organisationKey"] = oKey
-        }
+        let json: [String: Any] = ["code": code, /*"instance_id": "tk-win-1"*/ "server_tag": "beta"]
         
         let bodyData = try? JSONSerialization.data(withJSONObject: json)
         return bodyData
@@ -32,7 +29,7 @@ extension SMDiscoveryRequest: HTTPPostRequest {
     }
     
     var additionalHeaders: [String: String]? {
-        return nil
+        return ["mobile-api-key" : ScreenMeet.config.organizationKey]
     }
     
     var relativePath: String {

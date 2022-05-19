@@ -9,8 +9,15 @@ import UIKit
 
 /// Generic class represnting remote control event (triggered by controlling participant)
 public class SMRemoteControlEvent {
-    var from: String
-    var to: String
+    /**
+        id of the sender  of the event
+    */
+    public private(set) var from: String
+    
+    /**
+        id of the receiver  of the event
+    */
+    public private(set) var to: String
     
     init?(_ socketData: [String: Any]) {
         if let from = socketData["from"] as? String { self.from = from} else {return nil}

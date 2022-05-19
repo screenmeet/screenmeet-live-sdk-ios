@@ -226,6 +226,9 @@ class SMRemoteControlService: NSObject {
             control.sendActions(for: .touchUpInside)
         }
         else if view.isKind(of: WKWebView.self) {
+            currentTextView = nil
+            currentTextField = nil
+            
             let webView = (view as! WKWebView)
             
             if let rootViewController = ScreenMeet.session.delegate?.rootViewController {

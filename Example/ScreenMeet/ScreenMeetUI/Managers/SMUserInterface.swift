@@ -133,16 +133,21 @@ extension SMUserInterface: ScreenMeetDelegate {
     }
     
     func onConnectionStateChanged(_ newState: SMConnectionState) {
+        var shouldPreventScreenSleep = false
+        
         NSLog("[ScreenMeet] Connection state: \(newState)")
         switch newState {
         case .connecting:
             print("waiting for connecting to call ...")
         case .connected:
             smMainVC.updateMessages()
+            shouldPreventScreenSleep = true
             print("joined the call")
         case .reconnecting:
+            shouldPreventScreenSleep = true
             print("trying to restore connection to call ...")
         case .waitingEntrancePermission:
+            shouldPreventScreenSleep = true
             print("waiting for the host to let me in (knock feature) ...")
         case .disconnected(.callNotStarted):
             print("Call disconnected. Call is not started")
@@ -152,7 +157,6 @@ extension SMUserInterface: ScreenMeetDelegate {
             smMainVC.disconnect()
         case .disconnected(.leftCall):
             print("Call disconnected. Client left call")
-            smMainVC.disconnect()
         case .disconnected(.networkError):
             print("Call disconnected. Network error")
             smMainVC.disconnect()
@@ -167,6 +171,7 @@ extension SMUserInterface: ScreenMeetDelegate {
             smMainVC.disconnect()
         }
         
+        UIApplication.shared.isIdleTimerDisabled = shouldPreventScreenSleep
         updateContent()
     }
     
@@ -236,7 +241,7 @@ extension SMUserInterface {
         DispatchQueue.main.async { [unowned self] in
             guard let rootVC = self.rootController() else { return }
             
-            if rootVC.presentedViewController != self.smMainVC {
+            if rootVC.presentedViewController == nil {
                 rootVC.definesPresentationContext = true
                 let navigationViewController = UINavigationController(rootViewController: self.smMainVC)
                 rootVC.present(navigationViewController, animated: true, completion: completion)

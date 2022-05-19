@@ -33,7 +33,7 @@ class SMDemoRemoteControlNativeFormViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //self.navigationController?.navigationBar.isHidden = true
+        self.navigationController?.navigationBar.isHidden = false
         tableView.tableFooterView = UIView()
     }
     

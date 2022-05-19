@@ -214,7 +214,9 @@ class SMSmallVideoView: UIView {
         bringSubviewToFront(bottomView)
         bringSubviewToFront(stackView)
         
-        rtcVideoView.videoContentMode = .scaleAspectFill
+        #if arch(arm64)
+            rtcVideoView.videoContentMode = .scaleAspectFill
+        #endif
     }
 }
 

@@ -71,7 +71,7 @@ class MainViewController: UIViewController {
     }
     
     @objc func screenMeetUIWillDisappear() {
-        ScreenMeet.getAppStreamService().setConfidential(view: connectButton)
+       
     }
     
     @IBAction func connectButtonTapped(_ sender: UIButton) {
@@ -131,8 +131,12 @@ class MainViewController: UIViewController {
                             self?.codeTextField.isHidden = true
                             self?.codeTextField.isEnabled = true
                             self?.connectButton.isEnabled = true
-                            self?.connectButton.setTitle("Present ScreenMeet UI", for: .normal)
-                            self?.connectButton.setTitleColor(.white, for: .normal)
+                            
+                            // Stop animation is not over here and it not allows to change button title
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                self?.connectButton.setTitle("Present ScreenMeet UI", for: .normal)
+                                self?.connectButton.setTitleColor(.white, for: .normal)
+                            }
                         }
                     })
                 }
