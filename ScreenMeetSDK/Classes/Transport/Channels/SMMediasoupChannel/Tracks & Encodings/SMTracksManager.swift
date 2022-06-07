@@ -10,6 +10,7 @@ import WebRTC
 
 class SMTracksManager: NSObject {
     var videoSourceDevice: AVCaptureDevice?
+    var shouldUseCustomImageSessionForVideoSharing = false
     private var mediaStream: RTCMediaStream!
     private var videoSource: RTCVideoSource!
     private var videoTrack: RTCVideoTrack!
@@ -47,32 +48,37 @@ class SMTracksManager: NSObject {
     
     func startCapturer(_ videoSourceDevice: AVCaptureDevice?, _ completionHandler: SMCapturerOperationCompletion? = nil) {
         if (videoCapturer != nil) {
-            //TODO
-            print("Video capturer already started")
+            //Video capturer already started
             completionHandler?(nil)
             return
         }
         
-        videoCapturer = VideoCapturerFactory.videoCapturer(videoSourceDevice, delegate: self)
-        videoCapturer.delegate = nil
-        videoCapturer.startCapture() { [weak self] error in
-            if let error = error {
-                completionHandler?(error)
-            }
-            else {
-                if #available(iOS 13.0, *) {
-                    let captureSessionConnections = self?.videoCapturer.getCaptureSession().connections
-                    captureSessionConnections?.first?.videoOrientation = .portrait
-                    
-                    completionHandler?(nil)
-                    self?.videoCapturer.delegate = self
-                    
+        if shouldUseCustomImageSessionForVideoSharing {
+            self.videoSourceDevice = nil
+            videoCapturer = VideoCapturerFactory.fakeCapturer(delegate: self)
+            completionHandler?(nil)
+        }
+        else {
+            videoCapturer = VideoCapturerFactory.videoCapturer(videoSourceDevice, delegate: self)
+            videoCapturer.delegate = nil
+            videoCapturer.startCapture() { [weak self] error in
+                if let error = error {
+                    completionHandler?(error)
                 }
                 else {
-                    completionHandler?(SMError(code: .capturerInternalError, message: "Unsupported iOS version"))
+                    if #available(iOS 13.0, *) {
+                        let captureSessionConnections = self?.videoCapturer?.getCaptureSession().connections
+                        captureSessionConnections?.first?.videoOrientation = .portrait
+                        
+                        completionHandler?(nil)
+                        self?.videoCapturer?.delegate = self
+                        
+                    }
+                    else {
+                        completionHandler?(SMError(code: .capturerInternalError, message: "Unsupported iOS version"))
+                    }
                 }
             }
-            
         }
     }
 
@@ -115,7 +121,7 @@ class SMTracksManager: NSObject {
         }
     }
 
-    func changeCapturer(_ videoSourceDevice: AVCaptureDevice!, _ completionHandler: SMCapturerOperationCompletion? = nil) {
+    func changeCapturer(_ videoSourceDevice: AVCaptureDevice!, _ isImageTransfer: Bool, _ completionHandler: SMCapturerOperationCompletion? = nil) {
         if (videoCapturer != nil) {
             videoCapturer.delegate = nil
             videoCapturer.stopCapture({ [weak self] error in
@@ -123,8 +129,15 @@ class SMTracksManager: NSObject {
                     completionHandler?(error)
                     return
                 }
+                var newCapturer: SMVideoCapturer!
                 
-                let newCapturer = VideoCapturerFactory.videoCapturer(videoSourceDevice, delegate: self!)
+                if isImageTransfer {
+                    newCapturer = VideoCapturerFactory.fakeCapturer(delegate: self!)
+                }
+                else {
+                    newCapturer = VideoCapturerFactory.videoCapturer(videoSourceDevice, delegate: self!)
+                }
+               
                 newCapturer.delegate = nil
                 newCapturer.startCapture({error in
                     guard error == nil else {
@@ -139,6 +152,8 @@ class SMTracksManager: NSObject {
                     newCapturer.delegate = self
                     completionHandler?(error)
                 })
+                
+                
                 self?.videoCapturer = newCapturer
             })
         } else {
@@ -162,57 +177,21 @@ class SMTracksManager: NSObject {
     }
     
     func createImageTransferHandler() -> SMImageHandler {
-        
-        videoSourceDevice = nil
-        videoCapturer = VideoCapturerFactory.fakeCapturer()
+        shouldUseCustomImageSessionForVideoSharing = true
                                       
-        let handler = SMImageHandler()
-        handler.imageHandler = { [unowned self] image in
-            let rotation = RTCVideoRotation._0
-            let timeStampNs: Int64 = Int64(Date().timeIntervalSince1970 * 1000000000)
-            
-            if let pixelBuffer =  buffer(from:(image)) {
-                let rtcpixelBuffer = RTCCVPixelBuffer(pixelBuffer: pixelBuffer)
-                let frame = RTCVideoFrame(buffer:rtcpixelBuffer, rotation: rotation, timeStampNs: timeStampNs)
-                if videoCapturer != nil {
-                    self.capturer(videoCapturer, didCapture: frame)
-                }
-            }
-            
+        let imageHandler = SMImageHandler()
+        imageHandler.imageHandler = { image in
+            (self.videoCapturer as? FakeCapturer)?.sendImage(image)
         }
-        return handler
+        
+        return imageHandler
     }
-    
-    private func buffer(from image: UIImage) -> CVPixelBuffer? {
-        let attrs = [kCVPixelBufferCGImageCompatibilityKey: kCFBooleanTrue, kCVPixelBufferCGBitmapContextCompatibilityKey: kCFBooleanTrue] as CFDictionary
-        var pixelBuffer : CVPixelBuffer?
-        let status = CVPixelBufferCreate(kCFAllocatorDefault, Int(image.size.width), Int(image.size.height), kCVPixelFormatType_32ARGB, attrs, &pixelBuffer)
-        guard (status == kCVReturnSuccess) else {
-          return nil
-        }
-
-        CVPixelBufferLockBaseAddress(pixelBuffer!, CVPixelBufferLockFlags(rawValue: 0))
-        let pixelData = CVPixelBufferGetBaseAddress(pixelBuffer!)
-
-        let rgbColorSpace = CGColorSpaceCreateDeviceRGB()
-        let context = CGContext(data: pixelData, width: Int(image.size.width), height: Int(image.size.height), bitsPerComponent: 8, bytesPerRow: CVPixelBufferGetBytesPerRow(pixelBuffer!), space: rgbColorSpace, bitmapInfo: CGImageAlphaInfo.noneSkipFirst.rawValue)
-
-        context?.translateBy(x: 0, y: image.size.height)
-        context?.scaleBy(x: 1.0, y: -1.0)
-
-        UIGraphicsPushContext(context!)
-        image.draw(in: CGRect(x: 0, y: 0, width: image.size.width, height: image.size.height))
-        UIGraphicsPopContext()
-        CVPixelBufferUnlockBaseAddress(pixelBuffer!, CVPixelBufferLockFlags(rawValue: 0))
-
-        return pixelBuffer
-      }
 }
 
 extension SMTracksManager: RTCVideoCapturerDelegate {
     func capturer(_ capturer: RTCVideoCapturer, didCapture frame: RTCVideoFrame) {
         DispatchQueue.main.async {
-            UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
+            //UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
         }
         self.videoSource?.capturer(capturer, didCapture: frame)
     }

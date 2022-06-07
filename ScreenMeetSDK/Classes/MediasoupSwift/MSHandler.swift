@@ -332,26 +332,20 @@ class MSSendHandler: MSHandler {
                                    codecOptions)
                    
                     let answer = remoteSdp.getSdp()
-                    //print("[MS] Calling pc->SetRemoteDescription(): %s", answer.utf8)
-                    
-                   // DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { [self] in
-                        pc.setRemoteDescription(.answer, answer) { error in
-                            if let error = error {
-                                completion(nil, MSError(type: .peerConnection, message: error.message))
+                    pc.setRemoteDescription(.answer, answer) { [unowned self] error in
+                        if let error = error {
+                            completion(nil, MSError(type: .peerConnection, message: error.message))
 
-                            }
-                            else {
-                                // Store in the map.
-                                mapMidTransceiver[localId] = newTransceiver
-                                let sendData = MSSendData(localId: localId,
-                                                          rtpSender: newTransceiver.sender,
-                                                          rtpParameters: sendingRtpParameters)
-                                completion(sendData, nil)
-                            }
                         }
-                    //}
-                    
-                    
+                        else {
+                            // Store in the map.
+                            mapMidTransceiver[localId] = newTransceiver
+                            let sendData = MSSendData(localId: localId,
+                                                      rtpSender: newTransceiver.sender,
+                                                      rtpParameters: sendingRtpParameters)
+                            completion(sendData, nil)
+                        }
+                    }
                 }
             }
         })
@@ -388,9 +382,7 @@ class MSSendHandler: MSHandler {
                 return
             }
             else {
-                //NSLog("[MS] calling pc.setLocalDescription(): " + offer!)
-
-                pc.setLocalDescription(.offer, offer!) { error in
+                pc.setLocalDescription(.offer, offer!) { [unowned self] error in
                     if let error = error {
                         NSLog("[MS] Handler.stopSending setLocalDescription issues: " + error.message)
                         return
@@ -398,7 +390,6 @@ class MSSendHandler: MSHandler {
                     else {
                         let answer = remoteSdp.getSdp()
 
-                        //NSLog("[MS] calling pc.setRemoteDescription(): " + answer)
                         pc.setRemoteDescription(.answer, answer) { error in
                             if let error = error {
                                 NSLog("[MS] pc.setRemoteDescription issue: " + error.message)

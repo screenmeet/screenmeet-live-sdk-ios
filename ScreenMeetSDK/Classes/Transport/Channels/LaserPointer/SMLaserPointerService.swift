@@ -90,6 +90,8 @@ final class SMLaserPointer {
         self.position.x = max(0, min(position.x, UIScreen.main.bounds.width))
         self.position.y = max(0, min(position.y, UIScreen.main.bounds.height))
         imageView.isHidden = false
+        
+        reload()
     }
     
     func updateTap() {
@@ -108,22 +110,12 @@ final class SMLaserPointer {
 }
 
 final class SMLaserPointerService {
-    
-    private var timer: Timer? = nil
-    
+        
     private var laserPointers = [SMLaserPointer]()
     
     private var colors: Set<UIColor> = [.red, .blue, .green, .yellow, .purple, .brown, .cyan, .magenta, .orange]
     
     func startLaserPointerSession(for requestorId: String) throws {
-        if timer == nil {
-            timer = Timer.scheduledTimer(withTimeInterval: 0.03, repeats: true) { [unowned self] _ in
-                laserPointers.forEach { laserPointer in
-                    laserPointer.reload()
-                }
-            }
-        }
-        
         if !laserPointers.contains(where: { $0.id == requestorId }) {
             let color = colors.randomElement() ?? .red
             colors.remove(color)
@@ -138,17 +130,11 @@ final class SMLaserPointerService {
         let laserPointer = laserPointers.remove(at: index)
         colors.insert(laserPointer.color)
         
-        if laserPointers.count == 0 {
-            timer?.invalidate()
-            timer = nil
-        }
     }
     
     func stopAllLaserPointerSessions() {
         colors = [.red, .blue, .green, .yellow, .purple, .brown, .cyan, .magenta, .orange]
         laserPointers.removeAll()
-        timer?.invalidate()
-        timer = nil
     }
     
     func updateLaserPointer(position: CGPoint, for requestorId: String) {

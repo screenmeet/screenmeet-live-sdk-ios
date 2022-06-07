@@ -19,26 +19,27 @@ class CameraVideoCapturer: RTCCameraVideoCapturer /*MSCameraVideoCapturer*/, SMV
     }
     
     func startCapture(_ completionHandler: SMCapturerOperationCompletion? = nil) {
-        self.startCapture(with: device!, format: device!.activeFormat, fps: 30) { (error: Error?) in
-            RTCDispatcher.dispatchAsync(on: .typeCaptureSession, block: {
+        RTCDispatcher.dispatchAsync(on: .typeCaptureSession, block: {
+            self.startCapture(with: self.device!, format: self.device!.activeFormat, fps: 30) { (error: Error?) in
                 if error == nil {
                     completionHandler?(nil)
                 }
                 else {
                     completionHandler?(SMError(code: .capturerInternalError, message: error!.localizedDescription))
                 }
-            })
-        }
+            }
+        })
     }
     
     func stopCapture(_ completionHandler: SMCapturerOperationCompletion? = nil) {
-        self.stopCapture(completionHandler: {
-            RTCDispatcher.dispatchAsync(on: .typeCaptureSession, block: {
+        RTCDispatcher.dispatchAsync(on: .typeCaptureSession, block: {
+                self.stopCapture(completionHandler: {
                 let inputs = self.captureSession.inputs.map { $0.copy() }
                 inputs.forEach({input in self.captureSession.removeInput(input as! AVCaptureInput)})
                 self.captureSession.stopRunning()
                 self.device = nil
                 completionHandler?(nil)
+                NSLog("camera capturer stopped")
             })
         })
     }

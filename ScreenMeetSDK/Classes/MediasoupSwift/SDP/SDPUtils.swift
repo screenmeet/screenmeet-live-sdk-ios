@@ -73,12 +73,6 @@ class SDPUtils: NSObject {
                 codec["parameters"] = parameters
                 
                 codecs[intValue] = codec
-                
-                if (parameters.contains(where: { (key, value) -> Bool in
-                    key == "useinbandfec"
-                })) {
-                    NSLog("Got debug param")
-                }
             }
             
             // Get RTCP feedback for each codec.

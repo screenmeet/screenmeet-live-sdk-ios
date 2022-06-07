@@ -73,6 +73,11 @@ public struct SMParticipantMediaState {
     public var isVideoActive: Bool {
         videoState != .NONE
     }
+    
+    /// Is Image transfer enabled
+    public var isScreenShareByImageTransfernOn: Bool {
+        callerState.imageTransferEnabled
+    }
 
     /// Audio state
     public var audioState: AudioState {

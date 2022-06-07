@@ -76,7 +76,7 @@ public protocol ScreenMeetDelegate: AnyObject {
     /// - Parameter error `SMError`
     func onError(_ error: SMError)
     
-    /// Occurs when request for entitlement
+    /// Occurs when approval for a feature(remote control or laser pointer) is requested from you
     ///
     /// - Parameters:
     ///  - feature: Feature being requested. Containes details about type of the feature and participant who requested it
@@ -90,7 +90,7 @@ public protocol ScreenMeetDelegate: AnyObject {
     ///  - feature: Feature request that has been rejested. Containes details about type of the feature and participant who requested it
     func onFeatureRequestRejected(feature: SMFeature)
     
-    /// Occurs when request for entitlement
+    /// Occurs when a feature has stopped
     ///
     /// - Parameters:
     ///  - feture: Feature that has been stopped
@@ -247,10 +247,14 @@ class SMSession: NSObject {
 extension SMSession {
 
    func getAVState() -> SMParticipantMediaState {
+        let msChannel = SMChannelsManager.shared.channel(for: .mediasoup) as! SMMediasoupChannel
+       
         var cState = SMCallerState()
         cState.audioEnabled = getAudioEnabled()
         cState.videoEnabled = getVideoEnabled()
         cState.screenEnabled = getVideoEnabled() && getVideoSourceDevice() == nil
+        cState.imageTransferEnabled = msChannel.customImageTransferSessionOn()
+       
         return SMParticipantMediaState(callerState: cState)
     }
     
@@ -261,7 +265,7 @@ extension SMSession {
             /* if the video is running and it's not camera or the devices are different, just switch the source*/
             if (getAVState().videoState != .CAMERA || getVideoSourceDevice()?.uniqueID != cameraDevice.uniqueID) {
                 setVideoSourceDevice(videoDevice: cameraDevice)
-                msChannel.changeCapturer(cameraDevice) { [weak self] error in
+                msChannel.changeCapturer(cameraDevice, false) { [weak self] error in
                     if (error == nil) {
                         DispatchQueue.main.async {
                             self?.delegate?.onLocalVideoSourceChanged()
@@ -293,8 +297,10 @@ extension SMSession {
         let audioVideoState = getAVState()
         
         /*If the video is running and it's not a screen, just change the source*/
-        if (audioVideoState.isVideoActive && audioVideoState.videoState != .SCREEN) {
-            msChannel.changeCapturer(nil) { [weak self] error in
+        if ((audioVideoState.isVideoActive && audioVideoState.videoState != .SCREEN) || msChannel.customImageTransferSessionOn()) {
+            msChannel.stopImageTransferSessionIfNeeded()
+            
+            msChannel.changeCapturer(nil, false) { [weak self] error in
                 if let error = error {
                     self?.delegate?.onError(error)
                 }
@@ -325,18 +331,19 @@ extension SMSession {
         let msChannel = SMChannelsManager.shared.channel(for: .mediasoup) as! SMMediasoupChannel
         let audioVideoState = getAVState()
         
-        /*If the video is running and it's not a screen, stop source*/
-        if (audioVideoState.isVideoActive && audioVideoState.videoState != .SCREEN) {
-            msChannel.stopCapturer() { [weak self] error in
+        /*If the video is running, stop source*/
+        if (audioVideoState.isVideoActive) {
+            
+            msChannel.changeCapturer(nil, true) { [weak self] error in
                 if let error = error {
                     self?.delegate?.onError(error)
-                    completion(nil)
                 }
                 else  {
+                    let handler = msChannel.createImageTransferHandler()
+                    completion(handler)
                     DispatchQueue.main.async {
                         self?.delegate?.onLocalVideoSourceChanged()
                     }
-                    completion(msChannel.createImageTransferHandler())
                 }
             }
         }

@@ -34,6 +34,8 @@ class SMLaserPointerChannel: SMChannel {
     
     func buildState(from initialPayload: [String : Any]) {
         NSLog("[SM] LaserPointerChannel \(#function) is not supported")
+        lpService.stopAllLaserPointerSessions()
+        requestorIds.removeAll()
     }
     
     func startLaserPointerSession(for id: String) throws {

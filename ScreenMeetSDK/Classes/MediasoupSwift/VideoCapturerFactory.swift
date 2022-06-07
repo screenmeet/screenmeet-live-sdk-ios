@@ -26,8 +26,8 @@ class VideoCapturerFactory {
         return cameraCapturer
     }
     
-    static func fakeCapturer() -> SMVideoCapturer {
-        let capturer = FakeCapturer()
+    static func fakeCapturer(delegate: RTCVideoCapturerDelegate) -> SMVideoCapturer {
+        let capturer = FakeCapturer(delegate: delegate)
         return capturer
     }
     

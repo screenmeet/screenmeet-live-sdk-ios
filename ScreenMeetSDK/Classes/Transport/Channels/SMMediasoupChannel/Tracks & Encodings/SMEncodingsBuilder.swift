@@ -14,8 +14,8 @@ class SMEncodingsBuilder: NSObject {
         
         let encoding1 = RTCRtpEncodingParameters()
         encoding1.isActive = true
-        encoding1.rid = "r1"
-        encoding1.maxBitrateBps = 500000
+        encoding1.rid = "l"
+        encoding1.maxBitrateBps = 128000
         encoding1.minBitrateBps = 0
         encoding1.numTemporalLayers = 1
         encoding1.scaleResolutionDownBy = 4
@@ -25,7 +25,7 @@ class SMEncodingsBuilder: NSObject {
         
         let encoding2 = RTCRtpEncodingParameters()
         encoding2.isActive = true
-        encoding2.rid = "r2"
+        encoding2.rid = "m"
         encoding2.maxBitrateBps = 1000000
         encoding2.minBitrateBps = 0
         encoding2.numTemporalLayers = 1
@@ -36,8 +36,8 @@ class SMEncodingsBuilder: NSObject {
         
         let encoding3 = RTCRtpEncodingParameters()
         encoding3.isActive = true
-        encoding3.rid = "r3"
-        encoding3.maxBitrateBps = 1500000
+        encoding3.rid = "h"
+        encoding3.maxBitrateBps = 3000000
         encoding3.minBitrateBps = 0
         encoding3.numTemporalLayers = 1
         encoding3.scaleResolutionDownBy = 1

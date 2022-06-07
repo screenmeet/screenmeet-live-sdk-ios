@@ -22,6 +22,9 @@ struct SMCallerState: SocketData {
     /// Is Screen enabled
     public var screenEnabled: Bool = false
     
+    /// Is Image transfer session enabled
+    public var imageTransferEnabled: Bool = false
+    
     /// Is Screen Annotation enabled
     public var screenAnnotationEnabled: Bool = false
 

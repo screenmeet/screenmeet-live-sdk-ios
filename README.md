@@ -63,6 +63,13 @@ Share Screen
 ScreenMeet.shareScreen()
 ```
 
+
+Share stream of images (Can be used for screen sharing by continuously providing raw images, screen shots for example)
+`SMImageHandler` contains a single interface `transferImage(_ image: UIImage)` that you can use to send images 
+```swift
+ScreenMeet.shareScreenWithImageTransfer(_ completion: @escaping ((SMImageHandler?) -> Void))
+```
+
 Stop Video sharing
 ```swift
 ScreenMeet.stopVideoSharing() // Stop Camera or Screen sharing
@@ -191,22 +198,35 @@ func onParticipantMediaStateChanged(_ participant: SMParticipant)
 func onActiveSpeakerChanged(_ participant: SMParticipant, _ remoteVideoTrack: RTCVideoTrack)
 ```
     
-## Entitlements
+## Feature requests (remote control, laser pointer)
 
 ```swift
-/// When requested for entitlement
-/// - Parameters:
-///  - entitlement: Entitlement type associated with request
-///  - participant: A participant who requires access
-///  - decisionHandler: The callback called after request is accepted or denied
-///  - granted: The retrieved decision for request.
-func onRequest(entitlement: SMEntitlementType, participant: SMParticipant, decisionHandler: @escaping (_ granted: Bool) -> Void)
-    
-/// When entitlement request was rejected
+/// Occurs when approval for a feature(remote control or laser pointer) is requested from you
 ///
 /// - Parameters:
-///  - entitlement: Entitlement type associated with request
-func onRequestRejected(entitlement: SMEntitlementType)
+///  - feature: Feature being requested. Containes details about type of the feature and participant who requested it
+///  - decisionHandler: The callback called after request is accepted or denied
+///  - granted: The retrieved decision for request.
+func onFeatureRequest(_ feature: SMFeature, _ decisionHandler: @escaping (_ granted: Bool) -> Void)
+    
+/// Occurs when previous request is rejected
+///
+/// - Parameters:
+/// - feature: Feature request that has been rejested. Containes details about type of the feature and participant who requested it
+func onFeatureRequestRejected(feature: SMFeature)
+    
+/// Occurs when a feature has stopped
+///
+/// - Parameters:
+///  - feture: Feature that has been stopped
+func onFeatureStopped(feature: SMFeature)
+    
+/// Occurs when certain feature (you approved) starts its activity (remote control, laser pointer)
+///
+/// - Parameters:
+///  - feature: Feature that has stated
+func onFeatureStarted(feature: SMFeature)
+    
 ```
 
 ## Remote Control

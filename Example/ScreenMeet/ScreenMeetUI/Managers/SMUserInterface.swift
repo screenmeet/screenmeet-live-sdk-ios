@@ -29,12 +29,16 @@ class SMUserInterface {
         return ScreenMeet.getMediaState().isAudioActive
     }
     
+    var isScreenShareByImageTransfernOn: Bool {
+        return ScreenMeet.getMediaState().isVideoActive && ScreenMeet.getMediaState().isScreenShareByImageTransfernOn
+    }
+    
     var isCameraEnabled: Bool {
         return ScreenMeet.getMediaState().isVideoActive && ScreenMeet.getMediaState().videoState == .CAMERA
     }
     
     var isScreenShareEnabled: Bool {
-        return ScreenMeet.getMediaState().isVideoActive && ScreenMeet.getMediaState().videoState == .SCREEN
+        return ScreenMeet.getMediaState().isVideoActive && ScreenMeet.getMediaState().videoState == .SCREEN && !ScreenMeet.getMediaState().isScreenShareByImageTransfernOn
     }
     
     var requestAlertController = UIAlertController()
@@ -96,32 +100,40 @@ extension SMUserInterface: ScreenMeetDelegate {
     
     func onParticipantJoined(_ participant: SMParticipant) {
         NSLog("[ScreenMeet] Participant joined: " + participant.name)
-        mainParticipant = participant
         
         updateContent()
     }
     
     func onParticipantVideoTrackCreated(_ participant: SMParticipant) {
         NSLog("[ScreenMeet] Participant " + participant.name + " started video")
-        mainParticipant = participant
+        
+        if mainParticipant?.id == participant.id {
+            mainParticipant = participant
+        }
+        if mainParticipant == nil {
+            mainParticipant = participant
+        }
+
         updateContent()
     }
     
     func onParticipantAudioTrackCreated(_ participant: SMParticipant) {
         NSLog("[ScreenMeet] Participant " + participant.name + " started audio")
-        mainParticipant = participant
         updateContent()
     }
     
     func onParticipantLeft(_ participant: SMParticipant) {
         NSLog("[ScreenMeet] Participant left: " + participant.name)
-        mainParticipant = ScreenMeet.getParticipants().first
         updateContent()
     }
     
     func onParticipantMediaStateChanged(_ participant: SMParticipant) {
         NSLog("[ScreenMeet] Participant " + participant.name + " has changed its media state (muted, resumed, etc) \(participant.avState). VideoTrack==\(participant.videoTrack == nil ? "nil": participant.videoTrack?.trackId ?? "Track Id 0001")")
-        mainParticipant = participant
+        
+        if mainParticipant?.id == participant.id {
+            mainParticipant = participant
+        }
+
         updateContent()
     }
     

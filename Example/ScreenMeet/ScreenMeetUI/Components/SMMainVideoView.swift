@@ -14,9 +14,9 @@ class SMMainVideoView: UIView {
     private weak var currentVideoTrack: RTCVideoTrack?
     
     #if arch(arm64)
-        var rtcVideoView: RTCMTLVideoView = RTCMTLVideoView()
+        var rtcVideoView: RTCMTLVideoView!
     #else
-        var rtcVideoView: RTCEAGLVideoView = RTCEAGLVideoView()
+        var rtcVideoView: RTCEAGLVideoView!
     #endif
     
     var imageView: UIImageView = {
@@ -61,8 +61,6 @@ class SMMainVideoView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        rtcVideoView.translatesAutoresizingMaskIntoConstraints = false
-
         topView.layer.insertSublayer(gradientLayer, at: 0)
         topView.addSubview(micImageView)
         topView.addSubview(nameLabel)
@@ -79,16 +77,10 @@ class SMMainVideoView: UIView {
             nameLabel.centerXAnchor.constraint(equalTo: topView.centerXAnchor, constant: 8)
         ])
         
-        addSubview(rtcVideoView)
         addSubview(imageView)
         addSubview(topView)
                 
         NSLayoutConstraint.activate([
-            rtcVideoView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            rtcVideoView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            rtcVideoView.widthAnchor.constraint(equalTo: widthAnchor),
-            rtcVideoView.heightAnchor.constraint(equalTo: heightAnchor),
-            
             imageView.topAnchor.constraint(equalTo: topAnchor, constant: 50),
             imageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -50),
             imageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 50),
@@ -121,46 +113,65 @@ class SMMainVideoView: UIView {
     }
     
     func update(with name: String?, audioState: Bool, videoState: Bool, videoTrack: RTCVideoTrack?) {
-        if videoTrack != nil {
-            currentVideoTrack?.remove(rtcVideoView)
+        if videoTrack != nil && videoTrack?.readyState == .live {
+            createRenderingView()
             currentVideoTrack = videoTrack
+            videoTrack?.isEnabled = true
+            
             videoTrack?.add(rtcVideoView)
         }
         else {
-            rtcVideoView.removeFromSuperview()
             currentVideoTrack?.remove(rtcVideoView)
             currentVideoTrack = nil
-            
-            createRenderingView()
         }
-        
+            
+        if rtcVideoView != nil {
+            rtcVideoView.isHidden = !videoState
+        }
         nameLabel.text = name
         micImageView.isHidden = audioState
         imageView.isHidden = videoState
-        rtcVideoView.isHidden = !videoState
     }
     
     private func createRenderingView() {
+        if rtcVideoView != nil {
+            currentVideoTrack?.remove(rtcVideoView)
+            rtcVideoView.removeFromSuperview()
+        }
+        
         /* Recreate RTCVideoView as the previous one might contain some previous track frame*/
-        rtcVideoView.removeFromSuperview()
         #if arch(arm64)
-            rtcVideoView = RTCMTLVideoView()
+            rtcVideoView = RTCMTLVideoView(frame: .zero)
         #else
-            rtcVideoView = RTCEAGLVideoView()
+            rtcVideoView = RTCEAGLVideoView(frame: .zero)
         #endif
+        
         rtcVideoView.translatesAutoresizingMaskIntoConstraints = false
         
         addSubview(rtcVideoView)
         
         NSLayoutConstraint.activate([
-            rtcVideoView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            rtcVideoView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            rtcVideoView.widthAnchor.constraint(equalTo: widthAnchor),
-            rtcVideoView.heightAnchor.constraint(equalTo: heightAnchor)])
+            rtcVideoView.topAnchor.constraint(equalTo: topAnchor),
+            rtcVideoView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            rtcVideoView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            rtcVideoView.trailingAnchor.constraint(equalTo: trailingAnchor)])
         
         #if arch(arm64)
             rtcVideoView.videoContentMode = .scaleAspectFit
         #endif
     }
+}
+
+extension SMMainVideoView: RTCVideoRenderer {
+    
+    func renderFrame(_ frame: RTCVideoFrame?) {
+        self.rtcVideoView.renderFrame(frame!)
+        
+    }
+    
+    func setSize(_ size: CGSize) {
+        NSLog("Set size...(\(size.width); \(size.height))")
+    }
+    
 }
 

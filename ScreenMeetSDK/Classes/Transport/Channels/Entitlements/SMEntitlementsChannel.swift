@@ -72,6 +72,7 @@ class SMEntitlementsChannel: SMChannel {
     
     func buildState(from initialPayload: [String : Any]) {
         NSLog("[SM] EntitlementsChannel \(#function) is not supported")
+        self.entitlements.removeAll()
     }
     
     func activeFeatures() -> [SMFeature] {
