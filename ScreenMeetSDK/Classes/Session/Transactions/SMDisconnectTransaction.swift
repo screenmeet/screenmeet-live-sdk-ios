@@ -16,14 +16,7 @@ class SMDisconnectTransaction: SMTransaction {
             self.transport.webSocketClient.disconnect(.leftCall)
         }
         
-        let participantsChannel = transport.channelsManager.channel(for: .participants) as! SMParticipantsChannel
-        participantsChannel.removeAllParticipants()
-        
-        let laserPointerChannel = transport.channelsManager.channel(for: .laserPointer) as! SMLaserPointerChannel
-        laserPointerChannel.stopAllLaserPointerSessions()
-        
-        let remoteControlChannel = transport.channelsManager.channel(for: .remoteControl) as! SMRemoteControlChannel
-        remoteControlChannel.stopAllRemoteControlSessions()
-        
+        SMResetChannelsStateTransaction().run()
     }
 }
+

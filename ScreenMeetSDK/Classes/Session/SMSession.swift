@@ -87,8 +87,8 @@ public protocol ScreenMeetDelegate: AnyObject {
     /// Occurs when previous request is rejected
     ///
     /// - Parameters:
-    ///  - feature: Feature request that has been rejested. Containes details about type of the feature and participant who requested it
-    func onFeatureRequestRejected(feature: SMFeature)
+    /// - requestId: Feature's request id that has been rejested. Same request id is passed when the feature reqeust is initially sent as well as when the feature starts
+    func onFeatureRequestRejected(requestId: String)
     
     /// Occurs when a feature has stopped
     ///
@@ -144,7 +144,7 @@ class SMSession: NSObject {
                 }
                 else {
                     self?.session = session
-                    self?.startWebRTC(session!.turn)
+                    self?.startWebRTC()
                 }
         }
     }
@@ -189,8 +189,8 @@ class SMSession: NSObject {
         ScreenVideoCapturer.appStreamService
     }
     
-    private func startWebRTC(_ turnUrl: String) {
-        SMStartWebRTCTransaction(turnUrl)
+    private func startWebRTC() {
+        SMStartWebRTCTransaction()
             .run { [weak self] error in
             if let error = error {
                 NSLog("WebRTC start failed: " + error.message)
@@ -233,12 +233,12 @@ class SMSession: NSObject {
     ///Features
     
     func activeFeatures() -> [SMFeature] {
-        let channel = SMChannelsManager.shared.channel(for: .entitlements) as! SMEntitlementsChannel
+        let channel = SMChannelsManager.shared.channel(for: .permissions) as! SMPermissionsChannel
         return channel.activeFeatures()
     }
     
     public func stopFeature(_ feature: SMFeature) {
-        let channel = SMChannelsManager.shared.channel(for: .entitlements) as! SMEntitlementsChannel
+        let channel = SMChannelsManager.shared.channel(for: .permissions) as! SMPermissionsChannel
         return channel.revokeAccess(for: feature.type, requestorId: feature.requestorParticipant.id)
     }
     
@@ -281,7 +281,9 @@ extension SMSession {
             setVideoSourceDevice(videoDevice: cameraDevice)
             msChannel.setVideoState(true) { [weak self] error, videoTrack in
                 if let error = error {
-                    self?.delegate?.onError(error)
+                    DispatchQueue.main.async {
+                        self?.delegate?.onError(error)
+                    }
                 }
                 else {
                     DispatchQueue.main.async {
@@ -410,7 +412,9 @@ extension SMSession {
             if let msChannel = SMChannelsManager.shared.channel(for: .mediasoup) as? SMMediasoupChannel {
                 msChannel.setAudioState(true) { [weak self] error in
                     if let error = error {
-                        self?.delegate?.onError(error)
+                        DispatchQueue.main.async {
+                            self?.delegate?.onError(error)
+                        }
                     }
                     else {
                         DispatchQueue.main.async {

@@ -92,11 +92,32 @@ class SMCallerStateChannel: SMChannel {
     
     /// Outbound
     
-    func setVideoState(_ isEnabled: Bool, _ completion: SMChannelOperationCompletion? = nil) {
+    func setVideoState(_ isEnabled: Bool,  _ sourceType: String? = nil, _ completion: SMChannelOperationCompletion? = nil) {
         if let sid = transport.webSocketClient.sid{
             videoStateChangeCompletion = completion
             
-            myCallerState.videoEnabled = isEnabled
+            myCallerState.sourceType = sourceType ?? "camera"
+            if sourceType == "screen_share" {
+                myCallerState.screenEnabled = isEnabled
+                myCallerState.videoEnabled = false
+            }
+            else {
+                myCallerState.videoEnabled = isEnabled
+                myCallerState.screenEnabled = false
+            }
+            
+            myCallerState.outputEnabled = myCallerState.screenEnabled || myCallerState.videoEnabled
+            
+            myCallerState.source["width"] = UIScreen.main.bounds.width
+            myCallerState.source["height"] = UIScreen.main.bounds.height
+            myCallerState.source["aspectRatio"] = UIScreen.main.bounds.width / UIScreen.main.bounds.height
+            myCallerState.source["frameRate"] = 16
+            myCallerState.source["resize-mode"] = "none"
+            myCallerState.source["cursor"] = "always"
+            myCallerState.source["logicalSurface"] = true
+            myCallerState.source["displaySurface"] = "monitor"
+            myCallerState.source["deviceId"] = "iPhoneScreen1"
+            
             let payload = [sid: myCallerState.socketRepresentation()]
             transport.webSocketClient.requestSet(for: name, data: payload)
         }
@@ -112,6 +133,9 @@ class SMCallerStateChannel: SMChannel {
             myCallerState.audioEnabled = isEnabled
             let payload = [sid: myCallerState.socketRepresentation()]
             
+            if isEnabled {
+                NSLog("[MSAudio] Set audio caller state")
+            }
             transport.webSocketClient.requestSet(for: name, data: payload)
         }
         else {
@@ -119,8 +143,20 @@ class SMCallerStateChannel: SMChannel {
         }
     }
     
+    func setInitialCallerState() {
+        if let sid = transport.webSocketClient.sid{
+            let payload = [sid: myCallerState.socketRepresentation()]
+            transport.webSocketClient.requestSet(for: name, data: payload)
+        }
+    }
+    
     func getCallerState(_ participantId: String) -> SMCallerState? {
         return participantsCallerStates[participantId]
+    }
+    
+    func resetCallerState() {
+        myCallerState = SMCallerState()
+        participantsCallerStates = [String: SMCallerState]()
     }
     
     private func isValidCallerState(_ dict:[String: Any]) -> Bool {

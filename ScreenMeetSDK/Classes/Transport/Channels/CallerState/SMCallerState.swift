@@ -9,12 +9,12 @@ import Foundation
 import SocketIO
 
 /// Represents participant state
-struct SMCallerState: SocketData {
+class SMCallerState: SocketData {
     
     /// Is Audio enabled
     public var audioEnabled: Bool = false
     
-    var outputEnabled: Bool = false
+    var outputEnabled: Bool = true
     
     /// Is Video enabled
     public var videoEnabled: Bool = false
@@ -28,7 +28,9 @@ struct SMCallerState: SocketData {
     /// Is Screen Annotation enabled
     public var screenAnnotationEnabled: Bool = false
 
-    var sourceType: String = "cam"
+    var sourceType: String = "camera"
+    
+    var source = [String: Any]()
     
     /// Is talking
     public var talking: Bool = false
@@ -58,6 +60,9 @@ struct SMCallerState: SocketData {
         
         if let talking = socketData["talking"] as? Bool { self.talking = talking }
         else { self.talking = currentState?.talking ?? false}
+        
+        if let source = socketData["source"] as? [String: Any] { self.source = source }
+        else { self.source = currentState?.source ?? [String: Any]()}
     }
     
     public func socketRepresentation() -> SocketData {
@@ -68,6 +73,8 @@ struct SMCallerState: SocketData {
         data["screenenabled"] = screenEnabled
         data["sourceType"] = sourceType
         data["talking"] = talking
+        data["width"] = source["width"]
+        data["height"] = source["height"]
         return data
     }
 }

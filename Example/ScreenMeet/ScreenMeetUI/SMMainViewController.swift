@@ -502,7 +502,7 @@ extension SMMainViewController: SMControlBarDelegate {
             ScreenMeet.stopVideoSharing()
         } else {
             ScreenMeet.shareScreen()
-            updateContent(with: SMUserInterface.manager.mainParticipant)
+            //updateContent(with: SMUserInterface.manager.mainParticipant)
         }
     }
          

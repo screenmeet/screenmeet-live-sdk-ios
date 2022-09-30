@@ -197,7 +197,7 @@ class MSAnswerMediaSection: MSMediaSection {
 
                         let opusMaxPlaybackRateIt = codecOptions!["opusMaxPlaybackRate"]
                         if (opusMaxPlaybackRateIt != nil) {
-                            let opusMaxPlaybackRate = opusMaxPlaybackRateIt as! UInt32
+                            let opusMaxPlaybackRate = opusMaxPlaybackRateIt as! Int
                             codecParameters["maxplaybackrate"] = opusMaxPlaybackRate
                         }
                     }

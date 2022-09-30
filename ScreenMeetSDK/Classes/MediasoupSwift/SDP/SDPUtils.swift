@@ -172,7 +172,7 @@ class SDPUtils: NSObject {
     }
     
     static func getCname(_ offerMediaObject: MSJson) -> String {
-        let jsonMssrcsIt = offerMediaObject["ssrc"]
+        let jsonMssrcsIt = offerMediaObject["ssrcs"]
         if (jsonMssrcsIt == nil) {
             return ""
         }

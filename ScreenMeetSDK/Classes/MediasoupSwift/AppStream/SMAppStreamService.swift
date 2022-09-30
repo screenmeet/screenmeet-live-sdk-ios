@@ -47,7 +47,7 @@ class SMAppStreamService: NSObject {
     func startStream(_ startHandler: SMCapturerOperationCompletion?, completion: @escaping (Result<CVPixelBuffer, SMAppStreamServiceError>) -> Void) {
         guard !screenRecorder.isRecording else { return }
         screenRecorder.delegate = self
-        screenRecorder.isMicrophoneEnabled = false
+        //screenRecorder.isMicrophoneEnabled = false
         
         RTCAudioSession.sharedInstance().lockForConfiguration()
             do {

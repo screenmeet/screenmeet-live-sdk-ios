@@ -121,7 +121,6 @@ class MSHandler: NSObject {
             else {
                 pc?.close()
                 
-                NSLog("SDP::" + sdp!)
                 let sdpObject = SDPTransform.parse(sdp!)
                 let nativeRtpCapabilities = SDPUtils.extractRtpCapabilities(sdpObject)
                 
@@ -203,12 +202,6 @@ class MSSendHandler: MSHandler {
               _ codecOptions: MSJson?,
               _ completion: @escaping MSSendCompletion) {
 
-        //MSLogger.shared.startPeerLog(pc.getPeeer())
-        
-        if (track.kind == "audio") {
-           
-            NSLog("Audio")
-        }
         let mediaSectionIdx = remoteSdp.getNextMediaSectionIdx()
         let transceiverInit = RTCRtpTransceiverInit()
         transceiverInit.direction = .sendOnly
@@ -512,7 +505,7 @@ class MSRecvHandler: MSHandler {
         
         // mid is optional, check whether it exists and is a non empty string.
         if let mid = rtpParameters["mid"] as? String, !mid.isEmpty {
-            localId = "r" + mid
+            localId = mid
         }
         else {
             localId = String(mapMidTransceiver.count)

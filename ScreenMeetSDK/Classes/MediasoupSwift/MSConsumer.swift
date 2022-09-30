@@ -124,6 +124,10 @@ class MSConsumer: NSObject {
         self.delegate.onTransportClose(consumer: self)
     }
     
+    deinit {
+        NSLog("[MS] Consumer dealloced")
+    }
+    
 }
 
 protocol MSConsumerPrivateDelegate {

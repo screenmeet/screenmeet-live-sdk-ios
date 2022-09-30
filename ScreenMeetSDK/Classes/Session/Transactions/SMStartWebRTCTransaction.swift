@@ -10,16 +10,14 @@ import WebRTC
 typealias StartWebRTCTransactionCompletion = (SMError?) -> Void
 
 class SMStartWebRTCTransaction: SMTransaction {
-    private var turnUrl: String
     private var videoSourceDevice: AVCaptureDevice! = nil
     
-    init(_ turnUrl: String) {
-        self.turnUrl = turnUrl
+    override init() {
     }
     
     func run(_ completion: @escaping StartWebRTCTransactionCompletion) {
         let mediasoupChannel = transport.channelsManager.channel(for: .mediasoup) as! SMMediasoupChannel
-        let turnConfig = SMTurnConfiguration(turnHostName: turnUrl)
+        let turnConfig = SMTurnConfiguration()
             
         mediasoupChannel.startTransportAndChannels(turnConfig, completion)
     }

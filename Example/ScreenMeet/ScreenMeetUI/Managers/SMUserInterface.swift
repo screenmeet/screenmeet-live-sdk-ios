@@ -41,6 +41,7 @@ class SMUserInterface {
         return ScreenMeet.getMediaState().isVideoActive && ScreenMeet.getMediaState().videoState == .SCREEN && !ScreenMeet.getMediaState().isScreenShareByImageTransfernOn
     }
     
+    var currentReqeustId: String!
     var requestAlertController = UIAlertController()
     
     var mainParticipant: SMParticipant?
@@ -124,6 +125,10 @@ extension SMUserInterface: ScreenMeetDelegate {
     
     func onParticipantLeft(_ participant: SMParticipant) {
         NSLog("[ScreenMeet] Participant left: " + participant.name)
+        
+        if mainParticipant?.id == participant.id {
+            mainParticipant = nil
+        }
         updateContent()
     }
     
@@ -163,28 +168,36 @@ extension SMUserInterface: ScreenMeetDelegate {
             print("waiting for the host to let me in (knock feature) ...")
         case .disconnected(.callNotStarted):
             print("Call disconnected. Call is not started")
-            smMainVC.disconnect()
+            dismissCallScreen()
         case .disconnected(.callEndedByServer):
+            localVideoTrack = nil
+            mainParticipant = nil
+            dismissCallScreen()
             print("Call disconnected. Call is ended by server")
-            smMainVC.disconnect()
         case .disconnected(.leftCall):
             print("Call disconnected. Client left call")
+            localVideoTrack = nil
+            mainParticipant = nil
+            dismissCallScreen()
         case .disconnected(.networkError):
             print("Call disconnected. Network error")
-            smMainVC.disconnect()
         case .disconnected(.knockWaitTimeExpired):
             print("Waited for the entrance for too long. Hanging up")
-            smMainVC.disconnect()
         case .disconnected(.reconnectWaitTimeExpired):
             print("Waited for reconnect for too long. Hanging up")
-            smMainVC.disconnect()
         case .disconnected(.hostRefuedToLetIn):
             print("Host refused to let in the room")
-            smMainVC.disconnect()
+            mainParticipant = nil
         }
         
         UIApplication.shared.isIdleTimerDisabled = shouldPreventScreenSleep
         updateContent()
+    }
+    
+    func dismissCallScreen() {
+        smMainVC.dismiss(animated: true, completion: {
+            NotificationCenter.default.post(name: Notification.Name("ScreenMeetSessionEnd"), object: nil)
+        })
     }
     
     func onError(_ error: SMError) {
@@ -206,19 +219,23 @@ extension SMUserInterface: ScreenMeetDelegate {
 
     func onFeatureRequest(_ feature: SMFeature, _ decisionHandler: @escaping (Bool) -> Void) {
         NSLog("[ScreenMeet] Request entitlement: \(feature.type.rawValue), from participant: \(feature.requestorParticipant.name)")
-        presentRequestAlert(for: feature.type, participant: feature.requestorParticipant, completion: decisionHandler)
+        presentRequestAlert(for: feature.type, participant: feature.requestorParticipant, feature.requestId, completion: decisionHandler)
         updateContent()
     }
     
-    func onFeatureRequestRejected(feature: SMFeature) {
-        NSLog("[ScreenMeet] Feature rejected: \(feature.type.rawValue), from participant: \(feature.requestorParticipant.name)")
+    func onFeatureRequestRejected(requestId: String) {
+        NSLog("[ScreenMeet] Feature request rejected, requestId: \(requestId)")
         requestAlertController.dismiss(animated: true, completion: nil)
         updateContent()
     }
     
     func onFeatureStopped(feature: SMFeature) {
         if feature.type == .remotecontrol {
-            smMainVC.updateRemoteControlState(false)
+            if !ScreenMeet.activeFeatures().contains(where: { feature in
+                feature.type == .remotecontrol
+            }) {
+                smMainVC.updateRemoteControlState(false)
+            }
         }
         
         NSLog("[ScreenMeet] Feature stopped: \(feature.type.rawValue), participant: \(feature.requestorParticipant.name)")
@@ -275,11 +292,12 @@ extension SMUserInterface {
         }
     }
     
-    func presentRequestAlert(for entitlement: SMEntitlementType, participant: SMParticipant, completion: @escaping (Bool) -> Void) {
+    func presentRequestAlert(for permissionType: SMPermissionType, participant: SMParticipant, _ requestId: String, completion: @escaping (Bool) -> Void) {
         var title: String
         var message: String
         
-        switch entitlement {
+        currentReqeustId = requestId
+        switch permissionType {
             case .laserpointer:
                 title = "\"\(participant.name)\" Would you like to start laser pointer?"
                 message = "It's needed to help you navigate"

@@ -16,6 +16,7 @@ class SMLaserPointerChannel: SMChannel {
     private var requestorIds = [String]()
     
     func processEvent(_ message: SMChannelMessage) {
+        
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: message.data[1], options: .prettyPrinted)
             let laserPointerModel = try JSONDecoder().decode(SMLaserPointerModel.self, from: jsonData)
@@ -52,8 +53,8 @@ class SMLaserPointerChannel: SMChannel {
         lpService.stopAllLaserPointerSessions()
         
         for requestorId in requestorIds {
-            let entitlementsChannel = SMChannelsManager.shared.channel(for: .entitlements) as? SMEntitlementsChannel
-            entitlementsChannel?.revokeAccess(for: .laserpointer, requestorId: requestorId)
+            let permissionChannel = SMChannelsManager.shared.channel(for: .permissions) as? SMPermissionsChannel
+            permissionChannel?.revokeAccess(for: .laserpointer, requestorId: requestorId)
         }
         
         requestorIds.removeAll()

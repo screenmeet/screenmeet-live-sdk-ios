@@ -15,10 +15,9 @@ struct SMNewTrackAvailableMessage: Codable {
 struct SMTrackConsumerParams: Codable {
     var id: String
     var kind: String
+    var track: String
     var producerId: String
     var producerPaused: Bool
     var rtpParameters: SMTrackRtpParameters
     var type: String
 }
-
-

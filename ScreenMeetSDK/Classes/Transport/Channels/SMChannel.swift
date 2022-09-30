@@ -26,10 +26,10 @@ enum SMChannelName: String {
     case remoteControl      = "rc"
     case permissionRequests = "permission_requests"
     case permissionGrants   = "permission_grants"
+    case permissions         = "permissions"
     
     case capabilities       = "capabilities"
     case entitlements       = "entitlements"
-    case requests           = "requests"
 }
 
 typealias SMChannelOperationCompletion = (_ error: SMError?) -> Void

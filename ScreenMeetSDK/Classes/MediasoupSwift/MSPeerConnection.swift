@@ -17,6 +17,8 @@ typealias MSPeerConnectionGetStatsCompletion = (RTCStatisticsReport) -> Void
 typealias MSPeerConnectionIceConnectionStateChangedCallback = (RTCIceConnectionState) -> Void
 
 class MSPeerConnection: NSObject {
+    private var statsBySSRC = [String: Any]()
+    private var timer: Timer? = nil
     private var iceConnectionStateChangedCallback: MSPeerConnectionIceConnectionStateChangedCallback?
     private var peerConnectionFactory: RTCPeerConnectionFactory!
     private var pc: RTCPeerConnection!
@@ -43,7 +45,9 @@ class MSPeerConnection: NSObject {
     init(_ options: Options?, _ callback: MSPeerConnectionIceConnectionStateChangedCallback? = nil) {
         super.init()
         
-        RTCInitializeSSL()
+        //RTCInitializeSSL()
+        //timer?.invalidate()
+        //timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(printStats), userInfo: nil, repeats: true)
         
         self.iceConnectionStateChangedCallback = callback
         var config = RTCConfiguration()
@@ -148,8 +152,6 @@ class MSPeerConnection: NSObject {
                 completion(nil)
             }
         }
-        
-        
     }
 
     func getLocalDescription() -> String {
@@ -219,6 +221,64 @@ class MSPeerConnection: NSObject {
         }
     }
     
+    @objc private func printStats(){
+        for receiver in pc.receivers {
+            let track = receiver.track
+            if track!.kind != "video" {continue}
+            
+            pc.stats(for: track, statsOutputLevel: RTCStatsOutputLevel.debug) { reports in
+    
+                if  reports.count == 4 {
+                    let data = reports[3].values
+                    let trackId = data["googTrackId"]
+                    
+                    
+                    if trackId != "probator" {
+                        NSLog("*******************[MS RTC Stats]************************")
+                        NSLog("Track id: \(trackId!)")
+                       
+                        
+                        let ssrc = data["ssrc"]!
+                        let bytesSent: CLong = Int(data["bytesReceived"]!)!
+                       
+                        if  self.statsBySSRC[ssrc] != nil {
+                            let lastBytesSent:  CLong = (self.statsBySSRC[ssrc] as! [String:  Any])["bytesReceived"] as! CLong
+                            let lastStatsDate: NSDate = (self.statsBySSRC[ssrc] as! [String:  Any])["kRTCStatsLastDate"] as! NSDate
+
+                            let seconds = lastStatsDate.timeIntervalSinceNow
+                            let kbps = (( CGFloat(bytesSent - lastBytesSent) * 8.0) / fabs(seconds)) / 1000.0
+                        
+                            NSLog("bitrate: \(String(format: "%.0f", kbps)) kbps")
+                            
+                            NSLog("framesDecoded: \(data["framesDecoded"]!)")
+                            NSLog("packetsReceived: \(data["packetsReceived"]!)")
+                            NSLog("packetsLost: \(data["packetsLost"]!)")
+                            
+                            NSLog("googFrameRateOutput: \(data["googFrameRateOutput"]!)")
+                            NSLog("googTargetDelayMs: \(data["googTargetDelayMs"]!)")
+                            NSLog("googDecodeMs: \(data["googDecodeMs"]!)")
+                            NSLog("googFrameRateDecoded: \(data["googFrameRateDecoded"]!)")
+                            NSLog("googFrameRateReceived: \(data["googFrameRateReceived"]!)")
+                            NSLog("googDecodeMs: \(data["googDecodeMs"]!)")
+                            NSLog("googMinPlayoutDelayMs: \(data["googMinPlayoutDelayMs"]!)")
+                            NSLog("googCurrentDelayMs: \(data["googCurrentDelayMs"]!)")
+                            NSLog("googRenderDelayMs: \(data["googRenderDelayMs"]!)")
+                            NSLog("googFirstFrameReceivedToDecodedMs: \(data["googFirstFrameReceivedToDecodedMs"]!)")
+                            NSLog("googInterframeDelayMax: \(data["googInterframeDelayMax"]!)")
+                            NSLog("googJitterBufferMs: \(data["googJitterBufferMs"]!)")
+                            
+                            NSLog("*******************[END]************************")
+                        }
+                       
+                        self.statsBySSRC[ssrc] = ["bytesReceived": Int(data["bytesReceived"] as! String),  "kRTCStatsLastDate": NSDate()]
+                    }
+                }
+                        
+                    //}
+                }
+            }
+    }
+    
     deinit {
         NSLog("Deinit")
     }
@@ -266,3 +326,4 @@ extension MSPeerConnection: RTCPeerConnectionDelegate {
         NSLog("[MS ICE] Did open data channel")
     }
 }
+

@@ -114,14 +114,20 @@ class SMMainVideoView: UIView {
     
     func update(with name: String?, audioState: Bool, videoState: Bool, videoTrack: RTCVideoTrack?) {
         if videoTrack != nil && videoTrack?.readyState == .live {
-            createRenderingView()
-            currentVideoTrack = videoTrack
-            videoTrack?.isEnabled = true
-            
-            videoTrack?.add(rtcVideoView)
+            if currentVideoTrack?.trackId != videoTrack?.trackId || videoTrack?.trackId ==  "ARDAMSv0" {
+                createRenderingView()
+                currentVideoTrack = videoTrack
+                videoTrack?.isEnabled = true
+                
+                videoTrack?.add(rtcVideoView)
+            }
+            else {
+                NSLog("[MS] Same track")
+            }
         }
         else {
             currentVideoTrack?.remove(rtcVideoView)
+            rtcVideoView?.removeFromSuperview()
             currentVideoTrack = nil
         }
             

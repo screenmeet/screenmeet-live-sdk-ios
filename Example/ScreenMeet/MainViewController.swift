@@ -93,7 +93,7 @@ class MainViewController: UIViewController {
                 waitingView.isHidden = true
                 
                 ScreenMeet.delegate = SMUserInterface.manager
-                ScreenMeet.connect(code, "Frank") { [weak self] (error) in
+                ScreenMeet.connect(code, "iOS") { [weak self] (error) in
                     guard error == nil else {
                         if let challenge = error!.challenge {
                             self?.showCaptchaScreen(challenge)

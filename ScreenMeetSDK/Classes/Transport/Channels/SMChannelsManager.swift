@@ -32,10 +32,8 @@ class SMChannelsManager: NSObject {
             channel = SMLaserPointerChannel()
         case .remoteControl:
             channel = SMRemoteControlChannel()
-        case .entitlements:
-            channel = SMEntitlementsChannel()
-        case .requests:
-            channel = SMRequestsChannel()
+        case .permissions:
+            channel = SMPermissionsChannel()
         case .chat:
             channel = SMChatChannel()
         default:

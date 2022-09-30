@@ -18,8 +18,6 @@ struct Session: Decodable {
     var servers: SMDiscoveryServers
     
     var hostAuthToken: String?
-    
-    var turn: String
 }
 
 struct SMDiscoveryServers: Decodable {

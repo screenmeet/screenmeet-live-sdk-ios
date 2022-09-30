@@ -947,7 +947,7 @@ class MSOrtc: NSObject {
         ]
         
         // Match media codecs and keep the order preferred by remoteCaps.
-        let remoteCapsCodec = remoteCaps["codecs"] as! MSJsonArray
+        var remoteCapsCodec = remoteCaps["codecs"] as! MSJsonArray
         for remoteCodec in remoteCapsCodec {
             if MSOrtc.isRtxCodec(remoteCodec) {
                 continue
@@ -1572,14 +1572,14 @@ class MSOrtc: NSObject {
         let parameters = codec["parameters"] as! MSJson
         let packetizationMode = parameters["packetization-mode"]
 
-        if (packetizationMode != nil || packetizationMode as? Int == nil) {
+        if (packetizationMode == nil || packetizationMode as? Int == nil) {
             return 0;
         }
 
         return packetizationMode as! Int
     }
     
-    static func getH264LevelAssimetryAllowed(_ codec: MSJson) -> UInt8 {
+    static func getH264LevelAssimetryAllowed(_ codec: MSJson) -> Int {
         let parameters = codec["parameters"] as! MSJson
         let levelAssimetryAllowedIt = parameters["level-asymmetry-allowed"]
 
@@ -1588,7 +1588,7 @@ class MSOrtc: NSObject {
             return 0
         }
 
-        return levelAssimetryAllowedIt as! UInt8
+        return levelAssimetryAllowedIt as! Int
     }
     
     static func getH264ProfileLevelId(_ codec: MSJson) -> String {

@@ -120,7 +120,7 @@ struct SMSendTrackRtpEncoding: Codable, SocketData {
     var ssrc: Int?
     var active: Bool?
     var dtx: Bool?
-    var maxBitrate: Double?
+    var maxBitrate: Int64?
     var networkPriority: Int?
     var rid: String?
     
@@ -167,11 +167,14 @@ struct SMSendTrackRtpEncoding: Codable, SocketData {
 }
 
 struct SMSendTrackRtcp: Codable, SocketData {
+    var mux: Bool?
     var cname: String
     var reducedSize: Bool?
     
     func socketRepresentation() -> SocketData {
         var data = [String: Any]()
+        data["mux"] = mux
+        
         data["cname"] = cname
         
         data["reducedSize"] = reducedSize

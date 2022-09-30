@@ -16,7 +16,7 @@ class SMWebSocketClient: NSObject {
     private var state: SMConnectionState = .disconnected(.callNotStarted) {
         willSet {
             if (newValue != state) {
-                DispatchQueue.main.async { 
+                DispatchQueue.main.async {
                     ScreenMeet.session.delegate?.onConnectionStateChanged(newValue)
                 }
             }
@@ -41,7 +41,7 @@ class SMWebSocketClient: NSObject {
                 
         /* .connectParams is important! Without it server wont be able to register namespace... <- To investigate*/
         manager = SocketManager(socketURL: URL(string: url)!,
-                                config: [.log(false), .reconnects(true), .reconnectWait(1), .connectParams(["roomId": nameSpace])])
+                                config: [.log(true), .reconnects(true), .reconnectWait(1), .connectParams(["roomId": nameSpace])])
         
         socketIO = manager.socket(forNamespace: "/\(nameSpace)")
         
@@ -51,13 +51,9 @@ class SMWebSocketClient: NSObject {
             
             completion(nil)
             self.pingPongEvent()
-            
-            NSLog("SID: ", socketIO.sid)
-            NSLog("[SM Signalling] Ready")
         }
         
         socketIO.on(clientEvent: .reconnect, callback: { [weak self] data, ack in
-            NSLog("[SM Signalling] Reconnect")
             self?.state = .reconnecting
             
             self?.perform(#selector(self?.disconnectOnWaitTimeout), with: nil, afterDelay: TimeInterval(reconnectWaitTimeout))
@@ -100,19 +96,19 @@ class SMWebSocketClient: NSObject {
         })
         
         socketIO.on("dropping", callback: { [weak self] data, ack in
-            self?.disconnect(.hostRefuedToLetIn)
-            
             self?.childConnectCompletion?(nil, nil, SMError(code: .droppedByServer, message: "Host refused to let you in"))
-           
         })
         
         socketIO.on(clientEvent: .disconnect) { [unowned self] data, ack in
-            NSLog("[SM Signalling] Disconnect")
-            
-            /* Call suddenly terminated by server. Normally we set state to disconnected with a certain reason and then call socketIO.disconnect(). This way inside socketIO.on(clientEvent: .disconnect) {} handler the state is always .disconnected. In case the state inside this handler is any other it means that the socket was suddenly killed by server (someone force closed the room or ended the meeting)*/
-            if state == .connected || state == .reconnecting  || state == .waitingEntrancePermission{
+            if state == .connected || state == .reconnecting  {
                 state = .disconnected(.callEndedByServer)
             }
+            /* If the connection was dropped while we were waiting for entrance, it means host refused us to let in and clicked "Deny"*/
+            else if state == .waitingEntrancePermission {
+                state = .disconnected(.hostRefuedToLetIn)
+            }
+            
+            ScreenMeet.disconnect()
         }
         
         socketIO.connect()
@@ -162,7 +158,6 @@ class SMWebSocketClient: NSObject {
                         else {
                             self?.disconnect(.networkError)
                         }
-                        
                     }
                 }
             }
@@ -171,10 +166,10 @@ class SMWebSocketClient: NSObject {
     
     func requestSet(for channelName: SMChannelName, data: SocketData, completion: AckCallback? = nil) {
         if let completion = completion {
-            socketIO.emitWithAck("request-set", channelName.rawValue, data).timingOut(after: 10, callback: completion)
+            socketIO.emitWithAck("request-set", channelName.rawValue, data, ["merge": true]).timingOut(after: 10, callback: completion)
         }
         else{
-            socketIO.emit("request-set", channelName.rawValue, data)
+            socketIO.emit("request-set", channelName.rawValue, data, ["merge": true])
         }
     }
     
@@ -184,6 +179,15 @@ class SMWebSocketClient: NSObject {
                  callback: @escaping AckCallback ) {
               
         socketIO.emitWithAck("command", channelName.rawValue, message, data).timingOut(after: 10, callback: callback)
+    }
+    
+    func command(command: String,
+                 for channelName: SMChannelName,
+                 message: String,
+                 data: SocketData,
+                 callback: @escaping AckCallback ) {
+              
+        socketIO.emitWithAck(command, channelName.rawValue, message, data).timingOut(after: 10, callback: callback)
     }
     
     func logInfo(_ event: SocketData) {
@@ -245,7 +249,7 @@ class SMWebSocketClient: NSObject {
     }
     
     @objc private func disconnectOnWaitTimeout() {
-        //disconnect(.reconnectWaitTimeExpired)
+        disconnect(.reconnectWaitTimeExpired)
         childConnectCompletion?(nil, nil, SMError(code: .knockWaitTimeForEntryExpiredError, message: "Waiting time to reconnect this room has expired. Hanging up"))
     }
 }

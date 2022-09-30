@@ -16,6 +16,7 @@ typealias SMCapturerOperationCompletion = (SMError?) -> Void
 struct ConsumeOperation: Equatable {
     var kind: String
     var id: String
+    var producerKey: String
     var producerId: String
     var rtpParameters: MSJson
     
@@ -156,6 +157,9 @@ class SMMediasoupChannel: NSObject, SMChannel  {
     func createTransports() {
         createRecvTransport()
         createSendTransport()
+        
+        let channel = transport.channelsManager.channel(for: .callerState) as! SMCallerStateChannel
+        channel.setInitialCallerState()
     }
 
     func createSendTransport() {
@@ -165,12 +169,21 @@ class SMMediasoupChannel: NSObject, SMChannel  {
         var iceCandidates = json["iceCandidates"] as! MSJsonArray
         var dtlsParameters = json["dtlsParameters"] as! MSJson
 
+        var iceServers = [RTCIceServer]()
+        
+        self.mediasoupTransportOptions.result.outbound.iceServers.forEach { server in
+            iceServers.append(RTCIceServer(urlStrings: [server.urls], username: server.username, credential: server.credential))
+        }
+        let config = RTCConfiguration()
+        config.iceServers = iceServers
+        let options = MSPeerConnection.Options(config: config, factory: nil)
+        
         device.createSendTransport(self, mediasoupTransportOptions!.result.inbound.id,
                                         &iceParameters,
                                         &iceCandidates,
                                         &dtlsParameters,
                                         nil,
-                                        nil,
+                                        options,
                                         nil) { [self] sendTransport, error in
             if let error = error {
                 NSLog("[MS] Could not instantiate transport: " + error.message)
@@ -190,13 +203,22 @@ class SMMediasoupChannel: NSObject, SMChannel  {
         var iceCandidates = json["iceCandidates"] as! MSJsonArray
         var dtlsParameters = json["dtlsParameters"] as! MSJson
         
+        var iceServers = [RTCIceServer]()
+        
+        self.mediasoupTransportOptions.result.inbound.iceServers.forEach { server in
+            iceServers.append(RTCIceServer(urlStrings: [server.urls], username: server.username, credential: server.credential))
+        }
+        let config = RTCConfiguration()
+        config.iceServers = iceServers
+        let options = MSPeerConnection.Options(config: config, factory: nil)
+        
         device.createRecvTransport(self,
                                         mediasoupTransportOptions!.result.outbound.id,
                                         &iceParameters,
                                         &iceCandidates,
                                         &dtlsParameters,
                                         nil,
-                                        nil,
+                                        options,
                                         nil) { [weak self] recvTransport, error in
             if let error = error {
                 NSLog("[MS] Could not instantiate transport: " + error.message)
@@ -209,30 +231,35 @@ class SMMediasoupChannel: NSObject, SMChannel  {
     }
     
     func addAudioTrack(_ completion: SMAudioOperationCompletion? = nil) {
-        let audioTrack = self.tracksManager.makeAudioTrack()
-        
-        let codecOptions = [ "audioStartBitrate": 24000]
-        //let appData = "{\n \"profile\": \"cam\" \n}"
-        
-        sendTransport.produce(self, audioTrack, nil, codecOptions, nil) { [weak self] producer, error in
-            if let error = error {
-                NSLog("Could not create audio track: " + error.message)
-                completion?(SMError(code: .mediaTrackError, message: error.message))
-            }
-            else {
-                self?.producers["audio"] = producer
-                
-                let channel = self?.transport.channelsManager.channel(for: .callerState) as! SMCallerStateChannel
-                channel.setAudioState(true) { error in
-                    if let error = error {
-                        completion?(error)
-                    }
-                    else {
-                        completion?(nil)
+        DispatchQueue.main.async { [self] in
+            
+            
+            let audioTrack = self.tracksManager.makeAudioTrack()
+            
+            //let codecOptions = ["opusStereo": true, "opusMaxPlaybackRate": 24000] as [String : Any]
+          
+            let channel = transport.channelsManager.channel(for: .callerState) as! SMCallerStateChannel
+            channel.setAudioState(true) { error in
+                if let error = error {
+                    completion?(error)
+                }
+                else {
+                    sendTransport.produce(self, audioTrack, nil, nil, nil) { [weak self] producer, error in
+                        if let error = error {
+                            NSLog("Could not create audio track: " + error.message)
+                            completion?(SMError(code: .mediaTrackError, message: error.message))
+                        }
+                        else {
+                            self?.producers["audio"] = producer
+                            completion?(nil)
+                        }
                     }
                 }
             }
+            
+            
         }
+       
     }
     
     func addVideoTrack(_ completion: SMVideoOperationCompletion? = nil) {
@@ -240,8 +267,14 @@ class SMMediasoupChannel: NSObject, SMChannel  {
         videoTrack.isEnabled = false
         let codecOptions = ["videoGoogleStartBitrate": 1000]
 
-        let appData = [ "profile": "cam"]
+        var sourceType = "camera"
+        var appData = [ "profile": "camera"]
         
+        if tracksManager.videoSourceDevice == nil {
+            appData = [ "profile": "screen_share"]
+            sourceType = "screen_share"
+        }
+
         let encodings = SMEncodingsBuilder().defaultSimulcastEncodings()
         
         sendTransport.produce(self, videoTrack, encodings, codecOptions, appData) { [weak self] producer, error in
@@ -253,7 +286,7 @@ class SMMediasoupChannel: NSObject, SMChannel  {
                 self?.producers["video"] = producer
                 
                 let channel = self?.transport.channelsManager.channel(for: .callerState) as! SMCallerStateChannel
-                channel.setVideoState(true)
+                channel.setVideoState(true, sourceType)
                 
                 self?.tracksManager.startCapturer(self?.tracksManager.videoSourceDevice ?? nil) { error in
                     
@@ -285,10 +318,12 @@ class SMMediasoupChannel: NSObject, SMChannel  {
         let kind: String = trackMessage.consumerParams.kind
         let id: String = trackMessage.producerCid
         let producerId: String = trackMessage.consumerParams.producerId
+        let producerKey: String = trackMessage.consumerParams.track
         let rtpParameters: MSJson = trackMessage.consumerParams.rtpParameters.socketRepresentation() as! MSJson
         
         let operation = ConsumeOperation(kind: kind,
                                          id: id,
+                                         producerKey: producerKey,
                                          producerId: producerId,
                                          rtpParameters: rtpParameters)
         
@@ -377,18 +412,27 @@ class SMMediasoupChannel: NSObject, SMChannel  {
     }
     
     func notifyParticipantVideoCreated(_ participantId: String) {
+        let callerStateChannel = transport.channelsManager.channel(for: .callerState) as! SMCallerStateChannel
+        let participantChannel = transport.channelsManager.channel(for: .participants) as! SMParticipantsChannel
+        let callerState = callerStateChannel.getCallerState(participantId)
+        let identity = participantChannel.getIdentity(participantId)
+        var participant = SMParticipant(id: participantId, identity:
+                                            identity ?? SMIdentityInfo(),
+                                            callerState: callerState ?? SMCallerState(),
+                                            videoTrack: nil,
+                                            aduioTrack: nil)
+        if (participant.callerState.screenEnabled) {
+            transport.webSocketClient.command(for: .mediasoup, message: "set_substream", data: ["_target_cid": participantId, "layer": 0]) { data in
+                NSLog("[MS] set_substream 0 for sreenshare of participant \(participantId) called")
+            }
+        }
+        if (participant.callerState.videoEnabled) {
+            transport.webSocketClient.command(for: .mediasoup, message: "set_substream", data: ["_target_cid": participantId, "layer": 2]) { data in
+                NSLog("[MS] set_substream 2 for video of participant \(participantId) called")
+            }
+        }
+        
         DispatchQueue.main.async { [self] in
-            let callerStateChannel = transport.channelsManager.channel(for: .callerState) as! SMCallerStateChannel
-            let participantChannel = transport.channelsManager.channel(for: .participants) as! SMParticipantsChannel
-            let callerState = callerStateChannel.getCallerState(participantId)
-            let identity = participantChannel.getIdentity(participantId)
-            
-            var participant = SMParticipant(id: participantId, identity:
-                                                identity ?? SMIdentityInfo(),
-                                                callerState: callerState ?? SMCallerState(),
-                                                videoTrack: nil,
-                                                aduioTrack: nil)
-            
             participant = extendParticipantWithTracks(participant)
             
             ScreenMeet.session.delegate?.onParticipantVideoTrackCreated(participant)
@@ -535,10 +579,16 @@ class SMMediasoupChannel: NSObject, SMChannel  {
     func disconnect(_ completion: (() -> ())? = nil) {
         tracksManager.cleanupAudio()
         tracksManager.cleanupVideo()
-        transport.webSocketClient.command(for: .mediasoup, message: "video-stopped", data: [String: Any]()) {_ in
+        
+        if ScreenMeet.getConnectionState() == .connected {
+            transport.webSocketClient.command(for: .mediasoup, message: "video-stopped", data: [String: Any]()) {_ in
+                completion?()
+            }
+        }
+        else {
             completion?()
         }
-        
+
         if (sendTransport != nil) {
             sendTransport.close()
             producers = [String: MSProducer]()
@@ -635,6 +685,14 @@ class SMMediasoupChannel: NSObject, SMChannel  {
                     }
                 }
                 else {
+                    if videoSourceDevice == nil {
+                        let channel = self?.transport.channelsManager.channel(for: .callerState) as! SMCallerStateChannel
+                        channel.setVideoState(true, "screen_share")
+                    }
+                    else {
+                        let channel = self?.transport.channelsManager.channel(for: .callerState) as! SMCallerStateChannel
+                        channel.setVideoState(true, "camera")
+                    }
                     completionHandler?(nil)
                 }
             }
@@ -658,6 +716,10 @@ class SMMediasoupChannel: NSObject, SMChannel  {
     }
     
     private func setAudioStateInternal(_ isEnabled: Bool,  _ completion: @escaping SMAudioOperationCompletion) {
+        if sendTransport == nil {
+            completion(SMError(code: .capturerInternalError, message: "Transport for sending audio not created. Are you sure you are connected?"))
+            return
+        }
         if isEnabled {
             addAudioTrack(completion)
         }
@@ -684,6 +746,10 @@ class SMMediasoupChannel: NSObject, SMChannel  {
     }
     
     private func setVideoStateInternal(_ isEnabled: Bool, _ completion: @escaping SMVideoOperationCompletion) {
+        if sendTransport == nil {
+            completion(SMError(code: .capturerInternalError, message: "Transport for sending video not created. Are you sure you are connected?"), nil)
+            return
+        }
         if isEnabled {
             addVideoTrack(completion)
         }
@@ -811,6 +877,8 @@ class SMMediasoupChannel: NSObject, SMChannel  {
                     self.consumers[consumer!.getId()]?.append(consumer!)
                     
                     let payload = SMResumeTrackPayload(_target_cid: currentConsumerOperation.id,
+                                                       producerKey: currentConsumerOperation.producerKey,
+                                                             track: currentConsumerOperation.producerKey,
                                                               kind: currentConsumerOperation.kind)
                     transport.webSocketClient.command(for: .mediasoup, message: "resume-track", data: payload.socketRepresentation()) { [weak self] data in
                        
@@ -903,7 +971,9 @@ extension SMMediasoupChannel: MSSendTransportConnectDelegate {
                                               rtpParameters: rtp,
                                               paused: false)
         
-        let payload = trackPayload.socketRepresentation()
+        let payload = trackPayload.socketRepresentation() as! [String: Any]
+        
+        NSLog("[MSAudio] Sending track")
         self.transport.webSocketClient.command(for: self.name, message: "send-track", data: payload) { data in
                 SMSocketDataParser().parse(data) { (response: SMSendTrackSocketReponse?, error) in
                    if let error = error {

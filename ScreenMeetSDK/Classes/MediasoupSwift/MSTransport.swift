@@ -240,7 +240,10 @@ class MSSendTransport: MSTransport {
                     completion(nil, error)
                 }
                 
-                connectDelegate?.onProduce(self, track.kind, sendData!.rtpParameters, appData, { producerId in
+                var modifiedSendData = sendData!
+                modifiedSendData.rtpParameters = rtp
+                
+                connectDelegate?.onProduce(self, track.kind, modifiedSendData.rtpParameters, appData, { producerId in
                     
                     var rtpParameters = sendData!.rtpParameters!
                     
