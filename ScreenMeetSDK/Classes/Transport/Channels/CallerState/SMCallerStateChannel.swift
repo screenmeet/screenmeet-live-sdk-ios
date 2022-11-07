@@ -9,10 +9,6 @@ import UIKit
 import SocketIO
 
 class SMCallerStateChannel: SMChannel {
-    /* Store callbacks here as they should be called as we get confirmation through pub*/
-    private var audioStateChangeCompletion: SMChannelOperationCompletion? = nil
-    private var videoStateChangeCompletion: SMChannelOperationCompletion? = nil
-    
     private var participantsCallerStates = [String: SMCallerState]()
     private lazy var myCallerState: SMCallerState = {
         var defaultState = SMCallerState()
@@ -42,16 +38,6 @@ class SMCallerStateChannel: SMChannel {
                     else {
                         /* Our callerstate*/
                         myCallerState = SMCallerState(callerStateDict as! [String: Any], participantsCallerStates[participantId])
-                        
-                        /* call the previously stored callbacks if any*/
-                        DispatchQueue.main.async { [self] in
-                            audioStateChangeCompletion?(nil)
-                            videoStateChangeCompletion?(nil)
-                            
-                            /* nil the callbacks just to be on the safe side to make sure they are called once*/
-                            audioStateChangeCompletion = nil
-                            videoStateChangeCompletion = nil
-                        }
                     }
                 }
                 
@@ -94,7 +80,6 @@ class SMCallerStateChannel: SMChannel {
     
     func setVideoState(_ isEnabled: Bool,  _ sourceType: String? = nil, _ completion: SMChannelOperationCompletion? = nil) {
         if let sid = transport.webSocketClient.sid{
-            videoStateChangeCompletion = completion
             
             myCallerState.sourceType = sourceType ?? "camera"
             if sourceType == "screen_share" {
@@ -120,6 +105,7 @@ class SMCallerStateChannel: SMChannel {
             
             let payload = [sid: myCallerState.socketRepresentation()]
             transport.webSocketClient.requestSet(for: name, data: payload)
+            completion?(nil)
         }
         else {
             completion?(SMError(code: .socketError, message: "Socket sid is not availabale. Socket may be closed"))
@@ -128,7 +114,6 @@ class SMCallerStateChannel: SMChannel {
     
     func setAudioState(_ isEnabled: Bool, _ completion: SMChannelOperationCompletion? = nil) {
         if let sid = transport.webSocketClient.sid {
-            audioStateChangeCompletion = completion
             
             myCallerState.audioEnabled = isEnabled
             let payload = [sid: myCallerState.socketRepresentation()]
@@ -137,6 +122,7 @@ class SMCallerStateChannel: SMChannel {
                 NSLog("[MSAudio] Set audio caller state")
             }
             transport.webSocketClient.requestSet(for: name, data: payload)
+            completion?(nil)
         }
         else {
             completion?(SMError(code: .socketError, message: "Socket sid is not availabale. Socket may be closed"))

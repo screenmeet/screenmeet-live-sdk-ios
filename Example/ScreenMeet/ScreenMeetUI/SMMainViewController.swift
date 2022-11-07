@@ -168,6 +168,12 @@ class SMMainViewController: UIViewController {
         updateContent(with: SMUserInterface.manager.mainParticipant)
         SMUserInterface.manager.hideFloatingUI()
         navigationController?.navigationBar.isHidden = true
+        
+        if let serverUrl = UserDefaults.standard.string(forKey: "kServerKey") {
+            if let url = URL(string: serverUrl) {
+                ScreenMeet.config.endpoint = url
+            }
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {

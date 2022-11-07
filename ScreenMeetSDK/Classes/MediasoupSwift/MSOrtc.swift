@@ -5,7 +5,6 @@
 //  Created by Ross on 26.01.2021.
 //
 
-import UIKit
 import WebRTC
 
 class MSOrtc: NSObject {
@@ -947,7 +946,7 @@ class MSOrtc: NSObject {
         ]
         
         // Match media codecs and keep the order preferred by remoteCaps.
-        var remoteCapsCodec = remoteCaps["codecs"] as! MSJsonArray
+        let remoteCapsCodec = remoteCaps["codecs"] as! MSJsonArray
         for remoteCodec in remoteCapsCodec {
             if MSOrtc.isRtxCodec(remoteCodec) {
                 continue
@@ -1024,6 +1023,7 @@ class MSOrtc: NSObject {
             
             extendedCodecs[index] = extendedCodec
         }
+        extendedRtpCapabilities["codecs"] = extendedCodecs
         
         // Match header extensions.
         let remoteExts = remoteCaps["headerExtensions"] as! MSJsonArray
@@ -1284,7 +1284,7 @@ class MSOrtc: NSObject {
                     "payloadType": extendedCodec["localRtxPayloadType"],
                     "clockRate":   extendedCodec["clockRate"],
                             
-                    "parameters": [ "apt", extendedCodec["localPayloadType"] as! UInt8 ],
+                    "parameters": [ "apt", extendedCodec["localPayloadType"] as! Int ],
                     "rtcpFeedback": MSJsonArray()
                 ]
                 // clang-format on
@@ -1573,7 +1573,7 @@ class MSOrtc: NSObject {
         let packetizationMode = parameters["packetization-mode"]
 
         if (packetizationMode == nil || packetizationMode as? Int == nil) {
-            return 0;
+            return 0
         }
 
         return packetizationMode as! Int

@@ -228,8 +228,8 @@ class MSPeerConnection: NSObject {
             
             pc.stats(for: track, statsOutputLevel: RTCStatsOutputLevel.debug) { reports in
     
-                if  reports.count == 4 {
-                    let data = reports[3].values
+                if  reports.count == 3 {
+                    let data = reports[2].values
                     let trackId = data["googTrackId"]
                     
                     

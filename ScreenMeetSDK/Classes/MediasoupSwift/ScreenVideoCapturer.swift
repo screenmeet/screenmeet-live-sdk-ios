@@ -25,9 +25,6 @@ class ScreenVideoCapturer: RTCVideoCapturer, SMVideoCapturer, AVCaptureVideoData
 
     public func startCaptureScreen(_ completionHandler: SMCapturerOperationCompletion? = nil) {
         RTCDispatcher.dispatchAsync(on: .typeCaptureSession, block: {
-            self.reconfigureCaptureSessionInput()
-            self.captureSession.startRunning()
-            
             ScreenVideoCapturer.appStreamService.startStream(completionHandler) { (result) in
                 switch result {
                 case .success(let pixelBuffer):
@@ -59,16 +56,10 @@ class ScreenVideoCapturer: RTCVideoCapturer, SMVideoCapturer, AVCaptureVideoData
     
     public func setupVideoDataOutput() -> AVCaptureVideoDataOutput {
         let videoDataOutput = AVCaptureVideoDataOutput()
-
+        
         videoDataOutput.alwaysDiscardsLateVideoFrames = true
         videoDataOutput.setSampleBufferDelegate(self, queue: self.frameQueue)
         return videoDataOutput
-    }
-    
-    public func reconfigureCaptureSessionInput() {
-        self.captureSession.beginConfiguration()
-        captureSession.usesApplicationAudioSession = false
-        self.captureSession.commitConfiguration()
     }
     
     public func stopCapture(_ completionHandler: SMCapturerOperationCompletion? = nil) {
@@ -76,9 +67,6 @@ class ScreenVideoCapturer: RTCVideoCapturer, SMVideoCapturer, AVCaptureVideoData
             switch result {
             case .success:
                 RTCDispatcher.dispatchAsync(on: .typeCaptureSession, block: {
-                    let inputs = self.captureSession.inputs.map { $0.copy() }
-                    inputs.forEach({input in self.captureSession.removeInput(input as! AVCaptureInput)})
-                    self.captureSession.stopRunning()
                     self.delegate = nil
                     completionHandler?(nil)
                 })

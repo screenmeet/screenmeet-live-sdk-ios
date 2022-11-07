@@ -20,6 +20,8 @@ class SMRtcChannel: SMChannel {
             if type == "track-available" {
                 SMSocketDataParser().parse(payload) { [weak self] (message: SMNewTrackAvailableMessage?, error) in
                     if let error = error {
+                        ScreenMeet.delegate?.onError(SMError(code: .transactionInternalError, message: "Could not parse incoming \"track-available\" message in \"rtc\" channel.\nMessage: \n\(payload)"))
+
                         NSLog("error parsing consumer: " + error.message)
                     }
                     else {

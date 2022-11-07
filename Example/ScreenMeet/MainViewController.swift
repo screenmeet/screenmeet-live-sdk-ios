@@ -41,6 +41,10 @@ class MainViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(screenMeetSessionEnd), name: Notification.Name("ScreenMeetSessionEnd"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(screenMeetUIDidAppear), name: Notification.Name("ScreenMeetUIDidAppear"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(screenMeetUIWillDisappear), name: Notification.Name("ScreenMeetUIWillDisappear"), object: nil)
+        
+        if let stringUrl = UserDefaults.standard.string(forKey: "kServerKey") {
+            ScreenMeet.config.endpoint = URL(string: stringUrl)!
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -72,6 +76,46 @@ class MainViewController: UIViewController {
     
     @objc func screenMeetUIWillDisappear() {
        
+    }
+    
+    @IBAction func settingsButtonClicked(_ sender: UIButton) {
+        var textField = UITextField()
+        
+        let defaults = UserDefaults.standard
+        let alert = UIAlertController(title: "Server URL", message: "", preferredStyle: .alert)
+        alert.addTextField { alertTextField in
+            if let serverUrl = defaults.string(forKey: "kServerKey") {
+                alertTextField.text = serverUrl
+            }
+            else {
+                alertTextField.text = ScreenMeet.config.endpoint.absoluteString
+            }
+            textField = alertTextField
+        }
+                    
+        let action = UIAlertAction(title: "Apply", style: .default) { [weak self] action in
+            if let url = URL(string: textField.text!), UIApplication.shared.canOpenURL(url as URL) {
+                defaults.set(textField.text, forKey: "kServerKey")
+                ScreenMeet.config.endpoint = url
+            }
+            else {
+                self?.showAlert("The URL is incorrect. Please enter it aggain")
+            }
+        }
+                    
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
+    }
+    
+    private func showAlert(_ text: String) {
+        let alert = UIAlertController(title: "", message: text, preferredStyle: .alert)
+                    
+        let action = UIAlertAction(title: "Okay", style: .default) { action in
+            
+        }
+                    
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
     }
     
     @IBAction func connectButtonTapped(_ sender: UIButton) {

@@ -201,9 +201,41 @@ extension SMUserInterface: ScreenMeetDelegate {
     }
     
     func onError(_ error: SMError) {
-        NSLog("[ScreenMeet] Error: \(error.message)")
+        DispatchQueue.main.async { [self] in
+            if let mainVC = rootController()?.presentedViewController {
+                if mainVC.presentedViewController == requestAlertController {
+                    requestAlertController.dismiss(animated: false, completion: nil)
+                }
+            }
         
-        updateContent()
+            let errorAlertController = UIAlertController(title: "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", message: "", preferredStyle: .alert)
+            
+          
+            let okAction = UIAlertAction(title: "OK", style: .default) { (_) -> Void in
+                
+            }
+            
+            errorAlertController.addAction(okAction)
+            
+            
+            if let mainVC = rootController()?.presentedViewController {
+                mainVC.present(errorAlertController, animated: true, completion: nil)
+            } else {
+                rootController()?.present(errorAlertController, animated: true, completion: nil)
+            }
+            
+            let margin:CGFloat = 8.0
+            let rect = CGRect(x: margin, y: margin, width: 260, height: 450)
+
+            let customView = UITextView(frame: rect)
+            customView.backgroundColor = UIColor.clear
+            customView.isEditable = false
+            customView.font = UIFont(name: "HelveticaNeue-Light", size: 13)
+
+            customView.text = error.message
+            errorAlertController.view.addSubview(customView)
+        }
+        NSLog("[ScreenMeet] Error: \(error.message)")
     }
     
     func onRemoteControlEvent(_ event: SMRemoteControlEvent) {

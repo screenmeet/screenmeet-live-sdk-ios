@@ -47,17 +47,19 @@ class SMAppStreamService: NSObject {
     func startStream(_ startHandler: SMCapturerOperationCompletion?, completion: @escaping (Result<CVPixelBuffer, SMAppStreamServiceError>) -> Void) {
         guard !screenRecorder.isRecording else { return }
         screenRecorder.delegate = self
-        //screenRecorder.isMicrophoneEnabled = false
-        
-        RTCAudioSession.sharedInstance().lockForConfiguration()
-            do {
-                try RTCAudioSession.sharedInstance().setCategory(AVAudioSession.Category.record.rawValue)
-                try AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)
-            } catch let error {
-                debugPrint("Error changeing AVAudioSession category: \(error)")
-            }
-        RTCAudioSession.sharedInstance().unlockForConfiguration()
-        
+        if #available(iOS 16.0, *) {
+         
+        } else {
+            RTCAudioSession.sharedInstance().lockForConfiguration()
+                do {
+                    try RTCAudioSession.sharedInstance().setCategory(AVAudioSession.Category.record.rawValue)
+                    try AVAudioSession.sharedInstance().setActive(true, options: .notifyOthersOnDeactivation)
+                } catch let error {
+                    debugPrint("Error changeing AVAudioSession category: \(error)")
+                }
+            RTCAudioSession.sharedInstance().unlockForConfiguration()
+        }
+       
         screenRecorder.startCapture(handler: { [weak self] (sampleBuffer, sampleBufferType, error) in
             guard sampleBufferType == .video else { return }
             guard error == nil else {
@@ -70,13 +72,18 @@ class SMAppStreamService: NSObject {
             }
         }, completionHandler: { (error) in
             
-            RTCAudioSession.sharedInstance().lockForConfiguration()
-                do {
-                    try RTCAudioSession.sharedInstance().setCategory(AVAudioSession.Category.multiRoute.rawValue)
-                } catch let error {
-                    debugPrint("Error changeing AVAudioSession category: \(error)")
-                }
-            RTCAudioSession.sharedInstance().unlockForConfiguration()
+            if #available(iOS 16.0, *) {
+             
+            }
+            else {
+                RTCAudioSession.sharedInstance().lockForConfiguration()
+                    do {
+                        try RTCAudioSession.sharedInstance().setCategory(AVAudioSession.Category.multiRoute.rawValue)
+                    } catch let error {
+                        debugPrint("Error changeing AVAudioSession category: \(error)")
+                    }
+                RTCAudioSession.sharedInstance().unlockForConfiguration()
+            }
             
             if error != nil {
                 completion(.failure(.startCaptureFailed(error: error!)))

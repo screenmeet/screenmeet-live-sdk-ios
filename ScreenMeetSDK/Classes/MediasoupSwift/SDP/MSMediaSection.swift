@@ -5,8 +5,6 @@
 //  Created by Ross on 30.01.2021.
 //
 
-import UIKit
-
 class MSMediaSection: NSObject {
     var mediaObject = MSJson()
     
@@ -138,6 +136,10 @@ class MSAnswerMediaSection: MSMediaSection {
             mediaObject["rtcpFb"]    = MSJsonArray()
             mediaObject["fmtp"]      = MSJsonArray()
 
+            var arrayOfRtps = mediaObject["rtp"] as! MSJsonArray
+            var fmtpArray = mediaObject["fmtp"] as! MSJsonArray
+            var arrayOfRtcpFeedback = mediaObject["rtcpFb"] as! MSJsonArray
+            
             for codec in answerRtpParameters["codecs"] as! MSJsonArray {
                 var rtp = [
                     "payload": codec["payloadType"] as! Int,
@@ -153,9 +155,8 @@ class MSAnswerMediaSection: MSMediaSection {
                     }
                 }
 
-                var arrayOfRtps = mediaObject["rtp"] as! MSJsonArray
-                arrayOfRtps.append(rtp )
-                mediaObject["rtp"] = arrayOfRtps
+                
+                arrayOfRtps.append(rtp)
 
                 var codecParameters = codec["parameters"] as! MSJson
 
@@ -222,7 +223,7 @@ class MSAnswerMediaSection: MSMediaSection {
                     }
                 }
 
-                var fmtp: [String:Any] = [ "payload": codec["payloadType"] as! Int ]
+                var fmtp: [String:Any] = ["payload": codec["payloadType"] as! Int]
                 var config = ""
 
                 for (key, value) in codecParameters {
@@ -244,21 +245,22 @@ class MSAnswerMediaSection: MSMediaSection {
 
                 if (!config.isEmpty){
                     fmtp["config"] = config
-                    var fmtpArray = mediaObject["fmtp"] as! MSJsonArray
                     fmtpArray.append(fmtp as MSJson)
-                    mediaObject["fmtp"] = fmtpArray
                 }
 
                 for fb in codec["rtcpFeedback"] as! MSJsonArray{
-                    var array = mediaObject["rtcpFb"] as! MSJsonArray
-                    array.append(["payload": codec["payloadType"] as! Int,
+                    arrayOfRtcpFeedback.append(["payload": codec["payloadType"] as! Int,
                                   "type":    fb["type"] as! String,
                                   "subtype": fb["parameter"] as! String
                                 ])
-                    mediaObject["rtcpFb"] = array
+                   
                 }
             }
 
+            mediaObject["rtp"] = arrayOfRtps
+            mediaObject["fmtp"] = fmtpArray
+            mediaObject["rtcpFb"] = arrayOfRtcpFeedback
+            
             var payloads = ""
 
             for codec in answerRtpParameters["codecs"] as! MSJsonArray {
@@ -274,6 +276,8 @@ class MSAnswerMediaSection: MSMediaSection {
             mediaObject["payloads"] = payloads
             mediaObject["ext"]      = MSJsonArray()
 
+            var arrayOfExtensions = mediaObject["ext"] as! MSJsonArray
+            
             // Don't add a header extension if not present in the offer.
             for ext in answerRtpParameters["headerExtensions"] as! MSJsonArray {
                 let localExts = offerMediaObject["ext"] as? MSJsonArray
@@ -286,13 +290,13 @@ class MSAnswerMediaSection: MSMediaSection {
                 }
 
                 // clang-format off
-                var array = mediaObject["ext"] as! MSJsonArray
-                array.append(["uri": ext["uri"] as! String,
-                          "value": ext["id"] as! Int])
-                mediaObject["ext"] = array
-            }
                
-
+                arrayOfExtensions.append(["uri": ext["uri"] as! String,
+                          "value": ext["id"] as! Int])
+            }
+            
+            mediaObject["ext"] = arrayOfExtensions
+               
             // Allow both 1 byte and 2 bytes length header extensions.
             let extmapAllowMixedIt = offerMediaObject["extmapAllowMixed"]
 
@@ -312,18 +316,17 @@ class MSAnswerMediaSection: MSMediaSection {
 
                 mediaObject["rids"] = MSJsonArray()
 
-                for  rid in ridsIt as! MSJsonArray {
+                var arrayOfRids = mediaObject["rids"] as! MSJsonArray
+                for rid in ridsIt as! MSJsonArray {
                     if (rid["direction"] as! String != "send") {
                         continue
                     }
-
-                                
-                    var array = mediaObject["rids"] as! MSJsonArray
-                    array.append(["id": rid["id"] as Any,
-                                  "direction": "recv"])
-                    mediaObject["rids"] = array
+                    
+                    arrayOfRids.append(["id": rid["id"] as Any, "direction": "recv"])
                 }
+                mediaObject["rids"] = arrayOfRids
             }
+           
             mediaObject["rtcpMux"]   = "rtcp-mux"
             mediaObject["rtcpRsize"] = "rtcp-rsize"
         }
@@ -385,6 +388,10 @@ class MSOfferMediaSection: MSMediaSection {
             mediaObject["rtcpFb"]    = MSJsonArray()
             mediaObject["fmtp"]      = MSJsonArray()
 
+            var arrayOfRtcp = mediaObject["rtp"] as! MSJsonArray
+            var arrayOfFmtp = mediaObject["fmtp"] as! MSJsonArray
+            var arrayOfRtcpFb = mediaObject["rtcpFb"] as! MSJsonArray
+            
             for codec in offerRtpParameters["codecs"] as! MSJsonArray {
                 var rtp = ["payload": codec["payloadType"],
                            "codec":   MSMediaSection.getCodecName(codec),
@@ -397,11 +404,9 @@ class MSOfferMediaSection: MSMediaSection {
                         rtp["encoding"] = channels
                     }
                 }
-
-                var array = mediaObject["rtp"] as! MSJsonArray
-                array.append(rtp as MSJson)
-                mediaObject["rtp"] = array
                 
+                arrayOfRtcp.append(rtp as MSJson)
+               
                 let codecParameters = codec["parameters"] as! MSJson
                 var fmtp = ["payload": codec["payloadType"] ]
                 var config = ""
@@ -424,22 +429,23 @@ class MSOfferMediaSection: MSMediaSection {
                         config = config + String(intValue)
                     }
                 }
-
                 if (!config.isEmpty) {
                     fmtp["config"] = config
-                    var array = mediaObject["fmtp"] as! MSJsonArray
-                    array.append(fmtp as MSJson)
-                    mediaObject["fmtp"] = array
+                   
+                    arrayOfFmtp.append(fmtp as MSJson)
                 }
 
                 for fb in codec["rtcpFeedback"] as! MSJsonArray {
-                    var array = mediaObject["rtcpFb"] as! MSJsonArray
-                    array.append(["payload": codec["payloadType"] as! Int,
+                   
+                    arrayOfRtcpFb.append(["payload": codec["payloadType"] as! Int,
                               "type":    fb["type"] as! String,
                               "subtype": fb["parameter"] as! String])
-                    mediaObject["rtcpFb"] = array
                 }
             }
+            
+            mediaObject["rtp"] = arrayOfRtcp
+            mediaObject["fmtp"] = arrayOfFmtp
+            mediaObject["rtcpFb"] = arrayOfRtcpFb
 
             var payloads = ""
 
@@ -456,11 +462,12 @@ class MSOfferMediaSection: MSMediaSection {
             mediaObject["payloads"] = payloads
             mediaObject["ext"]      = MSJsonArray()
 
+            var arrayOfExtensions = mediaObject["ext"] as! MSJsonArray
             for ext in offerRtpParameters["headerExtensions"] as! MSJsonArray {
-                var array = mediaObject["ext"] as! MSJsonArray
-                array.append([ "uri":   ext["uri"] as! String,
+                arrayOfExtensions.append([ "uri":   ext["uri"] as! String,
                                "value": ext["id"] as! Int])
             }
+            mediaObject["ext"] = arrayOfExtensions
             
             mediaObject["rtcpMux"] = "rtcp-mux"
             mediaObject["rtcpRsize"] = "rtcp-rsize"
@@ -498,7 +505,7 @@ class MSOfferMediaSection: MSMediaSection {
                 mediaObject["ssrcs"] = ssrcsArray
                     
                 if (rtxSsrc != 0) {
-                    let  ssrcs = String(ssrc) + " " + String(rtxSsrc)
+                    let ssrcs = String(ssrc) + " " + String(rtxSsrc)
 
                     var ssrcsArray = mediaObject["ssrcs"] as! MSJsonArray
                     ssrcsArray.append(["id": rtxSsrc, "attribute": "cname", "value": cname ])

@@ -5,7 +5,6 @@
 //  Created by Ross on 27.01.2021.
 //
 
-import UIKit
 
 class SDPUtils: NSObject {
     static func extractRtpCapabilities(_ sdpObject: MSJson) -> MSJson {

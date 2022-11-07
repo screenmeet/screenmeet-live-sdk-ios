@@ -231,35 +231,27 @@ class SMMediasoupChannel: NSObject, SMChannel  {
     }
     
     func addAudioTrack(_ completion: SMAudioOperationCompletion? = nil) {
-        DispatchQueue.main.async { [self] in
-            
-            
-            let audioTrack = self.tracksManager.makeAudioTrack()
-            
-            //let codecOptions = ["opusStereo": true, "opusMaxPlaybackRate": 24000] as [String : Any]
-          
-            let channel = transport.channelsManager.channel(for: .callerState) as! SMCallerStateChannel
-            channel.setAudioState(true) { error in
-                if let error = error {
-                    completion?(error)
-                }
-                else {
-                    sendTransport.produce(self, audioTrack, nil, nil, nil) { [weak self] producer, error in
-                        if let error = error {
-                            NSLog("Could not create audio track: " + error.message)
-                            completion?(SMError(code: .mediaTrackError, message: error.message))
-                        }
-                        else {
-                            self?.producers["audio"] = producer
-                            completion?(nil)
-                        }
+        let audioTrack = self.tracksManager.makeAudioTrack()
+        
+        sendTransport.produce(self, audioTrack, nil, nil, nil) { [weak self] producer, error in
+            if let error = error {
+                NSLog("Could not create audio track: " + error.message)
+                completion?(SMError(code: .mediaTrackError, message: error.message))
+            }
+            else {
+                self?.producers["audio"] = producer
+                
+                let channel = self?.transport.channelsManager.channel(for: .callerState) as! SMCallerStateChannel
+                channel.setAudioState(true) { error in
+                    if let error = error {
+                        completion?(error)
+                    }
+                    else {
+                        completion?(nil)
                     }
                 }
             }
-            
-            
         }
-       
     }
     
     func addVideoTrack(_ completion: SMVideoOperationCompletion? = nil) {
@@ -485,7 +477,7 @@ class SMMediasoupChannel: NSObject, SMChannel  {
     }
     
     func getAudioEnabled() -> Bool {
-        if producers["audio"] != nil {
+        if producers["audio"] != nil && producers["audio"]!.track.isEnabled == true{
             return true
         }
         
@@ -716,18 +708,35 @@ class SMMediasoupChannel: NSObject, SMChannel  {
     }
     
     private func setAudioStateInternal(_ isEnabled: Bool,  _ completion: @escaping SMAudioOperationCompletion) {
+        let channel = transport.channelsManager.channel(for: .callerState) as! SMCallerStateChannel
+
         if sendTransport == nil {
             completion(SMError(code: .capturerInternalError, message: "Transport for sending audio not created. Are you sure you are connected?"))
             return
         }
         if isEnabled {
-            addAudioTrack(completion)
+            if let producer = producers["audio"]{
+                producer.track.isEnabled = true
+                
+                channel.setAudioState(true) { error in
+                    if let error = error {
+                        completion(error)
+                    }
+                    else {
+                        completion(nil)
+                    }
+                }
+            }
+            else {
+                addAudioTrack(completion)
+            }
         }
         else {
             if let producer = producers["audio"] {
-                producer.close()
+                /*producer.close()
                 producers["audio"] = nil
-                tracksManager.cleanupAudio()
+                tracksManager.cleanupAudio()*/
+                producer.track.isEnabled = false
                 
                 let channel = transport.channelsManager.channel(for: .callerState) as! SMCallerStateChannel
                 channel.setAudioState(false) { error in
@@ -977,7 +986,7 @@ extension SMMediasoupChannel: MSSendTransportConnectDelegate {
         self.transport.webSocketClient.command(for: self.name, message: "send-track", data: payload) { data in
                 SMSocketDataParser().parse(data) { (response: SMSendTrackSocketReponse?, error) in
                    if let error = error {
-                    NSLog("Could not parse send-track response: " + error.message)
+                       NSLog("Could not parse send-track response: " + error.message)
                    }
                    else {
                         let id = response!.result.id

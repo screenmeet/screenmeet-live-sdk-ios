@@ -22,10 +22,7 @@ struct SMSendTrackPayload: Codable, SocketData {
         data["paused"] = paused
         
         if let appData = appData {
-            if !appData.isEmpty {
-                data["appData"] = appData.socketRepresentation()
-            }
-            
+            data["appData"] = appData.socketRepresentation()
         }
         
         if let rtpParameters = rtpParameters {

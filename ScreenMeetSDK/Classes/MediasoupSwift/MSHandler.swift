@@ -5,7 +5,6 @@
 //  Created by Ross on 26.01.2021.
 //
 
-import UIKit
 import WebRTC
 
 typealias MSGetNativeCapabilitiesCompletion = ([String: Any]?, MSError?) -> Void
@@ -154,6 +153,11 @@ class MSHandler: NSObject {
         if let scaleResolutionDownBy = encoding.scaleResolutionDownBy {
             jsonEncoding["scaleResolutionDownBy"] = scaleResolutionDownBy
         }
+        
+        /*
+        if let scalabilityMode = encoding.scalabilityMode {
+            jsonEncoding["scalabilityMode"] = scalabilityMode
+        }*/
 
         jsonEncoding["networkPriority"] = encoding.networkPriority.rawValue
     }
@@ -247,6 +251,15 @@ class MSSendHandler: MSHandler {
                 }
                 else {
                     var sendingRtpParameters = sendingRtpParametersByKind[track.kind] as! MSJson
+                    
+                    /* The second codec for audio break the mediasoup flow. Needs to be investigated*/
+                    if track.kind == "audio" {
+                        var array = sendingRtpParameters["codecs"] as! MSJsonArray
+                        if array.count == 2 {
+                            array.removeLast()
+                        }
+                        sendingRtpParameters["codecs"] = array
+                    }
                     
                     // We can now get the transceiver.mid.
                     let localId: String! = newTransceiver.mid
@@ -523,60 +536,53 @@ class MSRecvHandler: MSHandler {
                 completion(nil, MSError(type: .peerConnection, message: error.message))
                 return
             }
+           
             let constraints = RTCMediaConstraints(mandatoryConstraints: nil, optionalConstraints: nil)
             pc.createAnswer(constraints) { answer, error in
                 if let error = error {
                     completion(nil, MSError(type: .peerConnection, message: error.message))
                     return
                 }
-                pc.createAnswer(constraints) { sdp, error in
+                var localSdpObject = SDPTransform.parse(answer!)
+                let media = (localSdpObject["media"] as! MSJsonArray).first { item -> Bool in
+                    return item["mid"] as? String == localId
+                }
+                
+                var answerMediaObject = media!
+
+                // May need to modify codec parameters in the answer based on codec
+                // parameters in the offer.
+                SDPUtils.applyCodecParameters(&rtpParameters, &answerMediaObject)
+               
+                let answer = SDPTransform.write(&localSdpObject)
+
+                if (!transportReady) {
+                    setupTransport("client", localSdpObject)
+                }
+
+                pc.setLocalDescription(.answer, answer) { error in
                     if let error = error {
-                        completion(nil, error)
+                        completion(nil, MSError(type: .peerConnection, message: error.message))
                         return
                     }
+                    let transceivers = pc.getTransceivers()
                     
-                    var localSdpObject = SDPTransform.parse(sdp!)
-                    let media = (localSdpObject["media"] as! MSJsonArray).first { item -> Bool in
-                        return item["mid"] as? String == localId
+                    let transceiver = transceivers.first { t -> Bool in
+                        t.mid == localId
                     }
                     
-                    var answerMediaObject = media!
-
-                    // May need to modify codec parameters in the answer based on codec
-                    // parameters in the offer.
-                    SDPUtils.applyCodecParameters(&rtpParameters, &answerMediaObject)
-                   
-                    let answer = SDPTransform.write(&localSdpObject)
-
-                    if (!transportReady) {
-                        setupTransport("client", localSdpObject)
+                    if (transceiver == nil) {
+                        completion(nil, MSError(type: .peerConnection, message: "new RTCRtpTransceiver not found"))
+                        return
                     }
 
-                    pc.setLocalDescription(.answer, answer) { error in
-                        if let error = error {
-                            completion(nil, MSError(type: .peerConnection, message: error.message))
-                            return
-                        }
-                        let transceivers = pc.getTransceivers()
-                        
-                        let transceiver = transceivers.first { t -> Bool in
-                            t.mid == localId
-                        }
-                        
-                        if (transceiver == nil) {
-                            completion(nil, MSError(type: .peerConnection, message: "new RTCRtpTransceiver not found"))
-                            return
-                        }
-
-                        // Store in the map.
-                        mapMidTransceiver[localId] = transceiver
-                        
-                        let recvData = MSRecvData(localId: localId,
-                                                  rtpReceiver: transceiver!.receiver,
-                                                  track: transceiver!.receiver.track!)
-                        completion(recvData, nil)
-                    }
-                       
+                    // Store in the map.
+                    mapMidTransceiver[localId] = transceiver
+                    
+                    let recvData = MSRecvData(localId: localId,
+                                              rtpReceiver: transceiver!.receiver,
+                                              track: transceiver!.receiver.track!)
+                    completion(recvData, nil)
                 }
             }
         }
@@ -620,7 +626,7 @@ class MSRecvHandler: MSHandler {
             }
         }
     }
-     
+
     func getReceiverStats(_ localId: String, _ completion: @escaping MSPeerConnectionGetStatsCompletion) {
         let localIdIt = mapMidTransceiver[localId]
 

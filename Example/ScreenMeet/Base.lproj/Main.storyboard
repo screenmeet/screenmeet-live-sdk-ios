@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="ia9-lG-H0g">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="ia9-lG-H0g">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -22,7 +22,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="EXc-Yz-ziq">
-                                <rect key="frame" x="107" y="128" width="200" height="200"/>
+                                <rect key="frame" x="107" y="132" width="200" height="200"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="200" id="1jE-ab-On5"/>
                                     <constraint firstAttribute="height" constant="200" id="gAh-Qx-ce2"/>
@@ -55,7 +55,7 @@
                                 </connections>
                             </button>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="bezel" placeholder="Code" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Rfn-Nh-Rdc" customClass="UnderLineTextField" customModule="ScreenMeet" customModuleProvider="target">
-                                <rect key="frame" x="122" y="378" width="170" height="30.5"/>
+                                <rect key="frame" x="122" y="382" width="170" height="30.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="170" id="Yz8-lA-an7"/>
                                 </constraints>
@@ -63,7 +63,7 @@
                                 <textInputTraits key="textInputTraits" returnKeyType="done"/>
                             </textField>
                             <view hidden="YES" alpha="0.90000000000000002" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iSe-1X-IBs">
-                                <rect key="frame" x="87" y="458.5" width="240" height="130"/>
+                                <rect key="frame" x="87" y="462.5" width="240" height="130"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="o9b-0m-8z3">
                                         <rect key="frame" x="20" y="71.5" width="200" height="38"/>
@@ -113,18 +113,33 @@
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="layer.clipToBounds" value="YES"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yLn-97-M5a">
+                                <rect key="frame" x="354" y="92" width="52" height="52"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="52" id="7eL-xf-0jz"/>
+                                    <constraint firstAttribute="width" constant="52" id="9Az-dI-x6T"/>
+                                </constraints>
+                                <color key="tintColor" red="1" green="0.4549019608" blue="0.20392156859999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="gear" catalog="system"/>
+                                <connections>
+                                    <action selector="settingsButtonClicked:" destination="rWk-2o-Ryo" eventType="touchUpInside" id="V5h-Ks-Ioc"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" name="main-bg"/>
                         <constraints>
                             <constraint firstItem="iSe-1X-IBs" firstAttribute="centerX" secondItem="VgL-f1-Qa0" secondAttribute="centerX" id="0cj-eg-1Ti"/>
                             <constraint firstItem="iSe-1X-IBs" firstAttribute="top" secondItem="Rfn-Nh-Rdc" secondAttribute="bottom" constant="50" id="7bz-LI-k0j"/>
                             <constraint firstItem="ctz-Bs-RaG" firstAttribute="leading" secondItem="VgL-f1-Qa0" secondAttribute="leading" id="Azm-At-A13"/>
+                            <constraint firstAttribute="trailing" secondItem="yLn-97-M5a" secondAttribute="trailing" constant="8" id="FKM-zz-29Y"/>
                             <constraint firstItem="EXc-Yz-ziq" firstAttribute="top" secondItem="5ka-yB-5dO" secondAttribute="bottom" constant="40" id="KZl-sd-hl6"/>
                             <constraint firstAttribute="trailingMargin" secondItem="F9N-wx-X5n" secondAttribute="trailing" constant="20" id="OOa-LX-Hrx"/>
                             <constraint firstAttribute="trailing" secondItem="ctz-Bs-RaG" secondAttribute="trailing" id="P95-mf-et5"/>
                             <constraint firstItem="F9N-wx-X5n" firstAttribute="leading" secondItem="VgL-f1-Qa0" secondAttribute="leadingMargin" constant="20" id="PBs-3N-pOV"/>
                             <constraint firstItem="Rfn-Nh-Rdc" firstAttribute="top" secondItem="EXc-Yz-ziq" secondAttribute="bottom" constant="50" id="RuH-dR-IPC"/>
                             <constraint firstItem="G3c-5J-dYh" firstAttribute="top" secondItem="ctz-Bs-RaG" secondAttribute="bottom" id="TIR-5d-dET"/>
+                            <constraint firstItem="yLn-97-M5a" firstAttribute="top" secondItem="5ka-yB-5dO" secondAttribute="bottom" id="df4-tr-Pih"/>
                             <constraint firstItem="EXc-Yz-ziq" firstAttribute="centerX" secondItem="VgL-f1-Qa0" secondAttribute="centerX" id="ifh-Z4-UTp"/>
                             <constraint firstItem="Rfn-Nh-Rdc" firstAttribute="centerX" secondItem="VgL-f1-Qa0" secondAttribute="centerX" id="jD8-ma-2kU"/>
                             <constraint firstItem="G3c-5J-dYh" firstAttribute="top" secondItem="F9N-wx-X5n" secondAttribute="bottom" constant="80" id="u5V-GJ-39A"/>
@@ -156,7 +171,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ia9-lG-H0g" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="xge-WY-3eu">
-                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <rect key="frame" x="0.0" y="48" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -181,7 +196,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q3K-cM-8fd">
-                                <rect key="frame" x="0.0" y="88" width="414" height="734"/>
+                                <rect key="frame" x="0.0" y="92" width="414" height="730"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <wkWebViewConfiguration key="configuration">
                                     <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
@@ -269,7 +284,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hwW-8f-JG7">
-                                <rect key="frame" x="0.0" y="44" width="414" height="769"/>
+                                <rect key="frame" x="0.0" y="48" width="414" height="765"/>
                                 <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <wkWebViewConfiguration key="configuration">
                                     <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
@@ -307,11 +322,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="ERo-ol-W2j">
-                                <rect key="frame" x="0.0" y="44" width="414" height="769"/>
+                                <rect key="frame" x="0.0" y="48" width="414" height="765"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SMDemoRemoteControlTextFieldCell" id="aV4-BQ-BQX" customClass="SMDemoRemoteControlTextFieldCell" customModule="ScreenMeet" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="44.5" width="414" height="50"/>
+                                        <rect key="frame" x="0.0" y="50" width="414" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="aV4-BQ-BQX" id="vIf-rM-Aa6">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="50"/>
@@ -335,7 +350,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SMDemoRemoteControlTextViewCell" id="af9-0d-z80" customClass="SMDemoRemoteControlTextViewCell" customModule="ScreenMeet" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="94.5" width="414" height="46"/>
+                                        <rect key="frame" x="0.0" y="100" width="414" height="46"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="af9-0d-z80" id="f5i-Na-7eT">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="46"/>
@@ -361,7 +376,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SMDemoRemoteControlButtonCell" id="Fgz-RL-GNb" customClass="SMDemoRemoteControlButtonCell" customModule="ScreenMeet" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="140.5" width="414" height="48"/>
+                                        <rect key="frame" x="0.0" y="146" width="414" height="48"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Fgz-RL-GNb" id="2pf-RX-GSa">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="48"/>
@@ -388,7 +403,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SMDemoRemoteControlSegmentCell" id="HIK-HU-ann" customClass="SMDemoRemoteControlSegmentCell" customModule="ScreenMeet" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="188.5" width="414" height="44"/>
+                                        <rect key="frame" x="0.0" y="194" width="414" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="HIK-HU-ann" id="jQv-fe-sL8">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
@@ -416,7 +431,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SMDemoRemoteControlSwitchCell" id="0px-SZ-RQG" customClass="SMDemoRemoteControlSwitchCell" customModule="ScreenMeet" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="232.5" width="414" height="44"/>
+                                        <rect key="frame" x="0.0" y="238" width="414" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="0px-SZ-RQG" id="auw-fp-hsj">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
@@ -436,7 +451,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SMDemoRemoteControlFillerCell" id="4Oy-eN-bup" customClass="SMDemoRemoteControlFillerCell" customModule="ScreenMeet" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="276.5" width="414" height="90"/>
+                                        <rect key="frame" x="0.0" y="282" width="414" height="90"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="4Oy-eN-bup" id="Okd-QR-WvN">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="90"/>
@@ -513,7 +528,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter captcha" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="2gu-QC-vPZ">
-                                <rect key="frame" x="137" y="204" width="140" height="34"/>
+                                <rect key="frame" x="137" y="208" width="140" height="34"/>
                                 <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.94901960784313721" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="140" id="c9l-va-JJJ"/>
@@ -527,7 +542,7 @@
                                 </connections>
                             </textField>
                             <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hVY-fS-yxx">
-                                <rect key="frame" x="125" y="104" width="164" height="80"/>
+                                <rect key="frame" x="125" y="108" width="164" height="80"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="80" id="D2w-GO-rc7"/>
@@ -539,7 +554,7 @@
                                 </wkWebViewConfiguration>
                             </wkWebView>
                             <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Vg-fe-HIQ">
-                                <rect key="frame" x="137" y="288" width="140" height="44"/>
+                                <rect key="frame" x="137" y="292" width="140" height="44"/>
                                 <color key="backgroundColor" red="0.85490196078431369" green="0.85490196078431369" blue="0.85490196078431369" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="jLc-wT-ZnT"/>
@@ -580,11 +595,12 @@
         </designable>
     </designables>
     <resources>
-        <image name="arrow.left" catalog="system" width="128" height="98"/>
-        <image name="arrow.right" catalog="system" width="128" height="98"/>
+        <image name="arrow.left" catalog="system" width="128" height="95"/>
+        <image name="arrow.right" catalog="system" width="128" height="95"/>
+        <image name="gear" catalog="system" width="128" height="122"/>
         <image name="icon-lock" width="24" height="24"/>
-        <image name="network" catalog="system" width="128" height="121"/>
-        <image name="network.badge.shield.half.filled" catalog="system" width="128" height="118"/>
+        <image name="network" catalog="system" width="128" height="123"/>
+        <image name="network.badge.shield.half.filled" catalog="system" width="128" height="121"/>
         <image name="uiwindow.split.2x1" catalog="system" width="128" height="93"/>
         <namedColor name="main-bg">
             <color red="0.94099998474121094" green="0.94099998474121094" blue="0.94099998474121094" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
