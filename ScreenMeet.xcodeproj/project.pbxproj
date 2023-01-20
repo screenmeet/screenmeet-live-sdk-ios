@@ -1,0 +1,519 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		9105274E29506C9800335BA8 /* ConnectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9105274A29506C9800335BA8 /* ConnectViewController.swift */; };
+		9105274F29506C9800335BA8 /* CallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9105274B29506C9800335BA8 /* CallViewController.swift */; };
+		9105275029506C9800335BA8 /* CallController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9105274C29506C9800335BA8 /* CallController.swift */; };
+		9105275129506C9800335BA8 /* CaptchaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9105274D29506C9800335BA8 /* CaptchaViewController.swift */; };
+		91189ADD294B83BF00AA3B77 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91189ADC294B83BF00AA3B77 /* AppDelegate.swift */; };
+		91189ADF294B83BF00AA3B77 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91189ADE294B83BF00AA3B77 /* SceneDelegate.swift */; };
+		91189AE4294B83BF00AA3B77 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 91189AE2294B83BF00AA3B77 /* Main.storyboard */; };
+		91189AE6294B83C100AA3B77 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 91189AE5294B83C100AA3B77 /* Assets.xcassets */; };
+		91189AE9294B83C100AA3B77 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 91189AE7294B83C100AA3B77 /* LaunchScreen.storyboard */; };
+		914C95AF2951F4C1001DB4AF /* CustomTransitionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914C95A92951F4C1001DB4AF /* CustomTransitionViewController.swift */; };
+		914C95B02951F4C1001DB4AF /* SpinerLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914C95AA2951F4C1001DB4AF /* SpinerLayer.swift */; };
+		914C95B12951F4C1001DB4AF /* TransitionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914C95AB2951F4C1001DB4AF /* TransitionButton.swift */; };
+		914C95B22951F4C1001DB4AF /* FadeTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914C95AC2951F4C1001DB4AF /* FadeTransition.swift */; };
+		914C95B32951F4C1001DB4AF /* CGRectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914C95AD2951F4C1001DB4AF /* CGRectExtension.swift */; };
+		914C95B42951F4C1001DB4AF /* UnderLineTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914C95AE2951F4C1001DB4AF /* UnderLineTextField.swift */; };
+		914C95BC2951F78B001DB4AF /* RemoteParticipantCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914C95BB2951F78B001DB4AF /* RemoteParticipantCell.swift */; };
+		91CD32E229524D7B00E03B7C /* BuildFile in Embed Frameworks */ = {isa = PBXBuildFile; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		933370ACD97E6021439328C6 /* Pods_ScreenMeet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 926EE1DFF90BAD240757A86F /* Pods_ScreenMeet.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		91CD32E029524D3C00E03B7C /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				91CD32E229524D7B00E03B7C /* BuildFile in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		25DEC123313B0E729810F491 /* Pods-ScreenMeet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScreenMeet.debug.xcconfig"; path = "Target Support Files/Pods-ScreenMeet/Pods-ScreenMeet.debug.xcconfig"; sourceTree = "<group>"; };
+		9105274A29506C9800335BA8 /* ConnectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectViewController.swift; sourceTree = "<group>"; };
+		9105274B29506C9800335BA8 /* CallViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallViewController.swift; sourceTree = "<group>"; };
+		9105274C29506C9800335BA8 /* CallController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallController.swift; sourceTree = "<group>"; };
+		9105274D29506C9800335BA8 /* CaptchaViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptchaViewController.swift; sourceTree = "<group>"; };
+		91189AD9294B83BF00AA3B77 /* ScreenMeet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ScreenMeet.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		91189ADC294B83BF00AA3B77 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		91189ADE294B83BF00AA3B77 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		91189AE3294B83BF00AA3B77 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		91189AE5294B83C100AA3B77 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		91189AE8294B83C100AA3B77 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		91189AEA294B83C100AA3B77 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		914C95A92951F4C1001DB4AF /* CustomTransitionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTransitionViewController.swift; sourceTree = "<group>"; };
+		914C95AA2951F4C1001DB4AF /* SpinerLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpinerLayer.swift; sourceTree = "<group>"; };
+		914C95AB2951F4C1001DB4AF /* TransitionButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionButton.swift; sourceTree = "<group>"; };
+		914C95AC2951F4C1001DB4AF /* FadeTransition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FadeTransition.swift; sourceTree = "<group>"; };
+		914C95AD2951F4C1001DB4AF /* CGRectExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGRectExtension.swift; sourceTree = "<group>"; };
+		914C95AE2951F4C1001DB4AF /* UnderLineTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnderLineTextField.swift; sourceTree = "<group>"; };
+		914C95BB2951F78B001DB4AF /* RemoteParticipantCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteParticipantCell.swift; sourceTree = "<group>"; };
+		914C95BD2951F8F6001DB4AF /* ScreenMeetLive.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = ScreenMeetLive.xcframework; path = Pods/ScreenMeetSDK3/ScreenMeetLive.xcframework; sourceTree = "<group>"; };
+		91832D742952485400EEA54D /* ScreenMeetLiveiOS.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = ScreenMeetLiveiOS.xcframework; path = Pods/ScreenMeetSDK3/ScreenMeetLiveiOS.xcframework; sourceTree = "<group>"; };
+		926EE1DFF90BAD240757A86F /* Pods_ScreenMeet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ScreenMeet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BDBCBFAF2420CFE408861E73 /* Pods-ScreenMeet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScreenMeet.release.xcconfig"; path = "Target Support Files/Pods-ScreenMeet/Pods-ScreenMeet.release.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		91189AD6294B83BF00AA3B77 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				933370ACD97E6021439328C6 /* Pods_ScreenMeet.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1CA59BAC467E7116D4E0EB10 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				91832D742952485400EEA54D /* ScreenMeetLiveiOS.xcframework */,
+				914C95BD2951F8F6001DB4AF /* ScreenMeetLive.xcframework */,
+				926EE1DFF90BAD240757A86F /* Pods_ScreenMeet.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		70733752A518375E355F4964 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				25DEC123313B0E729810F491 /* Pods-ScreenMeet.debug.xcconfig */,
+				BDBCBFAF2420CFE408861E73 /* Pods-ScreenMeet.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		91189AD0294B83BF00AA3B77 = {
+			isa = PBXGroup;
+			children = (
+				91189ADB294B83BF00AA3B77 /* ScreenMeet */,
+				91189ADA294B83BF00AA3B77 /* Products */,
+				1CA59BAC467E7116D4E0EB10 /* Frameworks */,
+				70733752A518375E355F4964 /* Pods */,
+			);
+			sourceTree = "<group>";
+		};
+		91189ADA294B83BF00AA3B77 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				91189AD9294B83BF00AA3B77 /* ScreenMeet.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		91189ADB294B83BF00AA3B77 /* ScreenMeet */ = {
+			isa = PBXGroup;
+			children = (
+				914C95BA2951F78B001DB4AF /* Cells */,
+				914C95A82951F4C1001DB4AF /* ThirdPartyUI */,
+				9105274C29506C9800335BA8 /* CallController.swift */,
+				9105274B29506C9800335BA8 /* CallViewController.swift */,
+				9105274D29506C9800335BA8 /* CaptchaViewController.swift */,
+				9105274A29506C9800335BA8 /* ConnectViewController.swift */,
+				91189ADC294B83BF00AA3B77 /* AppDelegate.swift */,
+				91189ADE294B83BF00AA3B77 /* SceneDelegate.swift */,
+				91189AE2294B83BF00AA3B77 /* Main.storyboard */,
+				91189AE5294B83C100AA3B77 /* Assets.xcassets */,
+				91189AE7294B83C100AA3B77 /* LaunchScreen.storyboard */,
+				91189AEA294B83C100AA3B77 /* Info.plist */,
+			);
+			path = ScreenMeet;
+			sourceTree = "<group>";
+		};
+		914C95A82951F4C1001DB4AF /* ThirdPartyUI */ = {
+			isa = PBXGroup;
+			children = (
+				914C95A92951F4C1001DB4AF /* CustomTransitionViewController.swift */,
+				914C95AA2951F4C1001DB4AF /* SpinerLayer.swift */,
+				914C95AB2951F4C1001DB4AF /* TransitionButton.swift */,
+				914C95AC2951F4C1001DB4AF /* FadeTransition.swift */,
+				914C95AD2951F4C1001DB4AF /* CGRectExtension.swift */,
+				914C95AE2951F4C1001DB4AF /* UnderLineTextField.swift */,
+			);
+			path = ThirdPartyUI;
+			sourceTree = "<group>";
+		};
+		914C95BA2951F78B001DB4AF /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				914C95BB2951F78B001DB4AF /* RemoteParticipantCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		91189AD8294B83BF00AA3B77 /* ScreenMeet */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 91189AED294B83C100AA3B77 /* Build configuration list for PBXNativeTarget "ScreenMeet" */;
+			buildPhases = (
+				0831CDCA7A56D384E29033A3 /* [CP] Check Pods Manifest.lock */,
+				91189AD5294B83BF00AA3B77 /* Sources */,
+				91189AD6294B83BF00AA3B77 /* Frameworks */,
+				91189AD7294B83BF00AA3B77 /* Resources */,
+				91CD32E029524D3C00E03B7C /* Embed Frameworks */,
+				22AD00255594A023613246B6 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ScreenMeet;
+			productName = ScreenMeet;
+			productReference = 91189AD9294B83BF00AA3B77 /* ScreenMeet.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		91189AD1294B83BF00AA3B77 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1400;
+				LastUpgradeCheck = 1400;
+				TargetAttributes = {
+					91189AD8294B83BF00AA3B77 = {
+						CreatedOnToolsVersion = 14.0.1;
+					};
+				};
+			};
+			buildConfigurationList = 91189AD4294B83BF00AA3B77 /* Build configuration list for PBXProject "ScreenMeet" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 91189AD0294B83BF00AA3B77;
+			productRefGroup = 91189ADA294B83BF00AA3B77 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				91189AD8294B83BF00AA3B77 /* ScreenMeet */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		91189AD7294B83BF00AA3B77 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				91189AE9294B83C100AA3B77 /* LaunchScreen.storyboard in Resources */,
+				91189AE6294B83C100AA3B77 /* Assets.xcassets in Resources */,
+				91189AE4294B83BF00AA3B77 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0831CDCA7A56D384E29033A3 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ScreenMeet-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		22AD00255594A023613246B6 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ScreenMeet/Pods-ScreenMeet-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ScreenMeet/Pods-ScreenMeet-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ScreenMeet/Pods-ScreenMeet-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		91189AD5294B83BF00AA3B77 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				914C95B12951F4C1001DB4AF /* TransitionButton.swift in Sources */,
+				9105274E29506C9800335BA8 /* ConnectViewController.swift in Sources */,
+				9105275029506C9800335BA8 /* CallController.swift in Sources */,
+				914C95B02951F4C1001DB4AF /* SpinerLayer.swift in Sources */,
+				914C95AF2951F4C1001DB4AF /* CustomTransitionViewController.swift in Sources */,
+				91189ADD294B83BF00AA3B77 /* AppDelegate.swift in Sources */,
+				914C95B42951F4C1001DB4AF /* UnderLineTextField.swift in Sources */,
+				914C95B22951F4C1001DB4AF /* FadeTransition.swift in Sources */,
+				9105275129506C9800335BA8 /* CaptchaViewController.swift in Sources */,
+				9105274F29506C9800335BA8 /* CallViewController.swift in Sources */,
+				91189ADF294B83BF00AA3B77 /* SceneDelegate.swift in Sources */,
+				914C95B32951F4C1001DB4AF /* CGRectExtension.swift in Sources */,
+				914C95BC2951F78B001DB4AF /* RemoteParticipantCell.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		91189AE2294B83BF00AA3B77 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				91189AE3294B83BF00AA3B77 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		91189AE7294B83C100AA3B77 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				91189AE8294B83C100AA3B77 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		91189AEB294B83C100AA3B77 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		91189AEC294B83C100AA3B77 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		91189AEE294B83C100AA3B77 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 25DEC123313B0E729810F491 /* Pods-ScreenMeet.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = U3AQW9824Q;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ScreenMeet/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.screenmeet.live.ScreenMeet;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		91189AEF294B83C100AA3B77 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BDBCBFAF2420CFE408861E73 /* Pods-ScreenMeet.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = U3AQW9824Q;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ScreenMeet/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.screenmeet.live.ScreenMeet;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		91189AD4294B83BF00AA3B77 /* Build configuration list for PBXProject "ScreenMeet" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				91189AEB294B83C100AA3B77 /* Debug */,
+				91189AEC294B83C100AA3B77 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		91189AED294B83C100AA3B77 /* Build configuration list for PBXNativeTarget "ScreenMeet" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				91189AEE294B83C100AA3B77 /* Debug */,
+				91189AEF294B83C100AA3B77 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 91189AD1294B83BF00AA3B77 /* Project object */;
+}
