@@ -1,11 +1,9 @@
-# Uncomment the next line to define a global platform for your project
-# platform :ios, '9.0'
-source 'https://github.com/Rostyk/screenmeet-live-sdk-ios-xc.git'
+
+#source 'https://github.com/screenmeet/screenmeet-live-sdk-ios.git'
  
 target 'ScreenMeet' do
   	# Comment the next line if you don't want to use dynamic frameworks
   	use_frameworks!
 
  	pod ScreenMeet
- 	pod 
 end

@@ -4,7 +4,7 @@
 //
 //  Created by Ross on 13.10.2022.
 //
-import ScreenMeetLiveiOS
+import ScreenMeetLive
 import UIKit
 import WebRTC
 
@@ -277,7 +277,7 @@ extension CallController: ScreenMeetDelegate {
         presentable?.onFeatureRequest(featureRequest, decisionHandler)
     }
     
-    func onFeatureRequestRejected(_ featureRequest: ScreenMeetLiveiOS.SMFeatureRequestData) {
+    func onFeatureRequestRejected(_ featureRequest: ScreenMeetLive.SMFeatureRequestData) {
         presentable?.onFeatureRequestRejected(requestId: featureRequest.requestId)
     }
     

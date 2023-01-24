@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import ScreenMeetLiveiOS
+import ScreenMeetLive
 import WebRTC
 
 extension UIColor {
