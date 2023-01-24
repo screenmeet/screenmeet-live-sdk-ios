@@ -4,7 +4,7 @@
 target 'ScreenMeet' do
   use_frameworks!
 
-  pod 'ScreenMeetSDK3', '3.0.74'
+  pod 'ScreenMeetSDK', '3.0.2'
 
 end
 
