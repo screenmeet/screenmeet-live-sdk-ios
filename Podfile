@@ -1,9 +1,10 @@
 
-platform :ios, '16.0'
+#platform :ios, '15.0'
 
 target 'ScreenMeet' do
   use_frameworks!
 
-  pod 'ScreenMeetSDK'
+  pod 'ScreenMeetSDK3', '3.0.74'
 
 end
+

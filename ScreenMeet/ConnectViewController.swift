@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import ScreenMeetLiveiOS
+import ScreenMeetLive
 
 class ConnectViewController: UIViewController {
     @IBOutlet weak var bottomInfoView: UIView!
@@ -34,6 +34,7 @@ class ConnectViewController: UIViewController {
         roomCodeTextField.resignFirstResponder()
         
         connectButton.startAnimation()
+        ScreenMeet.config.collectMetric = true
         
        // ScreenMeet.config.developerLoggingTiers = [.mediasoup, .webrtc, .signalling, .http, .rawSocket]
         ScreenMeet.connect(roomCodeTextField.text!, "iOS") { [weak self] error in
