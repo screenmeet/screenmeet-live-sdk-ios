@@ -6379,30 +6379,21 @@
         "children": [
           {
             "kind": "Var",
-            "name": "session",
-            "printedName": "session",
+            "name": "id",
+            "printedName": "id",
             "children": [
               {
                 "kind": "TypeNominal",
-                "name": "ImplicitlyUnwrappedOptional",
-                "printedName": "ScreenMeetLive.Session?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Session",
-                    "printedName": "ScreenMeetLive.Session",
-                    "usr": "s:14ScreenMeetLive7SessionV"
-                  }
-                ],
-                "usr": "s:Sq"
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
               }
             ],
             "declKind": "Var",
-            "usr": "s:14ScreenMeetLive19SMDiscoveryResponseV7sessionAA7SessionVSgvp",
-            "mangledName": "$s14ScreenMeetLive19SMDiscoveryResponseV7sessionAA7SessionVSgvp",
+            "usr": "s:14ScreenMeetLive19SMDiscoveryResponseV2idSSvp",
+            "mangledName": "$s14ScreenMeetLive19SMDiscoveryResponseV2idSSvp",
             "moduleName": "ScreenMeetLive",
             "declAttributes": [
-              "HasInitialValue",
               "HasStorage"
             ],
             "fixedbinaryorder": 0,
@@ -6415,22 +6406,14 @@
                 "children": [
                   {
                     "kind": "TypeNominal",
-                    "name": "ImplicitlyUnwrappedOptional",
-                    "printedName": "ScreenMeetLive.Session?",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "Session",
-                        "printedName": "ScreenMeetLive.Session",
-                        "usr": "s:14ScreenMeetLive7SessionV"
-                      }
-                    ],
-                    "usr": "s:Sq"
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
                   }
                 ],
                 "declKind": "Accessor",
-                "usr": "s:14ScreenMeetLive19SMDiscoveryResponseV7sessionAA7SessionVSgvg",
-                "mangledName": "$s14ScreenMeetLive19SMDiscoveryResponseV7sessionAA7SessionVSgvg",
+                "usr": "s:14ScreenMeetLive19SMDiscoveryResponseV2idSSvg",
+                "mangledName": "$s14ScreenMeetLive19SMDiscoveryResponseV2idSSvg",
                 "moduleName": "ScreenMeetLive",
                 "implicit": true,
                 "declAttributes": [
@@ -6450,22 +6433,14 @@
                   },
                   {
                     "kind": "TypeNominal",
-                    "name": "ImplicitlyUnwrappedOptional",
-                    "printedName": "ScreenMeetLive.Session?",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "Session",
-                        "printedName": "ScreenMeetLive.Session",
-                        "usr": "s:14ScreenMeetLive7SessionV"
-                      }
-                    ],
-                    "usr": "s:Sq"
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
                   }
                 ],
                 "declKind": "Accessor",
-                "usr": "s:14ScreenMeetLive19SMDiscoveryResponseV7sessionAA7SessionVSgvs",
-                "mangledName": "$s14ScreenMeetLive19SMDiscoveryResponseV7sessionAA7SessionVSgvs",
+                "usr": "s:14ScreenMeetLive19SMDiscoveryResponseV2idSSvs",
+                "mangledName": "$s14ScreenMeetLive19SMDiscoveryResponseV2idSSvs",
                 "moduleName": "ScreenMeetLive",
                 "implicit": true,
                 "declAttributes": [
@@ -6485,8 +6460,434 @@
                   }
                 ],
                 "declKind": "Accessor",
-                "usr": "s:14ScreenMeetLive19SMDiscoveryResponseV7sessionAA7SessionVSgvM",
-                "mangledName": "$s14ScreenMeetLive19SMDiscoveryResponseV7sessionAA7SessionVSgvM",
+                "usr": "s:14ScreenMeetLive19SMDiscoveryResponseV2idSSvM",
+                "mangledName": "$s14ScreenMeetLive19SMDiscoveryResponseV2idSSvM",
+                "moduleName": "ScreenMeetLive",
+                "implicit": true,
+                "declAttributes": [
+                  "Transparent"
+                ],
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "label",
+            "printedName": "label",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:14ScreenMeetLive19SMDiscoveryResponseV5labelSSvp",
+            "mangledName": "$s14ScreenMeetLive19SMDiscoveryResponseV5labelSSvp",
+            "moduleName": "ScreenMeetLive",
+            "declAttributes": [
+              "HasStorage"
+            ],
+            "fixedbinaryorder": 1,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:14ScreenMeetLive19SMDiscoveryResponseV5labelSSvg",
+                "mangledName": "$s14ScreenMeetLive19SMDiscoveryResponseV5labelSSvg",
+                "moduleName": "ScreenMeetLive",
+                "implicit": true,
+                "declAttributes": [
+                  "Transparent"
+                ],
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:14ScreenMeetLive19SMDiscoveryResponseV5labelSSvs",
+                "mangledName": "$s14ScreenMeetLive19SMDiscoveryResponseV5labelSSvs",
+                "moduleName": "ScreenMeetLive",
+                "implicit": true,
+                "declAttributes": [
+                  "Transparent"
+                ],
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:14ScreenMeetLive19SMDiscoveryResponseV5labelSSvM",
+                "mangledName": "$s14ScreenMeetLive19SMDiscoveryResponseV5labelSSvM",
+                "moduleName": "ScreenMeetLive",
+                "implicit": true,
+                "declAttributes": [
+                  "Transparent"
+                ],
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "servers",
+            "printedName": "servers",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "SMDiscoveryServers",
+                "printedName": "ScreenMeetLive.SMDiscoveryServers",
+                "usr": "s:14ScreenMeetLive18SMDiscoveryServersV"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:14ScreenMeetLive19SMDiscoveryResponseV7serversAA0D7ServersVvp",
+            "mangledName": "$s14ScreenMeetLive19SMDiscoveryResponseV7serversAA0D7ServersVvp",
+            "moduleName": "ScreenMeetLive",
+            "declAttributes": [
+              "HasStorage"
+            ],
+            "fixedbinaryorder": 2,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "SMDiscoveryServers",
+                    "printedName": "ScreenMeetLive.SMDiscoveryServers",
+                    "usr": "s:14ScreenMeetLive18SMDiscoveryServersV"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:14ScreenMeetLive19SMDiscoveryResponseV7serversAA0D7ServersVvg",
+                "mangledName": "$s14ScreenMeetLive19SMDiscoveryResponseV7serversAA0D7ServersVvg",
+                "moduleName": "ScreenMeetLive",
+                "implicit": true,
+                "declAttributes": [
+                  "Transparent"
+                ],
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "SMDiscoveryServers",
+                    "printedName": "ScreenMeetLive.SMDiscoveryServers",
+                    "usr": "s:14ScreenMeetLive18SMDiscoveryServersV"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:14ScreenMeetLive19SMDiscoveryResponseV7serversAA0D7ServersVvs",
+                "mangledName": "$s14ScreenMeetLive19SMDiscoveryResponseV7serversAA0D7ServersVvs",
+                "moduleName": "ScreenMeetLive",
+                "implicit": true,
+                "declAttributes": [
+                  "Transparent"
+                ],
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:14ScreenMeetLive19SMDiscoveryResponseV7serversAA0D7ServersVvM",
+                "mangledName": "$s14ScreenMeetLive19SMDiscoveryResponseV7serversAA0D7ServersVvM",
+                "moduleName": "ScreenMeetLive",
+                "implicit": true,
+                "declAttributes": [
+                  "Transparent"
+                ],
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "hostAuthToken",
+            "printedName": "hostAuthToken",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "Swift.String?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:14ScreenMeetLive19SMDiscoveryResponseV13hostAuthTokenSSSgvp",
+            "mangledName": "$s14ScreenMeetLive19SMDiscoveryResponseV13hostAuthTokenSSSgvp",
+            "moduleName": "ScreenMeetLive",
+            "declAttributes": [
+              "HasInitialValue",
+              "HasStorage"
+            ],
+            "fixedbinaryorder": 3,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "Swift.String?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:14ScreenMeetLive19SMDiscoveryResponseV13hostAuthTokenSSSgvg",
+                "mangledName": "$s14ScreenMeetLive19SMDiscoveryResponseV13hostAuthTokenSSSgvg",
+                "moduleName": "ScreenMeetLive",
+                "implicit": true,
+                "declAttributes": [
+                  "Transparent"
+                ],
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "Swift.String?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:14ScreenMeetLive19SMDiscoveryResponseV13hostAuthTokenSSSgvs",
+                "mangledName": "$s14ScreenMeetLive19SMDiscoveryResponseV13hostAuthTokenSSSgvs",
+                "moduleName": "ScreenMeetLive",
+                "implicit": true,
+                "declAttributes": [
+                  "Transparent"
+                ],
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:14ScreenMeetLive19SMDiscoveryResponseV13hostAuthTokenSSSgvM",
+                "mangledName": "$s14ScreenMeetLive19SMDiscoveryResponseV13hostAuthTokenSSSgvM",
+                "moduleName": "ScreenMeetLive",
+                "implicit": true,
+                "declAttributes": [
+                  "Transparent"
+                ],
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "host",
+            "printedName": "host",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "Swift.Bool?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Bool",
+                    "printedName": "Swift.Bool",
+                    "usr": "s:Sb"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:14ScreenMeetLive19SMDiscoveryResponseV4hostSbSgvp",
+            "mangledName": "$s14ScreenMeetLive19SMDiscoveryResponseV4hostSbSgvp",
+            "moduleName": "ScreenMeetLive",
+            "declAttributes": [
+              "HasInitialValue",
+              "HasStorage"
+            ],
+            "fixedbinaryorder": 4,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "Swift.Bool?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Bool",
+                        "printedName": "Swift.Bool",
+                        "usr": "s:Sb"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:14ScreenMeetLive19SMDiscoveryResponseV4hostSbSgvg",
+                "mangledName": "$s14ScreenMeetLive19SMDiscoveryResponseV4hostSbSgvg",
+                "moduleName": "ScreenMeetLive",
+                "implicit": true,
+                "declAttributes": [
+                  "Transparent"
+                ],
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Optional",
+                    "printedName": "Swift.Bool?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Bool",
+                        "printedName": "Swift.Bool",
+                        "usr": "s:Sb"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:14ScreenMeetLive19SMDiscoveryResponseV4hostSbSgvs",
+                "mangledName": "$s14ScreenMeetLive19SMDiscoveryResponseV4hostSbSgvs",
+                "moduleName": "ScreenMeetLive",
+                "implicit": true,
+                "declAttributes": [
+                  "Transparent"
+                ],
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:14ScreenMeetLive19SMDiscoveryResponseV4hostSbSgvM",
+                "mangledName": "$s14ScreenMeetLive19SMDiscoveryResponseV4hostSbSgvM",
                 "moduleName": "ScreenMeetLive",
                 "implicit": true,
                 "declAttributes": [
@@ -6499,7 +6900,7 @@
           {
             "kind": "Constructor",
             "name": "init",
-            "printedName": "init(session:)",
+            "printedName": "init(id:label:servers:hostAuthToken:host:)",
             "children": [
               {
                 "kind": "TypeNominal",
@@ -6509,14 +6910,47 @@
               },
               {
                 "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "SMDiscoveryServers",
+                "printedName": "ScreenMeetLive.SMDiscoveryServers",
+                "usr": "s:14ScreenMeetLive18SMDiscoveryServersV"
+              },
+              {
+                "kind": "TypeNominal",
                 "name": "Optional",
-                "printedName": "ScreenMeetLive.Session?",
+                "printedName": "Swift.String?",
                 "children": [
                   {
                     "kind": "TypeNominal",
-                    "name": "Session",
-                    "printedName": "ScreenMeetLive.Session",
-                    "usr": "s:14ScreenMeetLive7SessionV"
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "hasDefaultArg": true,
+                "usr": "s:Sq"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "Swift.Bool?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Bool",
+                    "printedName": "Swift.Bool",
+                    "usr": "s:Sb"
                   }
                 ],
                 "hasDefaultArg": true,
@@ -6524,27 +6958,8 @@
               }
             ],
             "declKind": "Constructor",
-            "usr": "s:14ScreenMeetLive19SMDiscoveryResponseV7sessionAcA7SessionVSg_tcfc",
-            "mangledName": "$s14ScreenMeetLive19SMDiscoveryResponseV7sessionAcA7SessionVSg_tcfc",
-            "moduleName": "ScreenMeetLive",
-            "implicit": true,
-            "init_kind": "Designated"
-          },
-          {
-            "kind": "Constructor",
-            "name": "init",
-            "printedName": "init()",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "SMDiscoveryResponse",
-                "printedName": "ScreenMeetLive.SMDiscoveryResponse",
-                "usr": "s:14ScreenMeetLive19SMDiscoveryResponseV"
-              }
-            ],
-            "declKind": "Constructor",
-            "usr": "s:14ScreenMeetLive19SMDiscoveryResponseVACycfc",
-            "mangledName": "$s14ScreenMeetLive19SMDiscoveryResponseVACycfc",
+            "usr": "s:14ScreenMeetLive19SMDiscoveryResponseV2id5label7servers13hostAuthToken0I0ACSS_SSAA0D7ServersVSSSgSbSgtcfc",
+            "mangledName": "$s14ScreenMeetLive19SMDiscoveryResponseV2id5label7servers13hostAuthToken0I0ACSS_SSAA0D7ServersVSSSgSbSgtcfc",
             "moduleName": "ScreenMeetLive",
             "implicit": true,
             "init_kind": "Designated"
@@ -6641,512 +7056,6 @@
             "printedName": "Deserializable",
             "usr": "s:14ScreenMeetLive14DeserializableP",
             "mangledName": "$s14ScreenMeetLive14DeserializableP"
-          }
-        ]
-      },
-      {
-        "kind": "TypeDecl",
-        "name": "Session",
-        "printedName": "Session",
-        "children": [
-          {
-            "kind": "Var",
-            "name": "id",
-            "printedName": "id",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "String",
-                "printedName": "Swift.String",
-                "usr": "s:SS"
-              }
-            ],
-            "declKind": "Var",
-            "usr": "s:14ScreenMeetLive7SessionV2idSSvp",
-            "mangledName": "$s14ScreenMeetLive7SessionV2idSSvp",
-            "moduleName": "ScreenMeetLive",
-            "declAttributes": [
-              "HasStorage"
-            ],
-            "fixedbinaryorder": 0,
-            "hasStorage": true,
-            "accessors": [
-              {
-                "kind": "Accessor",
-                "name": "Get",
-                "printedName": "Get()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "String",
-                    "printedName": "Swift.String",
-                    "usr": "s:SS"
-                  }
-                ],
-                "declKind": "Accessor",
-                "usr": "s:14ScreenMeetLive7SessionV2idSSvg",
-                "mangledName": "$s14ScreenMeetLive7SessionV2idSSvg",
-                "moduleName": "ScreenMeetLive",
-                "implicit": true,
-                "declAttributes": [
-                  "Transparent"
-                ],
-                "accessorKind": "get"
-              },
-              {
-                "kind": "Accessor",
-                "name": "Set",
-                "printedName": "Set()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Void",
-                    "printedName": "()"
-                  },
-                  {
-                    "kind": "TypeNominal",
-                    "name": "String",
-                    "printedName": "Swift.String",
-                    "usr": "s:SS"
-                  }
-                ],
-                "declKind": "Accessor",
-                "usr": "s:14ScreenMeetLive7SessionV2idSSvs",
-                "mangledName": "$s14ScreenMeetLive7SessionV2idSSvs",
-                "moduleName": "ScreenMeetLive",
-                "implicit": true,
-                "declAttributes": [
-                  "Transparent"
-                ],
-                "accessorKind": "set"
-              },
-              {
-                "kind": "Accessor",
-                "name": "Modify",
-                "printedName": "Modify()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Void",
-                    "printedName": "()"
-                  }
-                ],
-                "declKind": "Accessor",
-                "usr": "s:14ScreenMeetLive7SessionV2idSSvM",
-                "mangledName": "$s14ScreenMeetLive7SessionV2idSSvM",
-                "moduleName": "ScreenMeetLive",
-                "implicit": true,
-                "declAttributes": [
-                  "Transparent"
-                ],
-                "accessorKind": "_modify"
-              }
-            ]
-          },
-          {
-            "kind": "Var",
-            "name": "label",
-            "printedName": "label",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "String",
-                "printedName": "Swift.String",
-                "usr": "s:SS"
-              }
-            ],
-            "declKind": "Var",
-            "usr": "s:14ScreenMeetLive7SessionV5labelSSvp",
-            "mangledName": "$s14ScreenMeetLive7SessionV5labelSSvp",
-            "moduleName": "ScreenMeetLive",
-            "declAttributes": [
-              "HasStorage"
-            ],
-            "fixedbinaryorder": 1,
-            "hasStorage": true,
-            "accessors": [
-              {
-                "kind": "Accessor",
-                "name": "Get",
-                "printedName": "Get()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "String",
-                    "printedName": "Swift.String",
-                    "usr": "s:SS"
-                  }
-                ],
-                "declKind": "Accessor",
-                "usr": "s:14ScreenMeetLive7SessionV5labelSSvg",
-                "mangledName": "$s14ScreenMeetLive7SessionV5labelSSvg",
-                "moduleName": "ScreenMeetLive",
-                "implicit": true,
-                "declAttributes": [
-                  "Transparent"
-                ],
-                "accessorKind": "get"
-              },
-              {
-                "kind": "Accessor",
-                "name": "Set",
-                "printedName": "Set()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Void",
-                    "printedName": "()"
-                  },
-                  {
-                    "kind": "TypeNominal",
-                    "name": "String",
-                    "printedName": "Swift.String",
-                    "usr": "s:SS"
-                  }
-                ],
-                "declKind": "Accessor",
-                "usr": "s:14ScreenMeetLive7SessionV5labelSSvs",
-                "mangledName": "$s14ScreenMeetLive7SessionV5labelSSvs",
-                "moduleName": "ScreenMeetLive",
-                "implicit": true,
-                "declAttributes": [
-                  "Transparent"
-                ],
-                "accessorKind": "set"
-              },
-              {
-                "kind": "Accessor",
-                "name": "Modify",
-                "printedName": "Modify()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Void",
-                    "printedName": "()"
-                  }
-                ],
-                "declKind": "Accessor",
-                "usr": "s:14ScreenMeetLive7SessionV5labelSSvM",
-                "mangledName": "$s14ScreenMeetLive7SessionV5labelSSvM",
-                "moduleName": "ScreenMeetLive",
-                "implicit": true,
-                "declAttributes": [
-                  "Transparent"
-                ],
-                "accessorKind": "_modify"
-              }
-            ]
-          },
-          {
-            "kind": "Var",
-            "name": "servers",
-            "printedName": "servers",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "SMDiscoveryServers",
-                "printedName": "ScreenMeetLive.SMDiscoveryServers",
-                "usr": "s:14ScreenMeetLive18SMDiscoveryServersV"
-              }
-            ],
-            "declKind": "Var",
-            "usr": "s:14ScreenMeetLive7SessionV7serversAA18SMDiscoveryServersVvp",
-            "mangledName": "$s14ScreenMeetLive7SessionV7serversAA18SMDiscoveryServersVvp",
-            "moduleName": "ScreenMeetLive",
-            "declAttributes": [
-              "HasStorage"
-            ],
-            "fixedbinaryorder": 2,
-            "hasStorage": true,
-            "accessors": [
-              {
-                "kind": "Accessor",
-                "name": "Get",
-                "printedName": "Get()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "SMDiscoveryServers",
-                    "printedName": "ScreenMeetLive.SMDiscoveryServers",
-                    "usr": "s:14ScreenMeetLive18SMDiscoveryServersV"
-                  }
-                ],
-                "declKind": "Accessor",
-                "usr": "s:14ScreenMeetLive7SessionV7serversAA18SMDiscoveryServersVvg",
-                "mangledName": "$s14ScreenMeetLive7SessionV7serversAA18SMDiscoveryServersVvg",
-                "moduleName": "ScreenMeetLive",
-                "implicit": true,
-                "declAttributes": [
-                  "Transparent"
-                ],
-                "accessorKind": "get"
-              },
-              {
-                "kind": "Accessor",
-                "name": "Set",
-                "printedName": "Set()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Void",
-                    "printedName": "()"
-                  },
-                  {
-                    "kind": "TypeNominal",
-                    "name": "SMDiscoveryServers",
-                    "printedName": "ScreenMeetLive.SMDiscoveryServers",
-                    "usr": "s:14ScreenMeetLive18SMDiscoveryServersV"
-                  }
-                ],
-                "declKind": "Accessor",
-                "usr": "s:14ScreenMeetLive7SessionV7serversAA18SMDiscoveryServersVvs",
-                "mangledName": "$s14ScreenMeetLive7SessionV7serversAA18SMDiscoveryServersVvs",
-                "moduleName": "ScreenMeetLive",
-                "implicit": true,
-                "declAttributes": [
-                  "Transparent"
-                ],
-                "accessorKind": "set"
-              },
-              {
-                "kind": "Accessor",
-                "name": "Modify",
-                "printedName": "Modify()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Void",
-                    "printedName": "()"
-                  }
-                ],
-                "declKind": "Accessor",
-                "usr": "s:14ScreenMeetLive7SessionV7serversAA18SMDiscoveryServersVvM",
-                "mangledName": "$s14ScreenMeetLive7SessionV7serversAA18SMDiscoveryServersVvM",
-                "moduleName": "ScreenMeetLive",
-                "implicit": true,
-                "declAttributes": [
-                  "Transparent"
-                ],
-                "accessorKind": "_modify"
-              }
-            ]
-          },
-          {
-            "kind": "Var",
-            "name": "hostAuthToken",
-            "printedName": "hostAuthToken",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Optional",
-                "printedName": "Swift.String?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "String",
-                    "printedName": "Swift.String",
-                    "usr": "s:SS"
-                  }
-                ],
-                "usr": "s:Sq"
-              }
-            ],
-            "declKind": "Var",
-            "usr": "s:14ScreenMeetLive7SessionV13hostAuthTokenSSSgvp",
-            "mangledName": "$s14ScreenMeetLive7SessionV13hostAuthTokenSSSgvp",
-            "moduleName": "ScreenMeetLive",
-            "declAttributes": [
-              "HasInitialValue",
-              "HasStorage"
-            ],
-            "fixedbinaryorder": 3,
-            "hasStorage": true,
-            "accessors": [
-              {
-                "kind": "Accessor",
-                "name": "Get",
-                "printedName": "Get()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Optional",
-                    "printedName": "Swift.String?",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "String",
-                        "printedName": "Swift.String",
-                        "usr": "s:SS"
-                      }
-                    ],
-                    "usr": "s:Sq"
-                  }
-                ],
-                "declKind": "Accessor",
-                "usr": "s:14ScreenMeetLive7SessionV13hostAuthTokenSSSgvg",
-                "mangledName": "$s14ScreenMeetLive7SessionV13hostAuthTokenSSSgvg",
-                "moduleName": "ScreenMeetLive",
-                "implicit": true,
-                "declAttributes": [
-                  "Transparent"
-                ],
-                "accessorKind": "get"
-              },
-              {
-                "kind": "Accessor",
-                "name": "Set",
-                "printedName": "Set()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Void",
-                    "printedName": "()"
-                  },
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Optional",
-                    "printedName": "Swift.String?",
-                    "children": [
-                      {
-                        "kind": "TypeNominal",
-                        "name": "String",
-                        "printedName": "Swift.String",
-                        "usr": "s:SS"
-                      }
-                    ],
-                    "usr": "s:Sq"
-                  }
-                ],
-                "declKind": "Accessor",
-                "usr": "s:14ScreenMeetLive7SessionV13hostAuthTokenSSSgvs",
-                "mangledName": "$s14ScreenMeetLive7SessionV13hostAuthTokenSSSgvs",
-                "moduleName": "ScreenMeetLive",
-                "implicit": true,
-                "declAttributes": [
-                  "Transparent"
-                ],
-                "accessorKind": "set"
-              },
-              {
-                "kind": "Accessor",
-                "name": "Modify",
-                "printedName": "Modify()",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "Void",
-                    "printedName": "()"
-                  }
-                ],
-                "declKind": "Accessor",
-                "usr": "s:14ScreenMeetLive7SessionV13hostAuthTokenSSSgvM",
-                "mangledName": "$s14ScreenMeetLive7SessionV13hostAuthTokenSSSgvM",
-                "moduleName": "ScreenMeetLive",
-                "implicit": true,
-                "declAttributes": [
-                  "Transparent"
-                ],
-                "accessorKind": "_modify"
-              }
-            ]
-          },
-          {
-            "kind": "Constructor",
-            "name": "init",
-            "printedName": "init(id:label:servers:hostAuthToken:)",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Session",
-                "printedName": "ScreenMeetLive.Session",
-                "usr": "s:14ScreenMeetLive7SessionV"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "String",
-                "printedName": "Swift.String",
-                "usr": "s:SS"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "String",
-                "printedName": "Swift.String",
-                "usr": "s:SS"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "SMDiscoveryServers",
-                "printedName": "ScreenMeetLive.SMDiscoveryServers",
-                "usr": "s:14ScreenMeetLive18SMDiscoveryServersV"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "Optional",
-                "printedName": "Swift.String?",
-                "children": [
-                  {
-                    "kind": "TypeNominal",
-                    "name": "String",
-                    "printedName": "Swift.String",
-                    "usr": "s:SS"
-                  }
-                ],
-                "hasDefaultArg": true,
-                "usr": "s:Sq"
-              }
-            ],
-            "declKind": "Constructor",
-            "usr": "s:14ScreenMeetLive7SessionV2id5label7servers13hostAuthTokenACSS_SSAA18SMDiscoveryServersVSSSgtcfc",
-            "mangledName": "$s14ScreenMeetLive7SessionV2id5label7servers13hostAuthTokenACSS_SSAA18SMDiscoveryServersVSSSgtcfc",
-            "moduleName": "ScreenMeetLive",
-            "implicit": true,
-            "init_kind": "Designated"
-          },
-          {
-            "kind": "Constructor",
-            "name": "init",
-            "printedName": "init(from:)",
-            "children": [
-              {
-                "kind": "TypeNominal",
-                "name": "Session",
-                "printedName": "ScreenMeetLive.Session",
-                "usr": "s:14ScreenMeetLive7SessionV"
-              },
-              {
-                "kind": "TypeNominal",
-                "name": "Decoder",
-                "printedName": "Swift.Decoder",
-                "usr": "s:s7DecoderP"
-              }
-            ],
-            "declKind": "Constructor",
-            "usr": "s:14ScreenMeetLive7SessionV4fromACs7Decoder_p_tKcfc",
-            "mangledName": "$s14ScreenMeetLive7SessionV4fromACs7Decoder_p_tKcfc",
-            "moduleName": "ScreenMeetLive",
-            "implicit": true,
-            "throwing": true,
-            "init_kind": "Designated"
-          }
-        ],
-        "declKind": "Struct",
-        "usr": "s:14ScreenMeetLive7SessionV",
-        "mangledName": "$s14ScreenMeetLive7SessionV",
-        "moduleName": "ScreenMeetLive",
-        "conformances": [
-          {
-            "kind": "Conformance",
-            "name": "Decodable",
-            "printedName": "Decodable",
-            "usr": "s:Se",
-            "mangledName": "$sSe"
-          },
-          {
-            "kind": "Conformance",
-            "name": "Sendable",
-            "printedName": "Sendable",
-            "usr": "s:s8SendableP",
-            "mangledName": "$ss8SendableP"
           }
         ]
       },
@@ -18773,6 +18682,36 @@
           },
           {
             "kind": "Function",
+            "name": "notifyParticipantInfoUpdated",
+            "printedName": "notifyParticipantInfoUpdated(_:_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "SMIdentityInfo",
+                "printedName": "ScreenMeetLive.SMIdentityInfo",
+                "usr": "s:14ScreenMeetLive14SMIdentityInfoC"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:14ScreenMeetLive18SMMediasoupChannelC28notifyParticipantInfoUpdatedyySS_AA010SMIdentityH0CtF",
+            "mangledName": "$s14ScreenMeetLive18SMMediasoupChannelC28notifyParticipantInfoUpdatedyySS_AA010SMIdentityH0CtF",
+            "moduleName": "ScreenMeetLive",
+            "isOpen": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
             "name": "getVideoEnabled",
             "printedName": "getVideoEnabled()",
             "children": [
@@ -20612,19 +20551,26 @@
           },
           {
             "kind": "Var",
-            "name": "segmentationRequest",
-            "printedName": "segmentationRequest",
+            "name": "_segmentationRequest",
+            "printedName": "_segmentationRequest",
             "children": [
               {
                 "kind": "TypeNominal",
-                "name": "VNGeneratePersonSegmentationRequest",
-                "printedName": "Vision.VNGeneratePersonSegmentationRequest",
-                "usr": "c:objc(cs)VNGeneratePersonSegmentationRequest"
+                "name": "Optional",
+                "printedName": "Any?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "ProtocolComposition",
+                    "printedName": "Any"
+                  }
+                ],
+                "usr": "s:Sq"
               }
             ],
             "declKind": "Var",
-            "usr": "s:14ScreenMeetLive19CameraVideoCapturerC19segmentationRequest33_7E12CB3919E2DC7A09272F967C60CCC3LLSo028VNGeneratePersonSegmentationH0Cvp",
-            "mangledName": "$s14ScreenMeetLive19CameraVideoCapturerC19segmentationRequest33_7E12CB3919E2DC7A09272F967C60CCC3LLSo028VNGeneratePersonSegmentationH0Cvp",
+            "usr": "s:14ScreenMeetLive19CameraVideoCapturerC20_segmentationRequest33_7E12CB3919E2DC7A09272F967C60CCC3LLypSgvp",
+            "mangledName": "$s14ScreenMeetLive19CameraVideoCapturerC20_segmentationRequest33_7E12CB3919E2DC7A09272F967C60CCC3LLypSgvp",
             "moduleName": "ScreenMeetLive",
             "isInternal": true,
             "declAttributes": [
@@ -33772,6 +33718,56 @@
             "funcSelfKind": "NonMutating"
           },
           {
+            "kind": "Function",
+            "name": "update",
+            "printedName": "update(_:_:_:_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Array",
+                "printedName": "[ScreenMeetLive.SMCapability]",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "SMCapability",
+                    "printedName": "ScreenMeetLive.SMCapability",
+                    "usr": "s:14ScreenMeetLive12SMCapabilityO"
+                  }
+                ],
+                "usr": "s:Sa"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "SMIdentityInfo",
+                "printedName": "ScreenMeetLive.SMIdentityInfo",
+                "usr": "s:14ScreenMeetLive14SMIdentityInfoC"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "SMCallerState",
+                "printedName": "ScreenMeetLive.SMCallerState",
+                "usr": "s:14ScreenMeetLive13SMCallerStateC"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:14ScreenMeetLive13SMParticipantC6updateyySb_SayAA12SMCapabilityOGAA14SMIdentityInfoCAA13SMCallerStateCtF",
+            "mangledName": "$s14ScreenMeetLive13SMParticipantC6updateyySb_SayAA12SMCapabilityOGAA14SMIdentityInfoCAA13SMCallerStateCtF",
+            "moduleName": "ScreenMeetLive",
+            "isOpen": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
             "kind": "Constructor",
             "name": "init",
             "printedName": "init()",
@@ -40087,7 +40083,7 @@
               {
                 "kind": "TypeFunc",
                 "name": "Function",
-                "printedName": "(ScreenMeetLive.Session?, ScreenMeetLive.SMError?) -> ()",
+                "printedName": "(ScreenMeetLive.SMDiscoveryResponse?, ScreenMeetLive.SMError?) -> ()",
                 "children": [
                   {
                     "kind": "TypeNominal",
@@ -40097,18 +40093,18 @@
                   {
                     "kind": "TypeNominal",
                     "name": "Tuple",
-                    "printedName": "(ScreenMeetLive.Session?, ScreenMeetLive.SMError?)",
+                    "printedName": "(ScreenMeetLive.SMDiscoveryResponse?, ScreenMeetLive.SMError?)",
                     "children": [
                       {
                         "kind": "TypeNominal",
                         "name": "Optional",
-                        "printedName": "ScreenMeetLive.Session?",
+                        "printedName": "ScreenMeetLive.SMDiscoveryResponse?",
                         "children": [
                           {
                             "kind": "TypeNominal",
-                            "name": "Session",
-                            "printedName": "ScreenMeetLive.Session",
-                            "usr": "s:14ScreenMeetLive7SessionV"
+                            "name": "SMDiscoveryResponse",
+                            "printedName": "ScreenMeetLive.SMDiscoveryResponse",
+                            "usr": "s:14ScreenMeetLive19SMDiscoveryResponseV"
                           }
                         ],
                         "usr": "s:Sq"
@@ -40133,8 +40129,8 @@
               }
             ],
             "declKind": "Func",
-            "usr": "s:14ScreenMeetLive22SMHandshakeTransactionC3runyyyAA7SessionVSg_AA7SMErrorVSgtcF",
-            "mangledName": "$s14ScreenMeetLive22SMHandshakeTransactionC3runyyyAA7SessionVSg_AA7SMErrorVSgtcF",
+            "usr": "s:14ScreenMeetLive22SMHandshakeTransactionC3runyyyAA19SMDiscoveryResponseVSg_AA7SMErrorVSgtcF",
+            "mangledName": "$s14ScreenMeetLive22SMHandshakeTransactionC3runyyyAA19SMDiscoveryResponseVSg_AA7SMErrorVSgtcF",
             "moduleName": "ScreenMeetLive",
             "isOpen": true,
             "funcSelfKind": "NonMutating"
@@ -60013,6 +60009,36 @@
           },
           {
             "kind": "Function",
+            "name": "onParticipantInfoUpdated",
+            "printedName": "onParticipantInfoUpdated(_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "SMParticipant",
+                "printedName": "ScreenMeetLive.SMParticipant",
+                "usr": "s:14ScreenMeetLive13SMParticipantC"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:14ScreenMeetLive0aB8DelegateP24onParticipantInfoUpdatedyyAA13SMParticipantCF",
+            "mangledName": "$s14ScreenMeetLive0aB8DelegateP24onParticipantInfoUpdatedyyAA13SMParticipantCF",
+            "moduleName": "ScreenMeetLive",
+            "genericSig": "<τ_0_0 where τ_0_0 : ScreenMeetLive.ScreenMeetDelegate>",
+            "sugared_genericSig": "<Self where Self : ScreenMeetLive.ScreenMeetDelegate>",
+            "protocolReq": true,
+            "declAttributes": [
+              "RawDocComment"
+            ],
+            "reqNewWitnessTableEntry": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
             "name": "onParticipantVideoTrackCreated",
             "printedName": "onParticipantVideoTrackCreated(_:_:_:)",
             "children": [
@@ -60803,27 +60829,27 @@
           },
           {
             "kind": "Var",
-            "name": "session",
-            "printedName": "session",
+            "name": "discoveryResponse",
+            "printedName": "discoveryResponse",
             "children": [
               {
                 "kind": "TypeNominal",
                 "name": "ImplicitlyUnwrappedOptional",
-                "printedName": "ScreenMeetLive.Session?",
+                "printedName": "ScreenMeetLive.SMDiscoveryResponse?",
                 "children": [
                   {
                     "kind": "TypeNominal",
-                    "name": "Session",
-                    "printedName": "ScreenMeetLive.Session",
-                    "usr": "s:14ScreenMeetLive7SessionV"
+                    "name": "SMDiscoveryResponse",
+                    "printedName": "ScreenMeetLive.SMDiscoveryResponse",
+                    "usr": "s:14ScreenMeetLive19SMDiscoveryResponseV"
                   }
                 ],
                 "usr": "s:Sq"
               }
             ],
             "declKind": "Var",
-            "usr": "s:14ScreenMeetLive9SMSessionC7session33_0AC92DD8B4A49AD8A34A54B8935BBD45LLAA7SessionVSgvp",
-            "mangledName": "$s14ScreenMeetLive9SMSessionC7session33_0AC92DD8B4A49AD8A34A54B8935BBD45LLAA7SessionVSgvp",
+            "usr": "s:14ScreenMeetLive9SMSessionC17discoveryResponse33_0AC92DD8B4A49AD8A34A54B8935BBD45LLAA011SMDiscoveryF0VSgvp",
+            "mangledName": "$s14ScreenMeetLive9SMSessionC17discoveryResponse33_0AC92DD8B4A49AD8A34A54B8935BBD45LLAA011SMDiscoveryF0VSgvp",
             "moduleName": "ScreenMeetLive",
             "isInternal": true,
             "declAttributes": [
@@ -102062,7 +102088,7 @@
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/MediasoupSwift\/CameraVideoCapturer.swift",
       "kind": "IntegerLiteral",
-      "offset": 652,
+      "offset": 953,
       "length": 10,
       "value": "1000000000"
     },
@@ -102580,35 +102606,35 @@
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Session\/Transactions\/SMHandshakeTransaction.swift",
       "kind": "StringLiteral",
-      "offset": 406,
+      "offset": 418,
       "length": 2,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Session\/Transactions\/SMHandshakeTransaction.swift",
       "kind": "IntegerLiteral",
-      "offset": 865,
+      "offset": 877,
       "length": 1,
       "value": "6"
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Session\/Transactions\/SMHandshakeTransaction.swift",
       "kind": "IntegerLiteral",
-      "offset": 922,
+      "offset": 934,
       "length": 6,
       "value": "169400"
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Session\/Transactions\/SMHandshakeTransaction.swift",
       "kind": "StringLiteral",
-      "offset": 1071,
+      "offset": 1083,
       "length": 11,
       "value": "\"Anonymous\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Session\/Transactions\/SMHandshakeTransaction.swift",
       "kind": "IntegerLiteral",
-      "offset": 1127,
+      "offset": 1139,
       "length": 2,
       "value": "45"
     },
@@ -103665,1190 +103691,1190 @@
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 7420,
+      "offset": 7458,
       "length": 2,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "IntegerLiteral",
-      "offset": 7515,
+      "offset": 7553,
       "length": 1,
       "value": "0"
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 7771,
+      "offset": 7809,
       "length": 9,
       "value": "\"iPod5,1\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 7821,
+      "offset": 7859,
       "length": 29,
       "value": "\"iPod touch (5th generation)\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 7871,
+      "offset": 7909,
       "length": 9,
       "value": "\"iPod7,1\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 7921,
+      "offset": 7959,
       "length": 29,
       "value": "\"iPod touch (6th generation)\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 7971,
+      "offset": 8009,
       "length": 9,
       "value": "\"iPod9,1\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 8021,
+      "offset": 8059,
       "length": 29,
       "value": "\"iPod touch (7th generation)\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 8071,
+      "offset": 8109,
       "length": 11,
       "value": "\"iPhone3,1\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 8084,
+      "offset": 8122,
       "length": 11,
       "value": "\"iPhone3,2\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 8097,
+      "offset": 8135,
       "length": 11,
       "value": "\"iPhone3,3\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 8121,
+      "offset": 8159,
       "length": 10,
       "value": "\"iPhone 4\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 8152,
+      "offset": 8190,
       "length": 11,
       "value": "\"iPhone4,1\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 8202,
+      "offset": 8240,
       "length": 11,
       "value": "\"iPhone 4s\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 8234,
+      "offset": 8272,
       "length": 11,
       "value": "\"iPhone5,1\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 8247,
+      "offset": 8285,
       "length": 11,
       "value": "\"iPhone5,2\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 8284,
+      "offset": 8322,
       "length": 10,
       "value": "\"iPhone 5\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 8315,
+      "offset": 8353,
       "length": 11,
       "value": "\"iPhone5,3\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 8328,
+      "offset": 8366,
       "length": 11,
       "value": "\"iPhone5,4\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 8365,
+      "offset": 8403,
       "length": 11,
       "value": "\"iPhone 5c\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 8397,
+      "offset": 8435,
       "length": 11,
       "value": "\"iPhone6,1\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 8410,
+      "offset": 8448,
       "length": 11,
       "value": "\"iPhone6,2\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 8447,
+      "offset": 8485,
       "length": 11,
       "value": "\"iPhone 5s\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 8479,
+      "offset": 8517,
       "length": 11,
       "value": "\"iPhone7,2\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 8529,
+      "offset": 8567,
       "length": 10,
       "value": "\"iPhone 6\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 8560,
+      "offset": 8598,
       "length": 11,
       "value": "\"iPhone7,1\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 8610,
+      "offset": 8648,
       "length": 15,
       "value": "\"iPhone 6 Plus\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 8646,
+      "offset": 8684,
       "length": 11,
       "value": "\"iPhone8,1\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 8696,
+      "offset": 8734,
       "length": 11,
       "value": "\"iPhone 6s\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 8728,
+      "offset": 8766,
       "length": 11,
       "value": "\"iPhone8,2\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 8778,
+      "offset": 8816,
       "length": 16,
       "value": "\"iPhone 6s Plus\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 8815,
+      "offset": 8853,
       "length": 11,
       "value": "\"iPhone8,4\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 8865,
+      "offset": 8903,
       "length": 11,
       "value": "\"iPhone SE\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 8897,
+      "offset": 8935,
       "length": 11,
       "value": "\"iPhone9,1\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 8910,
+      "offset": 8948,
       "length": 11,
       "value": "\"iPhone9,3\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 8947,
+      "offset": 8985,
       "length": 10,
       "value": "\"iPhone 7\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 8978,
+      "offset": 9016,
       "length": 11,
       "value": "\"iPhone9,2\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 8991,
+      "offset": 9029,
       "length": 11,
       "value": "\"iPhone9,4\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 9028,
+      "offset": 9066,
       "length": 15,
       "value": "\"iPhone 7 Plus\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 9064,
+      "offset": 9102,
       "length": 12,
       "value": "\"iPhone10,1\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 9078,
+      "offset": 9116,
       "length": 12,
       "value": "\"iPhone10,4\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 9114,
+      "offset": 9152,
       "length": 10,
       "value": "\"iPhone 8\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 9145,
+      "offset": 9183,
       "length": 12,
       "value": "\"iPhone10,2\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 9159,
+      "offset": 9197,
       "length": 12,
       "value": "\"iPhone10,5\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 9195,
+      "offset": 9233,
       "length": 15,
       "value": "\"iPhone 8 Plus\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 9231,
+      "offset": 9269,
       "length": 12,
       "value": "\"iPhone10,3\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 9245,
+      "offset": 9283,
       "length": 12,
       "value": "\"iPhone10,6\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 9281,
+      "offset": 9319,
       "length": 10,
       "value": "\"iPhone X\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 9312,
+      "offset": 9350,
       "length": 12,
       "value": "\"iPhone11,2\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 9362,
+      "offset": 9400,
       "length": 11,
       "value": "\"iPhone XS\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 9394,
+      "offset": 9432,
       "length": 12,
       "value": "\"iPhone11,4\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 9408,
+      "offset": 9446,
       "length": 12,
       "value": "\"iPhone11,6\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 9444,
+      "offset": 9482,
       "length": 15,
       "value": "\"iPhone XS Max\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 9480,
+      "offset": 9518,
       "length": 12,
       "value": "\"iPhone11,8\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 9530,
+      "offset": 9568,
       "length": 11,
       "value": "\"iPhone XR\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 9562,
+      "offset": 9600,
       "length": 12,
       "value": "\"iPhone12,1\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 9612,
+      "offset": 9650,
       "length": 11,
       "value": "\"iPhone 11\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 9644,
+      "offset": 9682,
       "length": 12,
       "value": "\"iPhone12,3\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 9694,
+      "offset": 9732,
       "length": 15,
       "value": "\"iPhone 11 Pro\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 9730,
+      "offset": 9768,
       "length": 12,
       "value": "\"iPhone12,5\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 9780,
+      "offset": 9818,
       "length": 19,
       "value": "\"iPhone 11 Pro Max\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 9820,
+      "offset": 9858,
       "length": 12,
       "value": "\"iPhone12,8\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 9870,
+      "offset": 9908,
       "length": 28,
       "value": "\"iPhone SE (2nd generation)\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 9919,
+      "offset": 9957,
       "length": 12,
       "value": "\"iPhone13,1\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 9969,
+      "offset": 10007,
       "length": 16,
       "value": "\"iPhone 12 mini\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10006,
+      "offset": 10044,
       "length": 12,
       "value": "\"iPhone13,2\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10056,
+      "offset": 10094,
       "length": 11,
       "value": "\"iPhone 12\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10088,
+      "offset": 10126,
       "length": 12,
       "value": "\"iPhone13,3\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10138,
+      "offset": 10176,
       "length": 15,
       "value": "\"iPhone 12 Pro\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10174,
+      "offset": 10212,
       "length": 12,
       "value": "\"iPhone13,4\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10224,
+      "offset": 10262,
       "length": 19,
       "value": "\"iPhone 12 Pro Max\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10264,
+      "offset": 10302,
       "length": 9,
       "value": "\"iPad2,1\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10275,
+      "offset": 10313,
       "length": 9,
       "value": "\"iPad2,2\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10286,
+      "offset": 10324,
       "length": 9,
       "value": "\"iPad2,3\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10297,
+      "offset": 10335,
       "length": 9,
       "value": "\"iPad2,4\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10314,
+      "offset": 10352,
       "length": 8,
       "value": "\"iPad 2\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10343,
+      "offset": 10381,
       "length": 9,
       "value": "\"iPad3,1\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10354,
+      "offset": 10392,
       "length": 9,
       "value": "\"iPad3,2\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10365,
+      "offset": 10403,
       "length": 9,
       "value": "\"iPad3,3\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10393,
+      "offset": 10431,
       "length": 23,
       "value": "\"iPad (3rd generation)\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10437,
+      "offset": 10475,
       "length": 9,
       "value": "\"iPad3,4\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10448,
+      "offset": 10486,
       "length": 9,
       "value": "\"iPad3,5\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10459,
+      "offset": 10497,
       "length": 9,
       "value": "\"iPad3,6\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10487,
+      "offset": 10525,
       "length": 23,
       "value": "\"iPad (4th generation)\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10531,
+      "offset": 10569,
       "length": 10,
       "value": "\"iPad6,11\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10543,
+      "offset": 10581,
       "length": 10,
       "value": "\"iPad6,12\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10581,
+      "offset": 10619,
       "length": 23,
       "value": "\"iPad (5th generation)\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10625,
+      "offset": 10663,
       "length": 9,
       "value": "\"iPad7,5\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10636,
+      "offset": 10674,
       "length": 9,
       "value": "\"iPad7,6\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10675,
+      "offset": 10713,
       "length": 23,
       "value": "\"iPad (6th generation)\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10719,
+      "offset": 10757,
       "length": 10,
       "value": "\"iPad7,11\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10731,
+      "offset": 10769,
       "length": 10,
       "value": "\"iPad7,12\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10769,
+      "offset": 10807,
       "length": 23,
       "value": "\"iPad (7th generation)\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10813,
+      "offset": 10851,
       "length": 10,
       "value": "\"iPad11,6\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10825,
+      "offset": 10863,
       "length": 10,
       "value": "\"iPad11,7\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10863,
+      "offset": 10901,
       "length": 23,
       "value": "\"iPad (8th generation)\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10907,
+      "offset": 10945,
       "length": 9,
       "value": "\"iPad4,1\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10918,
+      "offset": 10956,
       "length": 9,
       "value": "\"iPad4,2\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10929,
+      "offset": 10967,
       "length": 9,
       "value": "\"iPad4,3\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10957,
+      "offset": 10995,
       "length": 10,
       "value": "\"iPad Air\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10988,
+      "offset": 11026,
       "length": 9,
       "value": "\"iPad5,3\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 10999,
+      "offset": 11037,
       "length": 9,
       "value": "\"iPad5,4\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11038,
+      "offset": 11076,
       "length": 12,
       "value": "\"iPad Air 2\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11071,
+      "offset": 11109,
       "length": 10,
       "value": "\"iPad11,3\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11083,
+      "offset": 11121,
       "length": 10,
       "value": "\"iPad11,4\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11121,
+      "offset": 11159,
       "length": 27,
       "value": "\"iPad Air (3rd generation)\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11169,
+      "offset": 11207,
       "length": 10,
       "value": "\"iPad13,1\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11181,
+      "offset": 11219,
       "length": 10,
       "value": "\"iPad13,2\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11219,
+      "offset": 11257,
       "length": 27,
       "value": "\"iPad Air (4th generation)\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11267,
+      "offset": 11305,
       "length": 9,
       "value": "\"iPad2,5\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11278,
+      "offset": 11316,
       "length": 9,
       "value": "\"iPad2,6\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11289,
+      "offset": 11327,
       "length": 9,
       "value": "\"iPad2,7\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11317,
+      "offset": 11355,
       "length": 11,
       "value": "\"iPad mini\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11349,
+      "offset": 11387,
       "length": 9,
       "value": "\"iPad4,4\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11360,
+      "offset": 11398,
       "length": 9,
       "value": "\"iPad4,5\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11371,
+      "offset": 11409,
       "length": 9,
       "value": "\"iPad4,6\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11399,
+      "offset": 11437,
       "length": 13,
       "value": "\"iPad mini 2\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11433,
+      "offset": 11471,
       "length": 9,
       "value": "\"iPad4,7\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11444,
+      "offset": 11482,
       "length": 9,
       "value": "\"iPad4,8\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11455,
+      "offset": 11493,
       "length": 9,
       "value": "\"iPad4,9\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11483,
+      "offset": 11521,
       "length": 13,
       "value": "\"iPad mini 3\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11517,
+      "offset": 11555,
       "length": 9,
       "value": "\"iPad5,1\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11528,
+      "offset": 11566,
       "length": 9,
       "value": "\"iPad5,2\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11567,
+      "offset": 11605,
       "length": 13,
       "value": "\"iPad mini 4\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11601,
+      "offset": 11639,
       "length": 10,
       "value": "\"iPad11,1\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11613,
+      "offset": 11651,
       "length": 10,
       "value": "\"iPad11,2\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11651,
+      "offset": 11689,
       "length": 28,
       "value": "\"iPad mini (5th generation)\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11700,
+      "offset": 11738,
       "length": 9,
       "value": "\"iPad6,3\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11711,
+      "offset": 11749,
       "length": 9,
       "value": "\"iPad6,4\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11750,
+      "offset": 11788,
       "length": 21,
       "value": "\"iPad Pro (9.7-inch)\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11792,
+      "offset": 11830,
       "length": 9,
       "value": "\"iPad7,3\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11803,
+      "offset": 11841,
       "length": 9,
       "value": "\"iPad7,4\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11842,
+      "offset": 11880,
       "length": 22,
       "value": "\"iPad Pro (10.5-inch)\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11885,
+      "offset": 11923,
       "length": 9,
       "value": "\"iPad8,1\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11896,
+      "offset": 11934,
       "length": 9,
       "value": "\"iPad8,2\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11907,
+      "offset": 11945,
       "length": 9,
       "value": "\"iPad8,3\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11918,
+      "offset": 11956,
       "length": 9,
       "value": "\"iPad8,4\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11935,
+      "offset": 11973,
       "length": 37,
       "value": "\"iPad Pro (11-inch) (1st generation)\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 11993,
+      "offset": 12031,
       "length": 9,
       "value": "\"iPad8,9\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 12004,
+      "offset": 12042,
       "length": 10,
       "value": "\"iPad8,10\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 12043,
+      "offset": 12081,
       "length": 37,
       "value": "\"iPad Pro (11-inch) (2nd generation)\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 12101,
+      "offset": 12139,
       "length": 9,
       "value": "\"iPad6,7\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 12112,
+      "offset": 12150,
       "length": 9,
       "value": "\"iPad6,8\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 12151,
+      "offset": 12189,
       "length": 39,
       "value": "\"iPad Pro (12.9-inch) (1st generation)\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 12211,
+      "offset": 12249,
       "length": 9,
       "value": "\"iPad7,1\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 12222,
+      "offset": 12260,
       "length": 9,
       "value": "\"iPad7,2\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 12261,
+      "offset": 12299,
       "length": 39,
       "value": "\"iPad Pro (12.9-inch) (2nd generation)\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 12321,
+      "offset": 12359,
       "length": 9,
       "value": "\"iPad8,5\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 12332,
+      "offset": 12370,
       "length": 9,
       "value": "\"iPad8,6\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 12343,
+      "offset": 12381,
       "length": 9,
       "value": "\"iPad8,7\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 12354,
+      "offset": 12392,
       "length": 9,
       "value": "\"iPad8,8\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 12371,
+      "offset": 12409,
       "length": 39,
       "value": "\"iPad Pro (12.9-inch) (3rd generation)\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 12431,
+      "offset": 12469,
       "length": 10,
       "value": "\"iPad8,11\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 12443,
+      "offset": 12481,
       "length": 10,
       "value": "\"iPad8,12\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 12481,
+      "offset": 12519,
       "length": 39,
       "value": "\"iPad Pro (12.9-inch) (4th generation)\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 12541,
+      "offset": 12579,
       "length": 12,
       "value": "\"AppleTV5,3\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 12591,
+      "offset": 12629,
       "length": 10,
       "value": "\"Apple TV\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 12622,
+      "offset": 12660,
       "length": 12,
       "value": "\"AppleTV6,2\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 12672,
+      "offset": 12710,
       "length": 13,
       "value": "\"Apple TV 4K\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 12706,
+      "offset": 12744,
       "length": 19,
       "value": "\"AudioAccessory1,1\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 12756,
+      "offset": 12794,
       "length": 9,
       "value": "\"HomePod\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 12786,
+      "offset": 12824,
       "length": 19,
       "value": "\"AudioAccessory5,1\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 12836,
+      "offset": 12874,
       "length": 14,
       "value": "\"HomePod mini\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 12871,
+      "offset": 12909,
       "length": 6,
       "value": "\"i386\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 12879,
+      "offset": 12917,
       "length": 8,
       "value": "\"x86_64\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 12921,
+      "offset": 12959,
       "length": 104,
       "value": "\"Simulator \""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 12984,
+      "offset": 13022,
       "length": 28,
       "value": "\"SIMULATOR_MODEL_IDENTIFIER\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 13017,
+      "offset": 13055,
       "length": 5,
       "value": "\"iOS\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 13024,
+      "offset": 13062,
       "length": 1,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/ross\/Work\/mac\/screenmeet\/Common\/ScreenMeetSDK\/Transport\/WebSocket\/Model\/SMIdentityInfo.swift",
       "kind": "StringLiteral",
-      "offset": 13570,
+      "offset": 13608,
       "length": 5,
       "value": "\"mac\""
     },

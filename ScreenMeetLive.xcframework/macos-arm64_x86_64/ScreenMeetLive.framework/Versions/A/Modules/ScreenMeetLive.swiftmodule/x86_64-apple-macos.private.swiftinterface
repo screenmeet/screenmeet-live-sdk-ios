@@ -231,6 +231,7 @@ public protocol ScreenMeetDelegate : AnyObject {
   func onLocalVideoStopped(_ source: ScreenMeetLive.SMVideoSource, _ videoTrack: ScreenMeetLive.SMVideoTrack)
   func onLocalAudioStopped()
   func onParticipantJoined(_ participant: ScreenMeetLive.SMParticipant)
+  func onParticipantInfoUpdated(_ updatedParticipant: ScreenMeetLive.SMParticipant)
   func onParticipantVideoTrackCreated(_ participant: ScreenMeetLive.SMParticipant, _ track: WebRTC.RTCVideoTrack, _ trackInfo: ScreenMeetLive.SMTrackInfo)
   func onParticipantVideoTrackStopped(_ participant: ScreenMeetLive.SMParticipant, _ track: WebRTC.RTCVideoTrack, _ trackInfo: ScreenMeetLive.SMTrackInfo)
   func onParticipantAudioTrackCreated(_ participant: ScreenMeetLive.SMParticipant)

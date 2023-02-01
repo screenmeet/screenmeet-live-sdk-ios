@@ -3,7 +3,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'ScreenMeetSDK'
-  s.version          = '3.0.2'
+  s.version          = '3.0.3'
   s.summary          = 'ScreenMeetSDK enables ScreenMeet\'s realtime platform in your app.'
 
   s.description      = <<-DESC
@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/screenmeet/screenmeet-live-sdk-ios.git', :tag => s.version.to_s }
   
   s.swift_version = '5.0'
-  s.ios.deployment_target = '14.0'
+  s.ios.deployment_target = '13.0'
 
   s.ios.vendored_frameworks = 'ScreenMeetLive.xcframework'
   
