@@ -256,6 +256,7 @@ using UInt = size_t;
 
 
 
+
 SWIFT_CLASS("_TtC14ScreenMeetLive14SMImageHandler")
 @interface SMImageHandler : NSObject
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
@@ -281,6 +282,7 @@ SWIFT_CLASS("_TtC14ScreenMeetLive12SMVideoTrack")
 SWIFT_CLASS("_TtC14ScreenMeetLive11SMVideoView")
 @interface SMVideoView : RTCMTLNSVideoView
 - (void)setFrameSize:(NSSize)newSize;
+- (void)layout;
 - (nonnull instancetype)initWithFrame:(NSRect)frameRect OBJC_DESIGNATED_INITIALIZER;
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
 @end
@@ -558,6 +560,7 @@ using UInt = size_t;
 
 
 
+
 SWIFT_CLASS("_TtC14ScreenMeetLive14SMImageHandler")
 @interface SMImageHandler : NSObject
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
@@ -583,6 +586,7 @@ SWIFT_CLASS("_TtC14ScreenMeetLive12SMVideoTrack")
 SWIFT_CLASS("_TtC14ScreenMeetLive11SMVideoView")
 @interface SMVideoView : RTCMTLNSVideoView
 - (void)setFrameSize:(NSSize)newSize;
+- (void)layout;
 - (nonnull instancetype)initWithFrame:(NSRect)frameRect OBJC_DESIGNATED_INITIALIZER;
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)coder OBJC_DESIGNATED_INITIALIZER;
 @end

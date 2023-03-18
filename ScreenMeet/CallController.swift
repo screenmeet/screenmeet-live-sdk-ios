@@ -72,11 +72,11 @@ class CallController {
     
     func toggleVideo() {
         if ScreenMeet.getMediaState().isCameraVideoActive {
-            ScreenMeet.stopVideoSharing(.camera(currentDevice))
+            ScreenMeet.stopVideoSharing(.camera(SMCameraConfiguration(device: currentDevice, format: currentDevice.activeFormat)))
             presentable?.onUpdateVideoButton(false)
         }
         else {
-            ScreenMeet.shareCamera(currentDevice)
+            ScreenMeet.shareCamera(SMCameraConfiguration(device: currentDevice, format: currentDevice.activeFormat))
             presentable?.onUpdateVideoButton(true)
         }
     }
@@ -159,6 +159,15 @@ class CallController {
 }
 
 extension CallController: ScreenMeetDelegate {
+    
+    func onParticipantInfoUpdated(_ updatedParticipant: ScreenMeetLive.SMParticipant) {
+        
+    }
+    
+    func onWaitingListChanged(_ waitingParticipants: [ScreenMeetLive.SMWaitingParticipantInfo]) {
+        
+    }
+    
     func onLocalAudioCreated() {
         presentable?.onUpdateAudioButton(true)
     }
