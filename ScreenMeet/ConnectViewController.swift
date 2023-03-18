@@ -19,6 +19,10 @@ class ConnectViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        ScreenMeet.config.developerLoggingTiers = [.mediasoup, .webrtc, .signalling, .http, .rawSocket]
+        ScreenMeet.config.organizationKey = "61c00186e7"
+        
         connectButton.setTitleColor(.white, for: .normal)
         connectButton.tintColor = .screenMeetBrandColor
         
