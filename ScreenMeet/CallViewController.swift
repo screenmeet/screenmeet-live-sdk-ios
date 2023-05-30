@@ -32,6 +32,7 @@ class CallViewController: UIViewController {
     @IBOutlet weak var participantsCollectionView: UICollectionView!
     private var gridLayout: UICollectionViewFlowLayout!
     @IBOutlet weak var participantsCollectionViewBottomMargin: NSLayoutConstraint!
+    @IBOutlet weak var participantsCollectionViewTopMargin: NSLayoutConstraint!
 
     /* Call controls*/
     @IBOutlet weak var micButton: UIButton!
@@ -91,6 +92,7 @@ class CallViewController: UIViewController {
         topInfoView.isHidden = false
         activeSpeakerView.isHidden = true
         participantsCollectionView.isHidden = true
+        hideCallControls()
     }
     
     private func showConnectedState() {
@@ -99,6 +101,23 @@ class CallViewController: UIViewController {
         topInfoView.isHidden = true
         activeSpeakerView.isHidden = false
         participantsCollectionView.isHidden = false
+        showCallControls()
+    }
+    
+    private func hideCallControls() {
+        micButton.isHidden = true
+        cameraButton.isHidden = true
+        screenButton.isHidden = true
+        detailsButton?.isHidden = true
+        hangupButton.isHidden = true
+    }
+    
+    private func showCallControls() {
+        micButton.isHidden = false
+        cameraButton.isHidden = false
+        screenButton.isHidden = false
+        detailsButton?.isHidden = false
+        hangupButton.isHidden = false
     }
     
     private func presentRequestAlert(for permissionType: SMPermissionType, participant: SMParticipant, _ requestId: String, completion: @escaping (Bool) -> Void) {
@@ -141,7 +160,13 @@ class CallViewController: UIViewController {
     
     private func updateCollectionViewLayoutForMinimizedState() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: { [self] in
-            participantsCollectionViewBottomMargin.constant = view.bounds.height - 290
+            if controller.numberOItems() == 0 {
+                participantsCollectionViewBottomMargin.constant = view.bounds.height
+            }
+            else {
+                participantsCollectionViewBottomMargin.constant = view.bounds.height - 290
+            }
+            
             gridLayout = UICollectionViewFlowLayout()
             gridLayout.scrollDirection = .horizontal
            
@@ -413,7 +438,13 @@ extension CallViewController: UICollectionViewDelegate {
             videoView.frame = videoContainerView.bounds
             videoView.translatesAutoresizingMaskIntoConstraints = false
             
-            videoView.videoContentMode = .scaleAspectFit
+            if item.info.profile.contains("screen"){
+                videoView.videoContentMode = .scaleAspectFit
+            }
+            else {
+                videoView.videoContentMode = .scaleAspectFill
+            }
+           
             
             item.track?.add(videoView)
             videoContainerView.addSubview(videoView)

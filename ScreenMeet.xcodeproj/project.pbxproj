@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4E935F254D858376EBA5AAFD /* Pods_ScreenMeet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F2B0D54D21B4FF3A3E62014 /* Pods_ScreenMeet.framework */; };
+		63850F8A2A0E35C800DCF7D3 /* TransitionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914C95AB2951F4C1001DB4AF /* TransitionButton.swift */; };
 		9105274E29506C9800335BA8 /* ConnectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9105274A29506C9800335BA8 /* ConnectViewController.swift */; };
 		9105274F29506C9800335BA8 /* CallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9105274B29506C9800335BA8 /* CallViewController.swift */; };
 		9105275029506C9800335BA8 /* CallController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9105274C29506C9800335BA8 /* CallController.swift */; };
@@ -19,11 +19,11 @@
 		91189AE9294B83C100AA3B77 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 91189AE7294B83C100AA3B77 /* LaunchScreen.storyboard */; };
 		914C95AF2951F4C1001DB4AF /* CustomTransitionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914C95A92951F4C1001DB4AF /* CustomTransitionViewController.swift */; };
 		914C95B02951F4C1001DB4AF /* SpinerLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914C95AA2951F4C1001DB4AF /* SpinerLayer.swift */; };
-		914C95B12951F4C1001DB4AF /* TransitionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914C95AB2951F4C1001DB4AF /* TransitionButton.swift */; };
 		914C95B22951F4C1001DB4AF /* FadeTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914C95AC2951F4C1001DB4AF /* FadeTransition.swift */; };
 		914C95B32951F4C1001DB4AF /* CGRectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914C95AD2951F4C1001DB4AF /* CGRectExtension.swift */; };
 		914C95B42951F4C1001DB4AF /* UnderLineTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914C95AE2951F4C1001DB4AF /* UnderLineTextField.swift */; };
 		914C95BC2951F78B001DB4AF /* RemoteParticipantCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914C95BB2951F78B001DB4AF /* RemoteParticipantCell.swift */; };
+		D8FEB65E9AEB9B1FE95B9C7D /* Pods_ScreenMeet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9929DD715A76B24010095688 /* Pods_ScreenMeet.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -39,8 +39,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		6F2B0D54D21B4FF3A3E62014 /* Pods_ScreenMeet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ScreenMeet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8E1BC2DD5516CC09F60A5444 /* Pods-ScreenMeet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScreenMeet.debug.xcconfig"; path = "Target Support Files/Pods-ScreenMeet/Pods-ScreenMeet.debug.xcconfig"; sourceTree = "<group>"; };
 		9105274A29506C9800335BA8 /* ConnectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectViewController.swift; sourceTree = "<group>"; };
 		9105274B29506C9800335BA8 /* CallViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallViewController.swift; sourceTree = "<group>"; };
 		9105274C29506C9800335BA8 /* CallController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallController.swift; sourceTree = "<group>"; };
@@ -59,7 +57,9 @@
 		914C95AD2951F4C1001DB4AF /* CGRectExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGRectExtension.swift; sourceTree = "<group>"; };
 		914C95AE2951F4C1001DB4AF /* UnderLineTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnderLineTextField.swift; sourceTree = "<group>"; };
 		914C95BB2951F78B001DB4AF /* RemoteParticipantCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteParticipantCell.swift; sourceTree = "<group>"; };
-		F7961BD9BD606D82C7F654A4 /* Pods-ScreenMeet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScreenMeet.release.xcconfig"; path = "Target Support Files/Pods-ScreenMeet/Pods-ScreenMeet.release.xcconfig"; sourceTree = "<group>"; };
+		9929DD715A76B24010095688 /* Pods_ScreenMeet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ScreenMeet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A7F695F21D22A32AEA718BAB /* Pods-ScreenMeet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScreenMeet.debug.xcconfig"; path = "Target Support Files/Pods-ScreenMeet/Pods-ScreenMeet.debug.xcconfig"; sourceTree = "<group>"; };
+		B81E4FA4171A235F9E3A136F /* Pods-ScreenMeet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScreenMeet.release.xcconfig"; path = "Target Support Files/Pods-ScreenMeet/Pods-ScreenMeet.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,7 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4E935F254D858376EBA5AAFD /* Pods_ScreenMeet.framework in Frameworks */,
+				D8FEB65E9AEB9B1FE95B9C7D /* Pods_ScreenMeet.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,8 +77,8 @@
 		70733752A518375E355F4964 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				8E1BC2DD5516CC09F60A5444 /* Pods-ScreenMeet.debug.xcconfig */,
-				F7961BD9BD606D82C7F654A4 /* Pods-ScreenMeet.release.xcconfig */,
+				A7F695F21D22A32AEA718BAB /* Pods-ScreenMeet.debug.xcconfig */,
+				B81E4FA4171A235F9E3A136F /* Pods-ScreenMeet.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -89,7 +89,7 @@
 				91189ADB294B83BF00AA3B77 /* ScreenMeet */,
 				91189ADA294B83BF00AA3B77 /* Products */,
 				70733752A518375E355F4964 /* Pods */,
-				91E31E294F05E341953E46C8 /* Frameworks */,
+				D6829EFCFE548BE2428BCA10 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -141,10 +141,10 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
-		91E31E294F05E341953E46C8 /* Frameworks */ = {
+		D6829EFCFE548BE2428BCA10 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				6F2B0D54D21B4FF3A3E62014 /* Pods_ScreenMeet.framework */,
+				9929DD715A76B24010095688 /* Pods_ScreenMeet.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -156,12 +156,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 91189AED294B83C100AA3B77 /* Build configuration list for PBXNativeTarget "ScreenMeet" */;
 			buildPhases = (
-				90B4CAE5837E23FAF09848F2 /* [CP] Check Pods Manifest.lock */,
+				E3E4E7662B93A05B87EE47B6 /* [CP] Check Pods Manifest.lock */,
 				9100D920297F2E4F008DF58C /* CopyFiles */,
 				91189AD5294B83BF00AA3B77 /* Sources */,
 				91189AD6294B83BF00AA3B77 /* Frameworks */,
 				91189AD7294B83BF00AA3B77 /* Resources */,
-				1C2F5563A2F1F23C92E301D8 /* [CP] Embed Pods Frameworks */,
+				CAAC3E27D4E839B8A462EDB6 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -219,7 +219,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		1C2F5563A2F1F23C92E301D8 /* [CP] Embed Pods Frameworks */ = {
+		CAAC3E27D4E839B8A462EDB6 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -236,7 +236,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ScreenMeet/Pods-ScreenMeet-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		90B4CAE5837E23FAF09848F2 /* [CP] Check Pods Manifest.lock */ = {
+		E3E4E7662B93A05B87EE47B6 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -265,7 +265,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				914C95B12951F4C1001DB4AF /* TransitionButton.swift in Sources */,
 				9105274E29506C9800335BA8 /* ConnectViewController.swift in Sources */,
 				9105275029506C9800335BA8 /* CallController.swift in Sources */,
 				914C95B02951F4C1001DB4AF /* SpinerLayer.swift in Sources */,
@@ -278,6 +277,7 @@
 				91189ADF294B83BF00AA3B77 /* SceneDelegate.swift in Sources */,
 				914C95B32951F4C1001DB4AF /* CGRectExtension.swift in Sources */,
 				914C95BC2951F78B001DB4AF /* RemoteParticipantCell.swift in Sources */,
+				63850F8A2A0E35C800DCF7D3 /* TransitionButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -426,13 +426,13 @@
 		};
 		91189AEE294B83C100AA3B77 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8E1BC2DD5516CC09F60A5444 /* Pods-ScreenMeet.debug.xcconfig */;
+			baseConfigurationReference = A7F695F21D22A32AEA718BAB /* Pods-ScreenMeet.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 33;
 				DEVELOPMENT_TEAM = U3AQW9824Q;
 				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -456,7 +456,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 3.0.5;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -477,13 +477,13 @@
 		};
 		91189AEF294B83C100AA3B77 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F7961BD9BD606D82C7F654A4 /* Pods-ScreenMeet.release.xcconfig */;
+			baseConfigurationReference = B81E4FA4171A235F9E3A136F /* Pods-ScreenMeet.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 33;
 				DEVELOPMENT_TEAM = U3AQW9824Q;
 				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -507,7 +507,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 3.0.5;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

@@ -127,13 +127,13 @@ it, simply add the following line to your Podfile:
 pod 'ScreenMeetSDK'
 ```
 
-Also **bitcode** should be disabled. It can be done manualy in xCode, or add the following lines at the end of your pod file
+When building with **xCode14.3** a post install hook setting minimum deployment target should be added in the Podfile:
 
 ```ruby
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
-      config.build_settings['ENABLE_BITCODE'] = 'NO'
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
     end
   end
 end
