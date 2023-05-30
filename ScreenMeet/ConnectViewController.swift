@@ -14,6 +14,7 @@ class ConnectViewController: UIViewController {
     
     @IBOutlet weak var connectButton: TransitionButton!
     @IBOutlet weak var roomCodeTextField: UITextField!
+    @IBOutlet weak var endpointTextField: UITextField!
     
     @IBOutlet weak var waitingView: UIView!
     
@@ -21,7 +22,6 @@ class ConnectViewController: UIViewController {
         super.viewDidLoad()
         
         ScreenMeet.config.developerLoggingTiers = [.mediasoup, .webrtc, .signalling, .http, .rawSocket]
-        ScreenMeet.config.organizationKey = "61c00186e7"
         
         connectButton.setTitleColor(.white, for: .normal)
         connectButton.tintColor = .screenMeetBrandColor
@@ -29,10 +29,21 @@ class ConnectViewController: UIViewController {
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
         
+        loadTextFieldValues()
         roomCodeTextField.becomeFirstResponder()
     }
     
     @IBAction func connectButtonClicked() {
+        roomCodeTextField.resignFirstResponder()
+        endpointTextField.resignFirstResponder()
+                
+        if let url = URL(string: endpointTextField.text!) {
+            ScreenMeet.config.endpoint = url
+        }
+        else {
+            showError("\"\(endpointTextField.text!)\" is not a valid endpoint url...")
+        }
+        
         connectButton.setTitleColor(.white, for: .normal)
         connectButton.tintColor = .screenMeetBrandColor
         roomCodeTextField.resignFirstResponder()
@@ -40,8 +51,14 @@ class ConnectViewController: UIViewController {
         connectButton.startAnimation()
         ScreenMeet.config.collectMetric = true
         
-       // ScreenMeet.config.developerLoggingTiers = [.mediasoup, .webrtc, .signalling, .http, .rawSocket]
-        ScreenMeet.connect(roomCodeTextField.text!, "iOS") { [weak self] error in
+        saveTextFieldValues()
+        
+        let connectOptions = SMConnectOptions(startAudioEnabled: false,
+                                              startVideoEnabled: false,
+                                              blurDefault: false,
+                                              deviceId: "iOS")
+        
+        ScreenMeet.connect(roomCodeTextField.text!, connectOptions) { [weak self] error in
             
             guard error == nil else {
                 if let challenge = error!.challenge {
@@ -53,7 +70,7 @@ class ConnectViewController: UIViewController {
                     self?.showError(error!.message)
                 }
                 else if error!.code == .knockWaitTimeForEntryExpiredError {
-                    self?.connectButton.stopAnimation(animationStyle: .shake)
+                    self?.connectButton.stopAnimation(animationStyle: 1)
                     self?.connectButton.setTitleColor(.white, for: .normal)
                     self?.connectButton.isEnabled = true
                     self?.roomCodeTextField.isHidden = false
@@ -97,8 +114,12 @@ class ConnectViewController: UIViewController {
         waitingView.isHidden = true
     }
     
+    @IBAction func settingsButtonClicked(_ sender: UIButton) {
+        endpointTextField.isHidden = !endpointTextField.isHidden
+    }
+    
     private func openCallScreen() {
-        connectButton.stopAnimation(animationStyle: .expand, revertAfterDelay: 1.0, completion: { [weak self] in
+        connectButton.stopAnimation(animationStyle: 2, revertAfterDelay: 1.0, completion: { [weak self] in
             if let callViewController = self?.storyboard?.instantiateViewController(withIdentifier: "CallViewController") as? CallViewController {
                 self?.navigationController?.pushViewController(callViewController, animated: true)
             }
@@ -129,7 +150,22 @@ class ConnectViewController: UIViewController {
         })
     }
     
+    private func saveTextFieldValues() {
+        UserDefaults.standard.set(endpointTextField.text!, forKey: "kEndpoint")
+        UserDefaults.standard.set(roomCodeTextField.text!, forKey: "kRoomId")
+    }
+    
+    private func loadTextFieldValues() {
+        if let endpoint = UserDefaults.standard.value(forKey: "kEndpoint") as? String {
+            endpointTextField.text = endpoint
+        }
+        if let roomId = UserDefaults.standard.value(forKey: "kRoomId") as? String {
+            roomCodeTextField.text = roomId
+        }
+    }
+    
     @objc private func dismissKeyboard() {
+        endpointTextField.endEditing(true)
         roomCodeTextField.endEditing(true)
     }
 }

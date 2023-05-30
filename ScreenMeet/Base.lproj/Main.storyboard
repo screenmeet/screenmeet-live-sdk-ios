@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="FRe-r3-DYV">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="FRe-r3-DYV">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -442,7 +442,7 @@
                                 </constraints>
                             </view>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="Room code" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="EJC-Oa-rKD" customClass="UnderLineTextField" customModule="ScreenMeet" customModuleProvider="target">
-                                <rect key="frame" x="57" y="158" width="300" height="42"/>
+                                <rect key="frame" x="57" y="299" width="300" height="42"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="300" id="Es1-2T-Bid"/>
                                     <constraint firstAttribute="height" constant="42" id="hNF-cp-bzr"/>
@@ -454,7 +454,7 @@
                                 </connections>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qbd-vu-eoL" customClass="TransitionButton" customModule="ScreenMeet" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="228" width="414" height="50"/>
+                                <rect key="frame" x="0.0" y="369" width="414" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="6i5-nQ-YiN"/>
                                 </constraints>
@@ -466,7 +466,7 @@
                                 </connections>
                             </button>
                             <view hidden="YES" alpha="0.89999997615814209" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lm7-Gi-GRe">
-                                <rect key="frame" x="87" y="300" width="240" height="130"/>
+                                <rect key="frame" x="87" y="441" width="240" height="130"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xBN-5C-REL">
                                         <rect key="frame" x="20" y="71.5" width="200" height="38"/>
@@ -516,19 +516,49 @@
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="layer.clipToBounds" value="YES"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qmm-ab-QDi">
+                                <rect key="frame" x="362" y="48" width="52" height="52"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="52" id="18t-tt-sci"/>
+                                    <constraint firstAttribute="height" constant="52" id="HOL-u3-fcg"/>
+                                </constraints>
+                                <color key="tintColor" red="1" green="0.45490196078431372" blue="0.20392156862745098" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="gear" catalog="system"/>
+                                <connections>
+                                    <action selector="settingsButtonClicked:" destination="YPd-GD-xbQ" eventType="touchUpInside" id="30E-ki-9ym"/>
+                                </connections>
+                            </button>
+                            <textField hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="https://edge.screenmeet.com" borderStyle="line" placeholder="Endpoint" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ODx-tb-ojT">
+                                <rect key="frame" x="57" y="171" width="300" height="42"/>
+                                <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="300" id="MTJ-7D-ipX"/>
+                                    <constraint firstAttribute="height" constant="42" id="vBk-q1-xHQ"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
+                                <connections>
+                                    <outlet property="delegate" destination="YPd-GD-xbQ" id="SeU-o7-KF0"/>
+                                </connections>
+                            </textField>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="ZMo-5y-KLW"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="EJC-Oa-rKD" firstAttribute="top" secondItem="ZMo-5y-KLW" secondAttribute="top" constant="110" id="1xn-Gm-DDE"/>
                             <constraint firstItem="EJC-Oa-rKD" firstAttribute="centerX" secondItem="0wC-Kn-OVH" secondAttribute="centerX" id="B1x-1T-NTA"/>
+                            <constraint firstItem="EJC-Oa-rKD" firstAttribute="top" secondItem="ODx-tb-ojT" secondAttribute="bottom" constant="86" id="BI8-Kz-YdB"/>
                             <constraint firstItem="qbd-vu-eoL" firstAttribute="trailing" secondItem="ZMo-5y-KLW" secondAttribute="trailing" id="BYp-XM-Y05"/>
                             <constraint firstAttribute="bottom" secondItem="91i-16-Avf" secondAttribute="bottom" constant="20" id="Cje-Jk-im8"/>
+                            <constraint firstItem="Qmm-ab-QDi" firstAttribute="top" secondItem="ZMo-5y-KLW" secondAttribute="top" id="F9l-iV-17w"/>
                             <constraint firstItem="91i-16-Avf" firstAttribute="leading" secondItem="ZMo-5y-KLW" secondAttribute="leading" id="G7u-UU-S9a"/>
                             <constraint firstItem="91i-16-Avf" firstAttribute="trailing" secondItem="ZMo-5y-KLW" secondAttribute="trailing" id="MGB-cT-E0b"/>
                             <constraint firstItem="Lm7-Gi-GRe" firstAttribute="centerX" secondItem="0wC-Kn-OVH" secondAttribute="centerX" id="Prm-oR-pNy"/>
                             <constraint firstItem="Lm7-Gi-GRe" firstAttribute="top" secondItem="EJC-Oa-rKD" secondAttribute="bottom" constant="100" id="R56-IP-atM"/>
+                            <constraint firstItem="ODx-tb-ojT" firstAttribute="centerX" secondItem="0wC-Kn-OVH" secondAttribute="centerX" id="Tya-5y-J12"/>
                             <constraint firstItem="qbd-vu-eoL" firstAttribute="top" secondItem="EJC-Oa-rKD" secondAttribute="bottom" constant="28" id="aEM-XM-6fj"/>
+                            <constraint firstItem="ZMo-5y-KLW" firstAttribute="trailing" secondItem="Qmm-ab-QDi" secondAttribute="trailing" id="fYS-kK-wz4"/>
+                            <constraint firstItem="ODx-tb-ojT" firstAttribute="top" secondItem="ZMo-5y-KLW" secondAttribute="top" constant="123" id="jcy-qo-RAP"/>
                             <constraint firstItem="qbd-vu-eoL" firstAttribute="leading" secondItem="ZMo-5y-KLW" secondAttribute="leading" id="jsr-qe-hdu"/>
                         </constraints>
                     </view>
@@ -537,6 +567,7 @@
                         <outlet property="bottomInfoLabel" destination="rUd-gK-TnA" id="KTe-IO-P54"/>
                         <outlet property="bottomInfoView" destination="91i-16-Avf" id="6hb-bw-PVR"/>
                         <outlet property="connectButton" destination="qbd-vu-eoL" id="Suf-g5-Tm5"/>
+                        <outlet property="endpointTextField" destination="ODx-tb-ojT" id="F6l-gR-puN"/>
                         <outlet property="roomCodeTextField" destination="EJC-Oa-rKD" id="C61-Yn-PqP"/>
                         <outlet property="waitingView" destination="Lm7-Gi-GRe" id="6Ke-JC-wlr"/>
                     </connections>
@@ -620,12 +651,8 @@
             <point key="canvasLocation" x="87" y="781"/>
         </scene>
     </scenes>
-    <designables>
-        <designable name="qbd-vu-eoL">
-            <size key="intrinsicContentSize" width="89" height="34.5"/>
-        </designable>
-    </designables>
     <resources>
+        <image name="gear" catalog="system" width="128" height="122"/>
         <image name="icon-lock" width="24" height="24"/>
         <image name="icon-logo" width="140" height="140"/>
         <image name="mic.fill" catalog="system" width="110" height="128"/>

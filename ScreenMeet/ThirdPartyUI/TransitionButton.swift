@@ -16,11 +16,12 @@ Stop animation style of the `TransitionButton`.
  - expand: expand the button and cover all the screen, useful to do transit animation.
  - shake: revert the button to original state and make a shaoe animation, useful to reflect that something went wrong
  */
+/*
 public enum StopAnimationStyle {
     case normal
     case expand
     case shake
-}
+}*/
 
 
 
@@ -117,25 +118,27 @@ public enum StopAnimationStyle {
      - Parameter completion: a callback closure to be called once the animation finished, it may be useful to transit to another view controller, example transit to the home screen from the login screen.
      
      */
-    open func stopAnimation(animationStyle:StopAnimationStyle = .normal, revertAfterDelay delay: TimeInterval = 1.0, completion:(()->Void)? = nil) {
+    open func stopAnimation(animationStyle: Int = 0, revertAfterDelay delay: TimeInterval = 1.0, completion:(()->Void)? = nil) {
 
         let delayToRevert = max(delay, 0.2)
 
         switch animationStyle {
-        case .normal:
+        case 0:
             // We return to original state after a delay to give opportunity to custom transition
             DispatchQueue.main.asyncAfter(deadline: .now() + delayToRevert) {
                 self.setOriginalState(completion: completion)
             }
-        case .shake:
+        case 1:
             // We return to original state after a delay to give opportunity to custom transition
             DispatchQueue.main.asyncAfter(deadline: .now() + delayToRevert) {
                 self.setOriginalState(completion: nil)
                 self.shakeAnimation(completion: completion)
             }
-        case .expand:
+        case 2:
             self.spiner.stopAnimation() // before animate the expand animation we need to hide the spiner first
             self.expand(completion: completion, revertDelay: delayToRevert) // scale the round button to fill the screen
+        default:
+            break
         }
     }
     

@@ -98,7 +98,10 @@ class CallController {
     }
     
     func itemAt(_ index: Int) -> SMItem? {
-        return items[index]
+        if index < items.count {
+            return items[index]
+        }
+        return nil
     }
     
     func numberOItems() -> Int {
