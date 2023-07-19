@@ -22,8 +22,10 @@ class SMItem {
 
 protocol CallPresentable: AnyObject {
     
-    func onFeatureRequest(_ featureRequest: SMFeatureRequestData, _ decisionHandler: @escaping (Bool) -> Void)
+    func onFeatureRequest(_ featureRequest: SMFeatureRequestData)
     func onFeatureRequestRejected(requestId: String)
+    func onFeatureStarted(_ featureRequest: SMFeatureRequestData)
+    func onFeatureStopped(_ featureRequest: SMFeatureRequestData)
     
     func onUpdateActiveSpeakerItem(_ item: SMItem)
     func onClearActiveSpeakerItem()
@@ -97,6 +99,28 @@ class CallController {
         items.removeAll()
     }
     
+    func checkPendingPermissionsRequests() {
+        let pendingRequests = ScreenMeet.pendingFeatureRequests()
+        
+        if let me = findMeAsParticipant(), !pendingRequests.isEmpty {
+            pendingRequests.forEach { featureRequestData in
+                if featureRequestData.grantorCid == me.id {
+                    presentable?.onFeatureRequest(featureRequestData)
+                }
+            }
+        }
+        
+        let grantedRequests = ScreenMeet.grantedFeatureRequests()
+        if let me = findMeAsParticipant(), !grantedRequests.isEmpty {
+            grantedRequests.forEach { featureRequestData in
+                if featureRequestData.grantorCid == me.id {
+                    presentable?.onFeatureStarted(featureRequestData)
+                }
+            }
+        }
+        
+    }
+    
     func itemAt(_ index: Int) -> SMItem? {
         if index < items.count {
             return items[index]
@@ -132,6 +156,10 @@ class CallController {
         return currentActiveSpeakerItem != nil
     }
     
+    func setRemoteControlledViewController(_ viewController: UIViewController) {
+        self.remoteControlledViewController = viewController
+    }
+    
     private func updateParticipantItems() {
         items = [SMItem]()
         let participants = ScreenMeet.getParticipants().sorted { $0.name < $1.name }
@@ -162,6 +190,14 @@ class CallController {
 }
 
 extension CallController: ScreenMeetDelegate {
+    func onFeatureRequest(_ featureReqeust: ScreenMeetLive.SMFeatureRequestData, _ decisionHandler: @escaping (Bool) -> Void) {
+        decisionHandler(true)
+    }
+    
+    //func onFeatureRequest(_ featureReqeust: ScreenMeetLive.SMFeatureRequestData, _ decisionHandler: @escaping (Bool) -> Void) {
+        //presentable?.onFeatureRequest(featureRequest)
+    //}
+    
     
     func onParticipantInfoUpdated(_ updatedParticipant: ScreenMeetLive.SMParticipant) {
         
@@ -285,20 +321,25 @@ extension CallController: ScreenMeetDelegate {
         
     }
     
-    func onFeatureRequest(_ featureRequest: SMFeatureRequestData, _ decisionHandler: @escaping (Bool) -> Void) {
-        presentable?.onFeatureRequest(featureRequest, decisionHandler)
+    func onFeatureRequest(_ featureRequest: SMFeatureRequestData) {
+        presentable?.onFeatureRequest(featureRequest)
     }
     
     func onFeatureRequestRejected(_ featureRequest: ScreenMeetLive.SMFeatureRequestData) {
         presentable?.onFeatureRequestRejected(requestId: featureRequest.requestId)
     }
     
+    func onFeatureRequestsChanged() {
+        
+    }
+    
+    
     func onFeatureStopped(_ featureRequest: SMFeatureRequestData) {
         
     }
     
     func onFeatureStarted(_ featureRequest: SMFeatureRequestData) {
-        
+        presentable?.onFeatureStarted(featureRequest)
     }
     
     func onRemoteControlEvent(_ event: SMRemoteControlEvent) {
@@ -306,7 +347,7 @@ extension CallController: ScreenMeetDelegate {
     }
     
     var rootViewController: UIViewController? {
-        return remoteControlledViewController
+        return remoteControlledViewController?.navigationController
     }
     
 }

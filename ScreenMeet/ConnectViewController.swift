@@ -21,6 +21,7 @@ class ConnectViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        ScreenMeet.config.organizationKey = "YOUR_API_KEY"
         ScreenMeet.config.developerLoggingTiers = [.mediasoup, .webrtc, .signalling, .http, .rawSocket]
         
         connectButton.setTitleColor(.white, for: .normal)
@@ -53,10 +54,7 @@ class ConnectViewController: UIViewController {
         
         saveTextFieldValues()
         
-        let connectOptions = SMConnectOptions(startAudioEnabled: false,
-                                              startVideoEnabled: false,
-                                              blurDefault: false,
-                                              deviceId: "iOS")
+        let connectOptions = SMConnectOptions(startAudioEnabled: false, startVideoEnabled: false, recordOptOut: false, blurDefault: false, userName: "iOS")
         
         ScreenMeet.connect(roomCodeTextField.text!, connectOptions) { [weak self] error in
             

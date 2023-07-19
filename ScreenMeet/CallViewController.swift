@@ -40,6 +40,7 @@ class CallViewController: UIViewController {
     @IBOutlet weak var screenButton: UIButton!
     @IBOutlet weak var detailsButton: UIButton!
     @IBOutlet weak var hangupButton: UIButton!
+    @IBOutlet weak var remoteControlButton: UIButton!
     
     @IBOutlet weak var sharingOwnScreenView: UIView!
     
@@ -69,6 +70,15 @@ class CallViewController: UIViewController {
         controller.remoteControlledViewController = navigationController
     }
     
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        navigationController?.isNavigationBarHidden = true
+        controller.setRemoteControlledViewController(self)
+        controller.checkPendingPermissionsRequests()
+    }
+    
     @IBAction func micButtonClicked(_ sender: UIButton) {
         controller.toggleAudio()
     }
@@ -84,6 +94,13 @@ class CallViewController: UIViewController {
     @IBAction func hangupButtonClicked(_ sender: UIButton) {
         controller.hangup()
         navigationController?.popViewController(animated: true)
+    }
+    
+    @IBAction func remoteControlButtonClicked(_ sender: UIButton) {
+        if let viewController = storyboard?.instantiateViewController(withIdentifier: "TabbarViewController") as? TabbarViewController {
+            navigationController?.pushViewController(viewController, animated: true)
+            controller.setRemoteControlledViewController(viewController)
+        }
     }
     
     private func showReconnectingState() {
@@ -271,7 +288,8 @@ class CallViewController: UIViewController {
 
 extension CallViewController: CallPresentable {
     
-    func onFeatureRequest(_ featureRequest: SMFeatureRequestData, _ decisionHandler: @escaping (Bool) -> Void) {
+    func onFeatureRequest(_ featureRequest: SMFeatureRequestData) {
+        
         DispatchQueue.main.async {  [weak self] in
             if let requestorParticipant = ScreenMeet.getParticipants().first(where: { p in
                 p.id == featureRequest.requestorCid
@@ -279,7 +297,7 @@ extension CallViewController: CallPresentable {
                 self?.presentRequestAlert(for: SMPermissionType(rawValue: featureRequest.privilege)!,
                                           participant: requestorParticipant,
                                           featureRequest.requestId,
-                                          completion: decisionHandler)
+                                          completion:featureRequest.decisionHandler!)
             }
             
         }
@@ -288,6 +306,18 @@ extension CallViewController: CallPresentable {
     func onFeatureRequestRejected(requestId: String) {
         if let alert = alert {
             alert.dismiss(animated: false)
+        }
+    }
+    
+    func onFeatureStarted(_ featureRequest: SMFeatureRequestData) {
+        if featureRequest.privilege == SMPermissionType.remotecontrol.rawValue {
+            remoteControlButton.isHidden = false
+            
+        }
+    }
+    func onFeatureStopped(_ featureRequest: SMFeatureRequestData) {
+        if featureRequest.privilege == SMPermissionType.remotecontrol.rawValue {
+            remoteControlButton.isHidden = true
         }
     }
     
