@@ -558,6 +558,16 @@
                                     <outlet property="delegate" destination="YPd-GD-xbQ" id="SeU-o7-KF0"/>
                                 </connections>
                             </textField>
+                            <textField hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="835fde6e95" borderStyle="line" placeholder="Organization Key" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gCO-yb-rHd">
+                                <rect key="frame" x="57" y="225" width="300" height="42"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
+                                <connections>
+                                    <outlet property="delegate" destination="YPd-GD-xbQ" id="PWe-eB-4nc"/>
+                                </connections>
+                            </textField>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="ZMo-5y-KLW"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -584,6 +594,7 @@
                         <outlet property="bottomInfoView" destination="91i-16-Avf" id="6hb-bw-PVR"/>
                         <outlet property="connectButton" destination="qbd-vu-eoL" id="Suf-g5-Tm5"/>
                         <outlet property="endpointTextField" destination="ODx-tb-ojT" id="F6l-gR-puN"/>
+                        <outlet property="organizationTextField" destination="gCO-yb-rHd" id="7Np-Tc-e7W"/>
                         <outlet property="roomCodeTextField" destination="EJC-Oa-rKD" id="C61-Yn-PqP"/>
                         <outlet property="waitingView" destination="Lm7-Gi-GRe" id="6Ke-JC-wlr"/>
                     </connections>

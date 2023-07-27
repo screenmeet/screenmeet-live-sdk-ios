@@ -15,13 +15,13 @@ class ConnectViewController: UIViewController {
     @IBOutlet weak var connectButton: TransitionButton!
     @IBOutlet weak var roomCodeTextField: UITextField!
     @IBOutlet weak var endpointTextField: UITextField!
+    @IBOutlet weak var organizationTextField: UITextField!
     
     @IBOutlet weak var waitingView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        ScreenMeet.config.organizationKey = "YOUR_API_KEY"
         ScreenMeet.config.developerLoggingTiers = [.mediasoup, .webrtc, .signalling, .http, .rawSocket]
         
         connectButton.setTitleColor(.white, for: .normal)
@@ -38,6 +38,7 @@ class ConnectViewController: UIViewController {
         roomCodeTextField.resignFirstResponder()
         endpointTextField.resignFirstResponder()
                 
+        ScreenMeet.config.organizationKey = organizationTextField.text!
         if let url = URL(string: endpointTextField.text!) {
             ScreenMeet.config.endpoint = url
         }
@@ -113,6 +114,7 @@ class ConnectViewController: UIViewController {
     }
     
     @IBAction func settingsButtonClicked(_ sender: UIButton) {
+        organizationTextField.isHidden = !organizationTextField.isHidden
         endpointTextField.isHidden = !endpointTextField.isHidden
     }
     
@@ -165,6 +167,7 @@ class ConnectViewController: UIViewController {
     @objc private func dismissKeyboard() {
         endpointTextField.endEditing(true)
         roomCodeTextField.endEditing(true)
+        organizationTextField.endEditing(true)
     }
 }
 
