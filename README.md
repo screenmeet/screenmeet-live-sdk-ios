@@ -120,6 +120,7 @@ More advanced sample with SwiftUI see in [FullExample](Example/FullExample) appl
 
 ## Installation
 
+### CocoaPods
 ScreenMeetSDK is available through [CocoaPods](https://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
@@ -138,6 +139,14 @@ post_install do |installer|
   end
 end
 
+```
+
+### Swift Package Manager
+Add the project as a dependency to your Package.swift:
+```swift
+dependencies: [
+    .package(url: "https://github.com/screenmeet/UniversalWebRTC", .upToNextMinor(from: "3.0.9"))
+]
 ```
 
 # ScreenMeetLive Events handling
