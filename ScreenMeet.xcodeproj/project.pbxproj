@@ -12,6 +12,7 @@
 		6304D4B82A56F10300D4CD87 /* DemoRCCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6304D4B62A56F10300D4CD87 /* DemoRCCollectionViewCell.swift */; };
 		63850F8A2A0E35C800DCF7D3 /* TransitionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914C95AB2951F4C1001DB4AF /* TransitionButton.swift */; };
 		63DDAB0F2A5C4D1A00030E12 /* TabbarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DDAB0E2A5C4D1A00030E12 /* TabbarViewController.swift */; };
+		77A79855920BCD6EBF07700C /* Pods_ScreenMeet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A8B3BDB6F10BF2BFD70DB6E /* Pods_ScreenMeet.framework */; };
 		9105274E29506C9800335BA8 /* ConnectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9105274A29506C9800335BA8 /* ConnectViewController.swift */; };
 		9105274F29506C9800335BA8 /* CallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9105274B29506C9800335BA8 /* CallViewController.swift */; };
 		9105275029506C9800335BA8 /* CallController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9105274C29506C9800335BA8 /* CallController.swift */; };
@@ -27,7 +28,6 @@
 		914C95B32951F4C1001DB4AF /* CGRectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914C95AD2951F4C1001DB4AF /* CGRectExtension.swift */; };
 		914C95B42951F4C1001DB4AF /* UnderLineTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914C95AE2951F4C1001DB4AF /* UnderLineTextField.swift */; };
 		914C95BC2951F78B001DB4AF /* RemoteParticipantCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914C95BB2951F78B001DB4AF /* RemoteParticipantCell.swift */; };
-		D8FEB65E9AEB9B1FE95B9C7D /* Pods_ScreenMeet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9929DD715A76B24010095688 /* Pods_ScreenMeet.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -43,10 +43,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		381CCD95650DFCE0031A4F54 /* Pods-ScreenMeet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScreenMeet.debug.xcconfig"; path = "Target Support Files/Pods-ScreenMeet/Pods-ScreenMeet.debug.xcconfig"; sourceTree = "<group>"; };
+		3C1F61186FE4826369EFD649 /* Pods-ScreenMeet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScreenMeet.release.xcconfig"; path = "Target Support Files/Pods-ScreenMeet/Pods-ScreenMeet.release.xcconfig"; sourceTree = "<group>"; };
 		6304D4B32A56EFE300D4CD87 /* DemoRCViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoRCViewController.swift; sourceTree = "<group>"; };
 		6304D4B52A56F10300D4CD87 /* DemoRCCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoRCCell.swift; sourceTree = "<group>"; };
 		6304D4B62A56F10300D4CD87 /* DemoRCCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoRCCollectionViewCell.swift; sourceTree = "<group>"; };
 		63DDAB0E2A5C4D1A00030E12 /* TabbarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabbarViewController.swift; sourceTree = "<group>"; };
+		7A8B3BDB6F10BF2BFD70DB6E /* Pods_ScreenMeet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ScreenMeet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9105274A29506C9800335BA8 /* ConnectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConnectViewController.swift; sourceTree = "<group>"; };
 		9105274B29506C9800335BA8 /* CallViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallViewController.swift; sourceTree = "<group>"; };
 		9105274C29506C9800335BA8 /* CallController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallController.swift; sourceTree = "<group>"; };
@@ -65,9 +68,6 @@
 		914C95AD2951F4C1001DB4AF /* CGRectExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGRectExtension.swift; sourceTree = "<group>"; };
 		914C95AE2951F4C1001DB4AF /* UnderLineTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnderLineTextField.swift; sourceTree = "<group>"; };
 		914C95BB2951F78B001DB4AF /* RemoteParticipantCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteParticipantCell.swift; sourceTree = "<group>"; };
-		9929DD715A76B24010095688 /* Pods_ScreenMeet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ScreenMeet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		A7F695F21D22A32AEA718BAB /* Pods-ScreenMeet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScreenMeet.debug.xcconfig"; path = "Target Support Files/Pods-ScreenMeet/Pods-ScreenMeet.debug.xcconfig"; sourceTree = "<group>"; };
-		B81E4FA4171A235F9E3A136F /* Pods-ScreenMeet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ScreenMeet.release.xcconfig"; path = "Target Support Files/Pods-ScreenMeet/Pods-ScreenMeet.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,7 +75,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D8FEB65E9AEB9B1FE95B9C7D /* Pods_ScreenMeet.framework in Frameworks */,
+				77A79855920BCD6EBF07700C /* Pods_ScreenMeet.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,8 +85,8 @@
 		70733752A518375E355F4964 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				A7F695F21D22A32AEA718BAB /* Pods-ScreenMeet.debug.xcconfig */,
-				B81E4FA4171A235F9E3A136F /* Pods-ScreenMeet.release.xcconfig */,
+				381CCD95650DFCE0031A4F54 /* Pods-ScreenMeet.debug.xcconfig */,
+				3C1F61186FE4826369EFD649 /* Pods-ScreenMeet.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -97,7 +97,7 @@
 				91189ADB294B83BF00AA3B77 /* ScreenMeet */,
 				91189ADA294B83BF00AA3B77 /* Products */,
 				70733752A518375E355F4964 /* Pods */,
-				D6829EFCFE548BE2428BCA10 /* Frameworks */,
+				BF7A8D43E0A25C776A91C996 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -153,10 +153,10 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
-		D6829EFCFE548BE2428BCA10 /* Frameworks */ = {
+		BF7A8D43E0A25C776A91C996 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				9929DD715A76B24010095688 /* Pods_ScreenMeet.framework */,
+				7A8B3BDB6F10BF2BFD70DB6E /* Pods_ScreenMeet.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -168,12 +168,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 91189AED294B83C100AA3B77 /* Build configuration list for PBXNativeTarget "ScreenMeet" */;
 			buildPhases = (
-				E3E4E7662B93A05B87EE47B6 /* [CP] Check Pods Manifest.lock */,
+				47FA6E3D8307B8526B159B7C /* [CP] Check Pods Manifest.lock */,
 				9100D920297F2E4F008DF58C /* CopyFiles */,
 				91189AD5294B83BF00AA3B77 /* Sources */,
 				91189AD6294B83BF00AA3B77 /* Frameworks */,
 				91189AD7294B83BF00AA3B77 /* Resources */,
-				CAAC3E27D4E839B8A462EDB6 /* [CP] Embed Pods Frameworks */,
+				7F3D4A27EE1329F8DD6D584D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -231,24 +231,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		CAAC3E27D4E839B8A462EDB6 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ScreenMeet/Pods-ScreenMeet-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ScreenMeet/Pods-ScreenMeet-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ScreenMeet/Pods-ScreenMeet-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E3E4E7662B93A05B87EE47B6 /* [CP] Check Pods Manifest.lock */ = {
+		47FA6E3D8307B8526B159B7C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -268,6 +251,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7F3D4A27EE1329F8DD6D584D /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ScreenMeet/Pods-ScreenMeet-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-ScreenMeet/Pods-ScreenMeet-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ScreenMeet/Pods-ScreenMeet-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -442,13 +442,13 @@
 		};
 		91189AEE294B83C100AA3B77 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A7F695F21D22A32AEA718BAB /* Pods-ScreenMeet.debug.xcconfig */;
+			baseConfigurationReference = 381CCD95650DFCE0031A4F54 /* Pods-ScreenMeet.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 48;
+				CURRENT_PROJECT_VERSION = 55;
 				DEVELOPMENT_TEAM = U3AQW9824Q;
 				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -472,7 +472,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.0.8;
+				MARKETING_VERSION = 3.0.9;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -493,13 +493,13 @@
 		};
 		91189AEF294B83C100AA3B77 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B81E4FA4171A235F9E3A136F /* Pods-ScreenMeet.release.xcconfig */;
+			baseConfigurationReference = 3C1F61186FE4826369EFD649 /* Pods-ScreenMeet.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 48;
+				CURRENT_PROJECT_VERSION = 55;
 				DEVELOPMENT_TEAM = U3AQW9824Q;
 				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -523,7 +523,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.0.8;
+				MARKETING_VERSION = 3.0.9;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

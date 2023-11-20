@@ -3,8 +3,8 @@
 
 target 'ScreenMeet' do
   use_frameworks!
-
-  pod 'ScreenMeetSDK'
+ 
+  pod "ScreenMeetSDK"
 
 end
 

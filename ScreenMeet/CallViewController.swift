@@ -34,6 +34,13 @@ class CallViewController: UIViewController {
     @IBOutlet weak var participantsCollectionViewBottomMargin: NSLayoutConstraint!
     @IBOutlet weak var participantsCollectionViewTopMargin: NSLayoutConstraint!
 
+    
+    /* Audio permission error badge*/
+    @IBOutlet weak var micPermissionErrorButton: UIButton!
+    
+    /* Video permission error badge*/
+    @IBOutlet weak var cameraPermissionErrorButton: UIButton!
+    
     /* Call controls*/
     @IBOutlet weak var micButton: UIButton!
     @IBOutlet weak var cameraButton: UIButton!
@@ -65,6 +72,11 @@ class CallViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(willEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
+        
+        checkVideoPermission()
+        checkAudioPermission()
         
         updateCollectionViewLayoutForMaximizedState()
         controller.remoteControlledViewController = navigationController
@@ -101,6 +113,11 @@ class CallViewController: UIViewController {
             navigationController?.pushViewController(viewController, animated: true)
             controller.setRemoteControlledViewController(viewController)
         }
+    }
+    
+    @objc private func willEnterForeground() {
+        checkAudioPermission()
+        checkVideoPermission()
     }
     
     private func showReconnectingState() {
@@ -172,6 +189,40 @@ class CallViewController: UIViewController {
         }))
         
         self.present(alert!, animated: true, completion: nil)
+    }
+    
+    private func showGoToSettingsAlert(_ mediaType: AVMediaType) {
+        if mediaType == .video {
+            let alert = UIAlertController(title: "Camera", message: "Camera access is necessary to use this app", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Go to Settings", style: .default, handler: { action in
+                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+            }))
+
+            self.present(alert, animated: true)
+        }
+        else if mediaType == .audio {
+            let alert = UIAlertController(title: "Microphone", message: "Microphone access is necessary to use this app", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Go to Settings", style: .default, handler: { action in
+                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+            }))
+
+            self.present(alert, animated: true)
+        }
+    }
+    
+    private func showRequestScreenShareAlert(_ participantName: String) {
+        let alert = UIAlertController(title: "", message: "\(participantName) asks you a permission to view your screen", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Allow", style: .default, handler: { [weak self]action in
+            if let screenButton = self?.screenButton {
+                self?.screenButtonClicked(screenButton)
+            }
+            alert.dismiss(animated: false)
+        }))
+        alert.addAction(UIAlertAction(title: "Deny", style: .cancel, handler: { action in
+            alert.dismiss(animated: false)
+        }))
+
+        self.present(alert, animated: true)
     }
     
     
@@ -284,6 +335,19 @@ class CallViewController: UIViewController {
             gridLayout?.sectionInset = UIEdgeInsets(top: top, left: left, bottom: bottom, right: right)
             participantsCollectionView.collectionViewLayout = gridLayout
     }
+    
+    private func checkVideoPermission() {
+        authorize(.video) { [weak self] granted in
+            self?.cameraPermissionErrorButton.isHidden = granted
+        }
+        
+    }
+    
+    private func checkAudioPermission() {
+        authorize(.audio) { [weak self] granted in
+            self?.micPermissionErrorButton.isHidden = granted
+        }
+    }
 }
 
 extension CallViewController: CallPresentable {
@@ -307,6 +371,13 @@ extension CallViewController: CallPresentable {
         if let alert = alert {
             alert.dismiss(animated: false)
         }
+    }
+    
+    func onScreenShareRequested(_ requestor: SMParticipant) {
+        if !controller.getMediaState().isScreenVideoActive {
+            showRequestScreenShareAlert(requestor.name)
+        }
+        
     }
     
     func onFeatureStarted(_ featureRequest: SMFeatureRequestData) {
@@ -390,6 +461,47 @@ extension CallViewController: CallPresentable {
         }
         if connectionState == .connected  {
             showConnectedState()
+        }
+    }
+    
+    func onError(_ error: SMError) {
+        if error.code == .permissionError {
+            if error.message.lowercased().contains("microphone") {
+                if micPermissionErrorButton.isHidden == false {
+                    showGoToSettingsAlert(.audio)
+                }
+                
+                checkAudioPermission()
+            }
+            else if error.message.lowercased().contains("video") {
+                if cameraPermissionErrorButton.isHidden == false {
+                    showGoToSettingsAlert(.video)
+                }
+                
+                checkVideoPermission()
+            }
+        }
+    }
+    
+    private typealias MediaAuthorization = (_ granted: Bool) -> Void
+    
+    private func authorize(_ type: AVMediaType, _ completion: @escaping MediaAuthorization) {
+        switch AVCaptureDevice.authorizationStatus(for: type) {
+            case .authorized:
+                completion(true)
+            
+            case .notDetermined:
+                completion(true)
+            
+            case .denied:
+                completion(false)
+                
+
+            case .restricted:
+                completion(false)
+            
+        @unknown default:
+            break
         }
     }
     
