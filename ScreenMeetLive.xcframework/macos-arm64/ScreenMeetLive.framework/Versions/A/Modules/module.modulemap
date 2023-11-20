@@ -1,4 +1,0 @@
-framework module ScreenMeetLive {
-  header "ScreenMeetLive-Swift.h"
-  requires objc
-}

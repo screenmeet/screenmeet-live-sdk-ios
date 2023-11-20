@@ -24,6 +24,7 @@ protocol CallPresentable: AnyObject {
     
     func onFeatureRequest(_ featureRequest: SMFeatureRequestData)
     func onFeatureRequestRejected(requestId: String)
+    func onScreenShareRequested(_ requestor: SMParticipant)
     func onFeatureStarted(_ featureRequest: SMFeatureRequestData)
     func onFeatureStopped(_ featureRequest: SMFeatureRequestData)
     
@@ -40,6 +41,7 @@ protocol CallPresentable: AnyObject {
     func onUpdateScreenSharingButton(_ state: Bool)
     
     func onConnectionStateChanged(_ connectionState: SMConnectionState)
+    func onError(_ error: SMError)
 }
 
 class CallController {
@@ -64,39 +66,37 @@ class CallController {
     func toggleAudio() {
         if ScreenMeet.getMediaState().isAudioActive {
             ScreenMeet.stopAudioSharing()
-            presentable?.onUpdateAudioButton(false)
         }
         else {
             ScreenMeet.shareMicrophone()
-            presentable?.onUpdateAudioButton(true)
         }
     }
     
     func toggleVideo() {
         if ScreenMeet.getMediaState().isCameraVideoActive {
             ScreenMeet.stopVideoSharing(.camera(SMCameraConfiguration(device: currentDevice, format: currentDevice.activeFormat)))
-            presentable?.onUpdateVideoButton(false)
         }
         else {
             ScreenMeet.shareCamera(SMCameraConfiguration(device: currentDevice, format: currentDevice.activeFormat))
-            presentable?.onUpdateVideoButton(true)
         }
     }
     
     func toggleScreen() {
         if ScreenMeet.getMediaState().isScreenVideoActive {
             ScreenMeet.stopVideoSharing(.screen)
-            presentable?.onUpdateScreenSharingButton(false)
         }
         else {
             ScreenMeet.shareScreen(.screen)
-            presentable?.onUpdateScreenSharingButton(true)
         }
     }
     
     func hangup() {
         ScreenMeet.disconnect()
         items.removeAll()
+    }
+    
+    func getMediaState() -> SMParticipantMediaState {
+        return ScreenMeet.getMediaState()
     }
     
     func checkPendingPermissionsRequests() {
@@ -190,14 +190,10 @@ class CallController {
 }
 
 extension CallController: ScreenMeetDelegate {
+    
     func onFeatureRequest(_ featureReqeust: ScreenMeetLive.SMFeatureRequestData, _ decisionHandler: @escaping (Bool) -> Void) {
         decisionHandler(true)
     }
-    
-    //func onFeatureRequest(_ featureReqeust: ScreenMeetLive.SMFeatureRequestData, _ decisionHandler: @escaping (Bool) -> Void) {
-        //presentable?.onFeatureRequest(featureRequest)
-    //}
-    
     
     func onParticipantInfoUpdated(_ updatedParticipant: ScreenMeetLive.SMParticipant) {
         
@@ -216,6 +212,7 @@ extension CallController: ScreenMeetDelegate {
             onParticipantVideoTrackCreated(me, videoTrack.rtcTrack, videoTrack.info)
         }
         if source == .screen { presentable?.onUpdateScreenSharingButton(true) }
+        else { presentable?.onUpdateVideoButton(true) }
     }
     
     func onLocalVideoSourceChanged() {
@@ -231,6 +228,9 @@ extension CallController: ScreenMeetDelegate {
     func onLocalVideoStopped(_ source: SMVideoSource, _ track: SMVideoTrack) {
         if let me = findMeAsParticipant() {
             onParticipantVideoTrackStopped(me, track.rtcTrack, track.info)
+            
+            if source.isScreen { presentable?.onUpdateScreenSharingButton(false) }
+            else { presentable?.onUpdateVideoButton(false) }
         }
     }
     
@@ -318,7 +318,7 @@ extension CallController: ScreenMeetDelegate {
     }
     
     func onError(_ error: SMError) {
-        
+        presentable?.onError(error)
     }
     
     func onFeatureRequest(_ featureRequest: SMFeatureRequestData) {
@@ -344,6 +344,10 @@ extension CallController: ScreenMeetDelegate {
     
     func onRemoteControlEvent(_ event: SMRemoteControlEvent) {
         
+    }
+    
+    func onScreenShareRequested(_ requestor: ScreenMeetLive.SMParticipant) {
+        presentable?.onScreenShareRequested(requestor)
     }
     
     var rootViewController: UIViewController? {

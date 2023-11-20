@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="FRe-r3-DYV">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22154" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="FRe-r3-DYV">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22130"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -328,13 +328,47 @@
                                             <constraint firstAttribute="width" constant="236" id="Ye0-E8-2zx"/>
                                         </constraints>
                                     </stackView>
+                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aTL-Nx-kFW">
+                                        <rect key="frame" x="54" y="20" width="24" height="24"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="24" id="q7k-OX-fNQ"/>
+                                            <constraint firstAttribute="width" constant="24" id="z1F-Ue-Bgm"/>
+                                        </constraints>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="!" cornerStyle="capsule">
+                                            <backgroundConfiguration key="background">
+                                                <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="strokeColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </backgroundConfiguration>
+                                            <color key="baseForegroundColor" systemColor="systemRedColor"/>
+                                        </buttonConfiguration>
+                                    </button>
+                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r9v-bJ-p66">
+                                        <rect key="frame" x="118" y="20" width="24" height="24"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="24" id="PDV-gD-U3g"/>
+                                            <constraint firstAttribute="width" constant="24" id="bur-VC-Zcv"/>
+                                        </constraints>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="!" cornerStyle="capsule">
+                                            <backgroundConfiguration key="background">
+                                                <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <color key="strokeColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </backgroundConfiguration>
+                                            <color key="baseForegroundColor" systemColor="systemRedColor"/>
+                                        </buttonConfiguration>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="r9v-bJ-p66" secondAttribute="bottom" constant="76" id="ALz-AT-o0Y"/>
                                     <constraint firstItem="6hZ-mt-VAE" firstAttribute="centerX" secondItem="5b4-jW-oEi" secondAttribute="centerX" id="MpZ-x7-T0t"/>
+                                    <constraint firstAttribute="bottom" secondItem="aTL-Nx-kFW" secondAttribute="bottom" constant="76" id="TVC-0S-Bzj"/>
                                     <constraint firstItem="6hZ-mt-VAE" firstAttribute="centerY" secondItem="5b4-jW-oEi" secondAttribute="centerY" id="eH0-pD-bQH"/>
+                                    <constraint firstItem="6hZ-mt-VAE" firstAttribute="leading" secondItem="r9v-bJ-p66" secondAttribute="trailing" constant="-100" id="ga8-am-eCF"/>
                                     <constraint firstAttribute="width" constant="320" id="lRj-pT-DjV"/>
                                     <constraint firstAttribute="height" constant="120" id="lcC-wW-MhZ"/>
+                                    <constraint firstItem="6hZ-mt-VAE" firstAttribute="leading" secondItem="aTL-Nx-kFW" secondAttribute="trailing" constant="-36" id="lmk-7v-yMr"/>
                                 </constraints>
                             </view>
                             <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon-logo" translatesAutoresizingMaskIntoConstraints="NO" id="z5K-yZ-VfD">
@@ -416,8 +450,10 @@
                         <outlet property="activeSpeakerView" destination="Z1H-wm-UFI" id="CeR-QG-V9a"/>
                         <outlet property="callControlsView" destination="5b4-jW-oEi" id="v6D-5p-z6W"/>
                         <outlet property="cameraButton" destination="vrD-wu-ktO" id="mJv-YH-bid"/>
+                        <outlet property="cameraPermissionErrorButton" destination="r9v-bJ-p66" id="hxR-eK-dTr"/>
                         <outlet property="hangupButton" destination="A58-xC-1fL" id="Hih-FZ-qEu"/>
                         <outlet property="micButton" destination="iCh-Hw-pOJ" id="O7U-60-vgj"/>
+                        <outlet property="micPermissionErrorButton" destination="aTL-Nx-kFW" id="tnp-ki-KI0"/>
                         <outlet property="participantsCollectionView" destination="Qwi-NK-x4b" id="0LM-gT-nyR"/>
                         <outlet property="participantsCollectionViewBottomMargin" destination="dUQ-oo-sLe" id="Gss-kf-er2"/>
                         <outlet property="remoteControlButton" destination="uDl-43-Byi" id="vKU-Qi-Nr1"/>
@@ -558,7 +594,7 @@
                                     <outlet property="delegate" destination="YPd-GD-xbQ" id="SeU-o7-KF0"/>
                                 </connections>
                             </textField>
-                            <textField hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="835fde6e95" borderStyle="line" placeholder="Organization Key" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gCO-yb-rHd">
+                            <textField hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="07058c7003" borderStyle="line" placeholder="Organization Key" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gCO-yb-rHd">
                                 <rect key="frame" x="57" y="225" width="300" height="42"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -871,19 +907,19 @@
         <image name="mic.slash.fill" catalog="system" width="108" height="128"/>
         <image name="phone.fill" catalog="system" width="128" height="114"/>
         <image name="play.fill" catalog="system" width="117" height="128"/>
-        <image name="play.slash.fill" catalog="system" width="117" height="128"/>
+        <image name="play.slash.fill" catalog="system" width="113" height="128"/>
         <image name="record.circle" catalog="system" width="128" height="123"/>
         <image name="tablecells" catalog="system" width="128" height="93"/>
         <image name="video.fill" catalog="system" width="128" height="81"/>
-        <image name="video.slash.fill" catalog="system" width="128" height="103"/>
+        <image name="video.slash.fill" catalog="system" width="128" height="114"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="tintColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
