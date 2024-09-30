@@ -22,7 +22,7 @@ class ConnectViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        ScreenMeet.config.developerLoggingTiers = [.mediasoup, .webrtc, .signalling, .http, .rawSocket]
+        //ScreenMeet.config.developerLoggingTiers = [.mediasoup, .webrtc, .signalling, .http, .rawSocket]
         
         connectButton.setTitleColor(.white, for: .normal)
         connectButton.tintColor = .screenMeetBrandColor
