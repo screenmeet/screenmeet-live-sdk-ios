@@ -13,9 +13,7 @@ public typealias PresentingCallback = (UIViewController) -> Void
 class DemoRCViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var collectionView: UICollectionView!
-    
-    var presentingCallback: PresentingCallback? = nil
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -26,6 +24,7 @@ class DemoRCViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        CallController.remoteControlledViewController = self
         navigationController?.isNavigationBarHidden = false
     }
     
@@ -112,11 +111,13 @@ extension DemoRCViewController: DemoRCCellDelegate {
         
         let alertController: UIAlertController = UIAlertController(title:nil, message:text, preferredStyle:.alert)
         alertController.addAction(UIAlertAction(title:"Ok", style: .default, handler: { [weak self] action in
-            self?.presentingCallback?(self!)
+            CallController.remoteControlledViewController = self!
         }))
         
-        presentingCallback?(alertController)
+        
+        CallController.remoteControlledViewController = alertController
         present(alertController, animated:true, completion:nil)
+       
     }
 }
 
@@ -126,11 +127,11 @@ extension DemoRCViewController: DemoRCCellCollectionViewDelegate {
         
         let alertController: UIAlertController = UIAlertController(title:nil, message:text, preferredStyle:.alert)
         alertController.addAction(UIAlertAction(title:"Ok", style: .default, handler: { [weak self] action in
-            self?.presentingCallback?(self!)
+            CallController.remoteControlledViewController = self!
         }))
         
+        CallController.remoteControlledViewController = alertController
         present(alertController, animated:true, completion:nil)
-        
-        presentingCallback?(alertController)
+       
     }
 }

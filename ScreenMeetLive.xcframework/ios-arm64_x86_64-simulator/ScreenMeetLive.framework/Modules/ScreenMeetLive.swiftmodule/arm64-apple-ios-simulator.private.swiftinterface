@@ -1,7 +1,6 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 5.9 (swiftlang-5.9.0.128.108 clang-1500.0.40.1)
-// swift-module-flags: -target arm64-apple-ios13.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -Onone -module-name ScreenMeetLive
-// swift-module-flags-ignorable: -enable-bare-slash-regex
+// swift-compiler-version: Apple Swift version 5.10 (swiftlang-5.10.0.13 clang-1500.3.9.4)
+// swift-module-flags: -target arm64-apple-ios13.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -Onone -enable-bare-slash-regex -module-name ScreenMeetLive
 import AVFoundation
 import AVKit
 import AudioToolbox
@@ -34,6 +33,7 @@ public protocol SMResponse : Swift.Decodable {
 }
 @_hasMissingDesignatedInitializers public class SMTextMessage : ScreenMeetLive.SMMessage {
   public var text: Swift.String
+  public init(id: Swift.String, createdOn: Foundation.Date, updatedOn: Foundation.Date?, senderId: Swift.String, senderName: Swift.String, text: Swift.String)
   @objc deinit
 }
 extension Foundation.NSURL {
@@ -61,6 +61,11 @@ public typealias SMFeatureChangeCallback = (ScreenMeetLive.SMFeature, Swift.Bool
     set
   }
   public var downscaleScreen: Swift.Bool {
+    get
+    set
+  }
+  public func calculateScaleFactorFoScreenSize(_ screenSize: CoreFoundation.CGSize, _ screenScaleFactor: CoreFoundation.CGFloat) -> CoreFoundation.CGFloat
+  public var screenScale: CoreFoundation.CGFloat {
     get
     set
   }
@@ -132,6 +137,18 @@ public typealias SMFeatureChangeCallback = (ScreenMeetLive.SMFeature, Swift.Bool
     get
     set
   }
+  public var audioTypeWebRTC: Swift.Bool {
+    get
+    set
+  }
+  public var audioTypeAudioUnit: Swift.Bool {
+    get
+    set
+  }
+  public var audioTypeAudioEngine: Swift.Bool {
+    get
+    set
+  }
   public var webrtcAudioJitterBufferMs: Swift.Int {
     get
     set
@@ -180,7 +197,8 @@ public typealias SMFeatureChangeCallback = (ScreenMeetLive.SMFeature, Swift.Bool
     get
     set
   }
-  public var isRequestingScreenRecordPermission: Swift.Bool {
+  public var lastConnectedOptions: ScreenMeetLive.SMConnectOptions?
+  public var wasRequestingPermissionThatRequiredRelaunch: Swift.Bool {
     get
     set
   }
@@ -196,7 +214,7 @@ public typealias SMFeatureChangeCallback = (ScreenMeetLive.SMFeature, Swift.Bool
     get
     set
   }
-  public func getCurrentCameraConfiguration() -> ScreenMeetLive.SMCameraConfiguration
+  public func getCurrentCameraConfiguration() -> ScreenMeetLive.SMCameraConfiguration?
   public func subscribeForFeaturesChange(_ object: Swift.AnyObject, _ callback: @escaping ScreenMeetLive.SMFeatureChangeCallback)
   public func unsubscribeFromFeaturesChanges(_ object: Swift.AnyObject)
   @objc deinit
@@ -271,6 +289,17 @@ public struct SMTrackInfo : SocketIO.SocketData {
   public var size: Swift.Int
   public var path: Swift.String?
   @objc deinit
+}
+public enum SMParticipantUpdateReason {
+  case roleChanged
+  case videoDimensionChanged
+  case capabilitiesChanged
+  case otherDetailsChanged
+  public static func == (a: ScreenMeetLive.SMParticipantUpdateReason, b: ScreenMeetLive.SMParticipantUpdateReason) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
 }
 @_hasMissingDesignatedInitializers public class SMParticipant : Swift.Equatable, Foundation.NSCopying {
   public var id: Swift.String
@@ -357,6 +386,7 @@ public enum SMFeature : Swift.String, Swift.Equatable {
   case recordMeeting
   case recordPending
   case remoteSupport
+  case remoteControl
   case followActiveSpeaker
   case flipCameraImage
   case blurCameraImage
@@ -403,6 +433,10 @@ public struct SMDeepLinkOptions {
 public protocol ScreenMeetChatDelegate : AnyObject {
   func onMessageReceived(_ message: ScreenMeetLive.SMMessage)
   func onMessageSendFailed(_ error: ScreenMeetLive.SMError)
+  func onDownloadFileTaskProgress(_ id: Swift.String, _ fileName: Swift.String, _ progress: Swift.Float, _ started: Foundation.Date)
+  func onUploadFileTaskProgress(_ id: Swift.String, _ fileName: Swift.String, _ progress: Swift.Float, _ started: Foundation.Date)
+  func onFileTaskCompleted(_ id: Swift.String, _ fileName: Swift.String, _ destionationURL: Foundation.URL?)
+  func onFileTaskFailed(_ id: Swift.String, _ fileName: Swift.String, _ error: Swift.String)
 }
 public protocol ScreenMeetDelegate : AnyObject {
   func onLocalAudioCreated()
@@ -411,7 +445,7 @@ public protocol ScreenMeetDelegate : AnyObject {
   func onLocalVideoStopped(_ source: ScreenMeetLive.SMVideoSource, _ videoTrack: ScreenMeetLive.SMVideoTrack)
   func onLocalAudioStopped()
   func onParticipantJoined(_ participant: ScreenMeetLive.SMParticipant)
-  func onParticipantInfoUpdated(_ updatedParticipant: ScreenMeetLive.SMParticipant)
+  func onParticipantInfoUpdated(_ updatedParticipant: ScreenMeetLive.SMParticipant, _ reason: ScreenMeetLive.SMParticipantUpdateReason)
   func onParticipantVideoTrackCreated(_ participant: ScreenMeetLive.SMParticipant, _ track: WebRTC.RTCVideoTrack, _ trackInfo: ScreenMeetLive.SMTrackInfo)
   func onParticipantVideoTrackStopped(_ participant: ScreenMeetLive.SMParticipant, _ track: WebRTC.RTCVideoTrack, _ trackInfo: ScreenMeetLive.SMTrackInfo)
   func onParticipantAudioTrackCreated(_ participant: ScreenMeetLive.SMParticipant)
@@ -449,6 +483,8 @@ public protocol ScreenMeetDelegate : AnyObject {
   @objc deinit
 }
 @_hasMissingDesignatedInitializers public class SMMessage {
+  public var id: Swift.String
+  public var createdOn: Foundation.Date
   final public let updatedOn: Foundation.Date?
   final public let senderId: Swift.String
   final public let senderName: Swift.String
@@ -510,8 +546,9 @@ public enum SMVideoSource : Swift.Equatable {
   public static func getConfidentiality() -> ScreenMeetLive.SMConfidentiality
   public static func getChatMessages() -> [ScreenMeetLive.SMMessage]
   public static func sendTextMessage(_ text: Swift.String)
-  public static func sendFile(_ url: Foundation.URL, _ progress: @escaping ScreenMeetLive.SMRequestProgress, _ completion: @escaping ScreenMeetLive.SMFileUploadCompletion)
-  public static func downloadFile(_ fileMessage: ScreenMeetLive.SMFileMessage, _ progress: @escaping ScreenMeetLive.SMRequestProgress, _ completion: @escaping ScreenMeetLive.SMFileDownloadCompletion)
+  public static func sendFile(_ url: Foundation.URL)
+  public static func downloadFile(_ fileMessage: ScreenMeetLive.SMFileMessage)
+  public static func cancelFileTask(_ id: Swift.String)
   public static func requestFeature(_ permissionType: ScreenMeetLive.SMPermissionType, _ tragetParticipantId: Swift.String)
   public static func cancelFeatureRequest(_ featureRequest: ScreenMeetLive.SMFeatureRequestData)
   public static func pendingFeatureRequests() -> [ScreenMeetLive.SMFeatureRequestData]
@@ -619,18 +656,13 @@ public enum SMConnectionState : Swift.Equatable, Swift.CustomStringConvertible {
   }
 }
 public enum SMDisconnectionReason {
-  case callEndedByServer
+  case callEndedByServer(Swift.String)
   case leftCall
   case networkError
   case callNotStarted
   case knockWaitTimeExpired
   case reconnectWaitTimeExpired
   case hostRefuedToLetIn
-  public static func == (a: ScreenMeetLive.SMDisconnectionReason, b: ScreenMeetLive.SMDisconnectionReason) -> Swift.Bool
-  public func hash(into hasher: inout Swift.Hasher)
-  public var hashValue: Swift.Int {
-    get
-  }
 }
 @_hasMissingDesignatedInitializers public class SMRemoteControlEvent : SocketIO.SocketData {
   public var to: Swift.String {
@@ -782,6 +814,7 @@ public enum SMErrorCode : Swift.Equatable {
   case participantInternalError
   case remoteControlError
   case capturerInternalError
+  case audioUnitError
   case permissionError
   case screenCapturerInternalError(source: ScreenMeetLive.SMVideoSource)
   case mediaTrackError
@@ -862,6 +895,18 @@ public struct SMRoomConfig {
   public var screenSharing: Swift.Bool {
     get
   }
+  public var fileTransfer: Swift.Bool {
+    get
+  }
+  public var chat: Swift.Bool {
+    get
+  }
+  public var backgroundBlur: Swift.Bool {
+    get
+  }
+  public var blurDefault: Swift.Bool {
+    get
+  }
   public var canHostChangeAudio: Swift.Bool {
     get
   }
@@ -887,6 +932,8 @@ extension ScreenMeetLive.SMCapability : Swift.RawRepresentable {}
 extension ScreenMeetLive.SMPermissionType : Swift.Equatable {}
 extension ScreenMeetLive.SMPermissionType : Swift.Hashable {}
 extension ScreenMeetLive.SMPermissionType : Swift.RawRepresentable {}
+extension ScreenMeetLive.SMParticipantUpdateReason : Swift.Equatable {}
+extension ScreenMeetLive.SMParticipantUpdateReason : Swift.Hashable {}
 extension ScreenMeetLive.SMParticipantMediaState.AudioState : Swift.Equatable {}
 extension ScreenMeetLive.SMParticipantMediaState.AudioState : Swift.Hashable {}
 extension ScreenMeetLive.SMFeature : Swift.Hashable {}
@@ -895,8 +942,6 @@ extension ScreenMeetLive.SMLogLevel : Swift.Hashable {}
 extension ScreenMeetLive.SMLogLevel : Swift.RawRepresentable {}
 extension ScreenMeetLive.SMDeveloperLogTier : Swift.Hashable {}
 extension ScreenMeetLive.SMDeveloperLogTier : Swift.RawRepresentable {}
-extension ScreenMeetLive.SMDisconnectionReason : Swift.Equatable {}
-extension ScreenMeetLive.SMDisconnectionReason : Swift.Hashable {}
 extension ScreenMeetLive.SMIdentityInfoRole : Swift.Equatable {}
 extension ScreenMeetLive.SMIdentityInfoRole : Swift.Hashable {}
 extension ScreenMeetLive.SMIdentityInfoRole : Swift.RawRepresentable {}

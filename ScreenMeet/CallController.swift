@@ -47,7 +47,7 @@ protocol CallPresentable: AnyObject {
 class CallController {
     
     weak var presentable: CallPresentable?
-    weak var remoteControlledViewController: UIViewController?
+    weak static var remoteControlledViewController: UIViewController? = nil
     
     private weak var currentDevice: AVCaptureDevice!
     
@@ -156,10 +156,6 @@ class CallController {
         return currentActiveSpeakerItem != nil
     }
     
-    func setRemoteControlledViewController(_ viewController: UIViewController) {
-        self.remoteControlledViewController = viewController
-    }
-    
     private func updateParticipantItems() {
         items = [SMItem]()
         let participants = ScreenMeet.getParticipants().sorted { $0.name < $1.name }
@@ -190,6 +186,10 @@ class CallController {
 }
 
 extension CallController: ScreenMeetDelegate {
+    func onParticipantInfoUpdated(_ updatedParticipant: ScreenMeetLive.SMParticipant, _ reason: ScreenMeetLive.SMParticipantUpdateReason) {
+        
+    }
+    
     
     func onFeatureRequest(_ featureReqeust: ScreenMeetLive.SMFeatureRequestData, _ decisionHandler: @escaping (Bool) -> Void) {
         decisionHandler(true)
@@ -351,7 +351,7 @@ extension CallController: ScreenMeetDelegate {
     }
     
     var rootViewController: UIViewController? {
-        return remoteControlledViewController?.navigationController
+        return CallController.remoteControlledViewController
     }
     
 }

@@ -79,7 +79,7 @@ class CallViewController: UIViewController {
         checkAudioPermission()
         
         updateCollectionViewLayoutForMaximizedState()
-        controller.remoteControlledViewController = navigationController
+        CallController.remoteControlledViewController = navigationController
     }
     
     
@@ -87,7 +87,7 @@ class CallViewController: UIViewController {
         super.viewWillAppear(animated)
         
         navigationController?.isNavigationBarHidden = true
-        controller.setRemoteControlledViewController(self)
+        CallController.remoteControlledViewController = self
         controller.checkPendingPermissionsRequests()
     }
     
@@ -111,7 +111,7 @@ class CallViewController: UIViewController {
     @IBAction func remoteControlButtonClicked(_ sender: UIButton) {
         if let viewController = storyboard?.instantiateViewController(withIdentifier: "TabbarViewController") as? TabbarViewController {
             navigationController?.pushViewController(viewController, animated: true)
-            controller.setRemoteControlledViewController(viewController)
+            CallController.remoteControlledViewController = viewController
         }
     }
     
