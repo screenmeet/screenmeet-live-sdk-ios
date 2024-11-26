@@ -245,7 +245,8 @@ extension CallController: ScreenMeetDelegate {
     
     func onParticipantVideoTrackCreated(_ participant: SMParticipant, _ track: RTCVideoTrack, _ trackInfo: SMTrackInfo) {
        
-        if (currentActiveSpeakerItem?.participant == participant && currentActiveSpeakerItem?.track == nil) || trackInfo.profile == "screen_share" {
+       
+        if  (currentActiveSpeakerItem?.participant == participant && currentActiveSpeakerItem?.track == nil) || trackInfo.profile == "screen_share" {
             currentActiveSpeakerItem = SMItem(track: track, info: trackInfo, participant: participant)
             presentable?.onUpdateActiveSpeakerItem(currentActiveSpeakerItem!)
         }
@@ -302,6 +303,7 @@ extension CallController: ScreenMeetDelegate {
     }
     
     func onActiveSpeakerChanged(_ participant: SMParticipant, _ trackInfo: SMTrackInfo?) {
+        
         let track = participant.videoTracks.first { smVideoTrack in
             smVideoTrack.info.trackId == trackInfo?.trackId
         }
@@ -314,6 +316,9 @@ extension CallController: ScreenMeetDelegate {
     }
     
     func onConnectionStateChanged(_ newState: SMConnectionState) {
+        if newState == .reconnecting {
+            currentActiveSpeakerItem?.track = nil
+        }
         presentable?.onConnectionStateChanged(newState)
     }
     

@@ -119,7 +119,7 @@ class ConnectViewController: UIViewController {
     }
     
     private func openCallScreen() {
-        connectButton.stopAnimation(animationStyle: 2, revertAfterDelay: 1.0, completion: { [weak self] in
+        connectButton.stopAnimation(animationStyle: 2, revertAfterDelay: 0.0, completion: { [weak self] in
             if let callViewController = self?.storyboard?.instantiateViewController(withIdentifier: "CallViewController") as? CallViewController {
                 self?.navigationController?.pushViewController(callViewController, animated: true)
             }
