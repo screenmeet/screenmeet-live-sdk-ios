@@ -318,6 +318,7 @@ extension CallController: ScreenMeetDelegate {
     func onConnectionStateChanged(_ newState: SMConnectionState) {
         if newState == .reconnecting {
             currentActiveSpeakerItem?.track = nil
+            presentable?.onClearActiveSpeakerItem()
         }
         presentable?.onConnectionStateChanged(newState)
     }
