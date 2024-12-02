@@ -22,9 +22,7 @@
 		91189AE4294B83BF00AA3B77 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 91189AE2294B83BF00AA3B77 /* Main.storyboard */; };
 		91189AE6294B83C100AA3B77 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 91189AE5294B83C100AA3B77 /* Assets.xcassets */; };
 		91189AE9294B83C100AA3B77 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 91189AE7294B83C100AA3B77 /* LaunchScreen.storyboard */; };
-		914C95AF2951F4C1001DB4AF /* CustomTransitionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914C95A92951F4C1001DB4AF /* CustomTransitionViewController.swift */; };
 		914C95B02951F4C1001DB4AF /* SpinerLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914C95AA2951F4C1001DB4AF /* SpinerLayer.swift */; };
-		914C95B22951F4C1001DB4AF /* FadeTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914C95AC2951F4C1001DB4AF /* FadeTransition.swift */; };
 		914C95B32951F4C1001DB4AF /* CGRectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914C95AD2951F4C1001DB4AF /* CGRectExtension.swift */; };
 		914C95B42951F4C1001DB4AF /* UnderLineTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914C95AE2951F4C1001DB4AF /* UnderLineTextField.swift */; };
 		914C95BC2951F78B001DB4AF /* RemoteParticipantCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 914C95BB2951F78B001DB4AF /* RemoteParticipantCell.swift */; };
@@ -61,10 +59,8 @@
 		91189AE5294B83C100AA3B77 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		91189AE8294B83C100AA3B77 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		91189AEA294B83C100AA3B77 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		914C95A92951F4C1001DB4AF /* CustomTransitionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTransitionViewController.swift; sourceTree = "<group>"; };
 		914C95AA2951F4C1001DB4AF /* SpinerLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpinerLayer.swift; sourceTree = "<group>"; };
 		914C95AB2951F4C1001DB4AF /* TransitionButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransitionButton.swift; sourceTree = "<group>"; };
-		914C95AC2951F4C1001DB4AF /* FadeTransition.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FadeTransition.swift; sourceTree = "<group>"; };
 		914C95AD2951F4C1001DB4AF /* CGRectExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGRectExtension.swift; sourceTree = "<group>"; };
 		914C95AE2951F4C1001DB4AF /* UnderLineTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UnderLineTextField.swift; sourceTree = "<group>"; };
 		914C95BB2951F78B001DB4AF /* RemoteParticipantCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteParticipantCell.swift; sourceTree = "<group>"; };
@@ -133,10 +129,8 @@
 		914C95A82951F4C1001DB4AF /* ThirdPartyUI */ = {
 			isa = PBXGroup;
 			children = (
-				914C95A92951F4C1001DB4AF /* CustomTransitionViewController.swift */,
 				914C95AA2951F4C1001DB4AF /* SpinerLayer.swift */,
 				914C95AB2951F4C1001DB4AF /* TransitionButton.swift */,
-				914C95AC2951F4C1001DB4AF /* FadeTransition.swift */,
 				914C95AD2951F4C1001DB4AF /* CGRectExtension.swift */,
 				914C95AE2951F4C1001DB4AF /* UnderLineTextField.swift */,
 			);
@@ -280,12 +274,10 @@
 				9105274E29506C9800335BA8 /* ConnectViewController.swift in Sources */,
 				9105275029506C9800335BA8 /* CallController.swift in Sources */,
 				914C95B02951F4C1001DB4AF /* SpinerLayer.swift in Sources */,
-				914C95AF2951F4C1001DB4AF /* CustomTransitionViewController.swift in Sources */,
 				91189ADD294B83BF00AA3B77 /* AppDelegate.swift in Sources */,
 				914C95B42951F4C1001DB4AF /* UnderLineTextField.swift in Sources */,
 				6304D4B42A56EFE300D4CD87 /* DemoRCViewController.swift in Sources */,
 				63DDAB0F2A5C4D1A00030E12 /* TabbarViewController.swift in Sources */,
-				914C95B22951F4C1001DB4AF /* FadeTransition.swift in Sources */,
 				9105275129506C9800335BA8 /* CaptchaViewController.swift in Sources */,
 				9105274F29506C9800335BA8 /* CallViewController.swift in Sources */,
 				6304D4B82A56F10300D4CD87 /* DemoRCCollectionViewCell.swift in Sources */,
@@ -444,11 +436,15 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 381CCD95650DFCE0031A4F54 /* Pods-ScreenMeet.debug.xcconfig */;
 			buildSettings = {
+				ARCHS = (
+					x86_64,
+					"$(ARCHS_STANDARD)",
+				);
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 59;
+				CURRENT_PROJECT_VERSION = 70;
 				DEVELOPMENT_TEAM = U3AQW9824Q;
 				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -472,7 +468,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.0.10;
+				MARKETING_VERSION = 3.0.11;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -495,11 +491,15 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3C1F61186FE4826369EFD649 /* Pods-ScreenMeet.release.xcconfig */;
 			buildSettings = {
+				ARCHS = (
+					x86_64,
+					"$(ARCHS_STANDARD)",
+				);
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 59;
+				CURRENT_PROJECT_VERSION = 70;
 				DEVELOPMENT_TEAM = U3AQW9824Q;
 				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -523,7 +523,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.0.10;
+				MARKETING_VERSION = 3.0.11;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

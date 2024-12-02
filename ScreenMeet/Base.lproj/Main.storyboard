@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="FRe-r3-DYV">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="FRe-r3-DYV">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -493,7 +493,7 @@
                                     <constraint firstItem="rUd-gK-TnA" firstAttribute="leading" secondItem="91i-16-Avf" secondAttribute="leading" constant="8" id="XXc-bd-LFj"/>
                                 </constraints>
                             </view>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="Room code" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="EJC-Oa-rKD" customClass="UnderLineTextField" customModule="ScreenMeet" customModuleProvider="target">
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="165027" borderStyle="line" placeholder="Room code" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="EJC-Oa-rKD" customClass="UnderLineTextField" customModule="ScreenMeet" customModuleProvider="target">
                                 <rect key="frame" x="57" y="299" width="300" height="42"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="300" id="Es1-2T-Bid"/>
@@ -594,7 +594,7 @@
                                     <outlet property="delegate" destination="YPd-GD-xbQ" id="SeU-o7-KF0"/>
                                 </connections>
                             </textField>
-                            <textField hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="q_fcLEtJWaGTHb15SAMbcZlnrhs" borderStyle="line" placeholder="Organization Key" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gCO-yb-rHd">
+                            <textField hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="6e27fe3bad" borderStyle="line" placeholder="Organization Key" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gCO-yb-rHd">
                                 <rect key="frame" x="57" y="225" width="300" height="42"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -892,11 +892,6 @@
             <point key="canvasLocation" x="1460" y="21"/>
         </scene>
     </scenes>
-    <designables>
-        <designable name="qbd-vu-eoL">
-            <size key="intrinsicContentSize" width="89" height="34.5"/>
-        </designable>
-    </designables>
     <resources>
         <image name="cube.box" catalog="system" width="128" height="123"/>
         <image name="gear" catalog="system" width="128" height="122"/>
@@ -906,8 +901,8 @@
         <image name="mic.fill" catalog="system" width="110" height="128"/>
         <image name="mic.slash.fill" catalog="system" width="108" height="128"/>
         <image name="phone.fill" catalog="system" width="128" height="114"/>
-        <image name="play.fill" catalog="system" width="117" height="128"/>
-        <image name="play.slash.fill" catalog="system" width="113" height="128"/>
+        <image name="play.fill" catalog="system" width="120" height="128"/>
+        <image name="play.slash.fill" catalog="system" width="116" height="128"/>
         <image name="record.circle" catalog="system" width="128" height="123"/>
         <image name="tablecells" catalog="system" width="128" height="93"/>
         <image name="video.fill" catalog="system" width="128" height="81"/>
@@ -916,10 +911,10 @@
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="tintColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

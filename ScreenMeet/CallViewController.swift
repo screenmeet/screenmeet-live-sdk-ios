@@ -456,12 +456,22 @@ extension CallViewController: CallPresentable {
     }
     
     func onConnectionStateChanged(_ connectionState: SMConnectionState) {
-        if connectionState == .reconnecting {
-            showReconnectingState()
-        }
-        if connectionState == .connected  {
+        switch connectionState {
+            
+        case .connecting:
+            break
+        case .connected:
             showConnectedState()
+        case .reconnecting:
+            showReconnectingState()
+        case .disconnected(let reason):
+            hangupButtonClicked(hangupButton)
+        case .waitingEntrancePermission:
+            break
+        @unknown default:
+            break
         }
+    
     }
     
     func onError(_ error: SMError) {
